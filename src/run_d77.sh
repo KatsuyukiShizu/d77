@@ -14,12 +14,12 @@ cd ${RESDIR}
 echo 
 echo " --------------- ${EXE} execution script ---------------"
 echo 
-##echo " Host = `hostname`"
-##echo " OS   = `uname`"
-##echo " Date = `date`"
-##echo 
-##echo " d77 is running in directory: $(pwd)"
-##echo 
+echo " Host = `hostname`"
+echo " OS   = `uname`"
+echo " Date = `date`"
+echo 
+echo " d77 is running in directory: $(pwd)"
+echo 
 
 cp "${DIRPWD}/${JOB}.inp" INPUT
 
@@ -138,7 +138,9 @@ case ${RUNTYP} in
           echo 'No INPDIR_SOC_CGF directry'
           exit
         fi
-        ln -s ${INPDIR_SOC_CGF}/SOC_CGF* .
+        ln -s ${INPDIR_SOC_CGF}/SOC_CGF_X .
+        ln -s ${INPDIR_SOC_CGF}/SOC_CGF_Y .
+        ln -s ${INPDIR_SOC_CGF}/SOC_CGF_Z .
       ;;
 
       *)
@@ -183,6 +185,7 @@ case $RUNTYP in
 
     array=(\
     ELFLD_CGF_ATM SOC_CGF_X SOC_CGF_Y SOC_CGF_Z \
+     \
     )
     
     for FILENAME in "${array[@]}"
