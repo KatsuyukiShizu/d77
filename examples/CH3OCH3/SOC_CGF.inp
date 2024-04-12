@@ -1,0 +1,11 @@
+$comment
+Input file for calculating spin-orbit integrals between CGFs
+$end_comment
+
+$control
+property = soc
+runtyp = calc_int_cgf
+effcharg_soc = read
+$end_control
+
+INPDIR_ELEC = ../INP_ELEC
