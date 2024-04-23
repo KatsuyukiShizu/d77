@@ -1,0 +1,556 @@
+
+ --------------- d77 execution script ---------------
+
+
+
+ ****************************************************
+ **                                                **
+ **             d77: version 20240423              **
+ **                                                **
+ **  Visual understanding of molecular properties  **
+ **                                                **
+ **        Coded by SHIZU Katsuyuki (Japan)        **
+ **                                                **
+ ****************************************************
+
+ d77 is free software and can be redistributed and/or modified
+ under the terms of the GNU General Public License v3.0
+ as published by the Free Software Foundation.
+ https://www.gnu.org/licenses/gpl-3.0.html
+
+ For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
+
+
+
+ --- Entering d77.exe on 2024/4/23 at 12:26:2 (time zone = UTC+0900)
+
+ ===== Copy of your input file =====
+
+ $comment
+ Input file for calculating vibronic coupling constants
+ between S0 and S1
+ | 0 > : ground state (S0)
+ | 3 > : lowest excited singlet state (S1)
+ $end_comment
+ 
+ $control
+ property = vc
+ runtyp = int_pgf
+ method = td
+ $end_control
+ 
+ $elec_state
+ bra = < 0 |
+ ket = | 3 >
+ $end_elec_state
+ 
+ INPDIR_ELEC = ../../INP_ELEC
+ INPDIR_VIB = ../../INP_VIB
+ INPDIR_ELFLD = ../../ELFLD
+
+ ===================================
+
+ Reading $CONTROL options in your input file
+ Done
+
+ Reading general information of the system from CONTROL_ELEC
+ Done
+
+ Reading frequencies from FREQ
+ Reading vibrational modes from VIBMODE
+ Done
+
+ Orthonormalization of vibrational vectors
+ Done
+
+ Information of the system
+ =============================
+ Number of atoms:         6
+ Charge:                  0
+ Spin multiplicity:       1
+ Number of electrons:     16
+ Number of CGFs:          38
+ Number of spin orbitals: 76
+ Number of vib. modes:    12
+ =============================
+
+ Threshold values
+ =================================
+ Threshold_s_cgf:        0.100E-04
+ Threshold_e_ab:         0.100E-03
+ Threshold_ci_ci:        0.100E-07
+ Threshold_contribution: 0.100E+00
+ Threshold_distance:     0.400E+01
+ =================================
+
+ Reading nuclear coordinates from COORD
+ Reading atomic numbers from ATMNUM
+ Reading nuclear charges from NUCCHARG
+ Done
+
+ Reading primitive Gaussian functions (PGFs) from ATMORB
+ Reading expantion coefficients for CGFs (MO coefficients) from
+ COEFAREF and COEFBREF
+ Constructing contracted Gaussian functions (CGFs) from the PGFs
+
+ Names of spin orbitals
+ =================================
+    75   76   LUMO+29a   LUMO+29b 
+    73   74   LUMO+28a   LUMO+28b 
+    71   72   LUMO+27a   LUMO+27b 
+    69   70   LUMO+26a   LUMO+26b 
+    67   68   LUMO+25a   LUMO+25b 
+    65   66   LUMO+24a   LUMO+24b 
+    63   64   LUMO+23a   LUMO+23b 
+    61   62   LUMO+22a   LUMO+22b 
+    59   60   LUMO+21a   LUMO+21b 
+    57   58   LUMO+20a   LUMO+20b 
+    55   56   LUMO+19a   LUMO+19b 
+    53   54   LUMO+18a   LUMO+18b 
+    51   52   LUMO+17a   LUMO+17b 
+    49   50   LUMO+16a   LUMO+16b 
+    47   48   LUMO+15a   LUMO+15b 
+    45   46   LUMO+14a   LUMO+14b 
+    43   44   LUMO+13a   LUMO+13b 
+    41   42   LUMO+12a   LUMO+12b 
+    39   40   LUMO+11a   LUMO+11b 
+    37   38   LUMO+10a   LUMO+10b 
+    35   36   LUMO+9a    LUMO+9b  
+    33   34   LUMO+8a    LUMO+8b  
+    31   32   LUMO+7a    LUMO+7b  
+    29   30   LUMO+6a    LUMO+6b  
+    27   28   LUMO+5a    LUMO+5b  
+    25   26   LUMO+4a    LUMO+4b  
+    23   24   LUMO+3a    LUMO+3b  
+    21   22   LUMO+2a    LUMO+2b  
+    19   20   LUMO+1a    LUMO+1b  
+    17   18   LUMOa      LUMOb    
+ ---------------------------------
+    15   16   HOMOa      HOMOb    
+    13   14   HOMO-1a    HOMO-1b  
+    11   12   HOMO-2a    HOMO-2b  
+     9   10   HOMO-3a    HOMO-3b  
+     7    8   HOMO-4a    HOMO-4b  
+     5    6   HOMO-5a    HOMO-5b  
+     3    4   HOMO-6a    HOMO-6b  
+     1    2   HOMO-7a    HOMO-7b  
+ =================================
+
+ Nuclear coordinates (bohr)
+ ==============================================
+ Atom        x             y             z
+ ----------------------------------------------
+   1     0.00000000    0.00000000    1.25734557
+   2     0.00000000    0.00000000   -1.25734557
+   3     0.00000000    1.74392800    2.34382016
+   4    -0.00000000   -1.74392800    2.34382016
+   5    -0.00000000   -1.74392800   -2.34382016
+   6     0.00000000    1.74392800   -2.34382016
+ ==============================================
+
+ Nuclear charges (elementary charge) and
+ atomic weights (atomic mass unit)
+ =============================================
+ Atom   Element   Atomic   Nuclear     Atomic 
+        symbol    number   charge      weight 
+ ---------------------------------------------
+   1       C         6       6.0      12.00000
+   2       C         6       6.0      12.00000
+   3       H         1       1.0       1.00783
+   4       H         1       1.0       1.00783
+   5       H         1       1.0       1.00783
+   6       H         1       1.0       1.00783
+ =============================================
+
+ Reading X + Y and X - Y from XY
+ Done
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ ---------------------------------------------
+ | 3 >
+ TD-HF/DFT excited state   3
+ Singlet   
+
+  -0.0467300   -0.0157100   5 ->  23
+  -0.0467300   -0.0157100   6 ->  24
+  -0.0304900   -0.0081700   5 ->  27
+  -0.0304900   -0.0081700   6 ->  28
+  -0.0258600   -0.0036600   5 ->  39
+  -0.0258600   -0.0036600   6 ->  40
+  -0.0020300   -0.0008100   5 ->  45
+  -0.0020300   -0.0008100   6 ->  46
+   0.0224400    0.0049800   5 ->  49
+   0.0224400    0.0049800   6 ->  50
+   0.0019500   -0.0004500   5 ->  65
+   0.0019500   -0.0004500   6 ->  66
+  -0.0042200   -0.0007200   5 ->  71
+  -0.0042200   -0.0007200   6 ->  72
+  -0.0008200   -0.0001200   5 ->  75
+  -0.0008200   -0.0001200   6 ->  76
+  -0.0779900   -0.0382500   7 ->  19
+  -0.0779900   -0.0382500   8 ->  20
+  -0.0014200    0.0008600   7 ->  29
+  -0.0014200    0.0008600   8 ->  30
+   0.0146900    0.0021500   7 ->  37
+   0.0146900    0.0021500   8 ->  38
+   0.0169300    0.0037100   7 ->  47
+   0.0169300    0.0037100   8 ->  48
+  -0.0010800   -0.0008600   7 ->  59
+  -0.0010800   -0.0008600   8 ->  60
+   0.0005600   -0.0000600   7 ->  63
+   0.0005600   -0.0000600   8 ->  64
+  -0.0013200   -0.0000400   7 ->  73
+  -0.0013200   -0.0000400   8 ->  74
+  -0.0736200   -0.0345400   9 ->  25
+  -0.0736200   -0.0345400  10 ->  26
+   0.0202300    0.0053100   9 ->  43
+   0.0202300    0.0053100  10 ->  44
+   0.0030200    0.0010000   9 ->  51
+   0.0030200    0.0010000  10 ->  52
+  -0.0031700   -0.0004100   9 ->  69
+  -0.0031700   -0.0004100  10 ->  70
+   0.0026100   -0.0008500  11 ->  23
+   0.0026100   -0.0008500  12 ->  24
+   0.1015900    0.0445300  11 ->  27
+   0.1015900    0.0445300  12 ->  28
+   0.0707700    0.0198300  11 ->  39
+   0.0707700    0.0198300  12 ->  40
+   0.0247800    0.0067000  11 ->  45
+   0.0247800    0.0067000  12 ->  46
+  -0.0231000   -0.0053000  11 ->  49
+  -0.0231000   -0.0053000  12 ->  50
+  -0.0018800    0.0003200  11 ->  65
+  -0.0018800    0.0003200  12 ->  66
+   0.0040800    0.0006400  11 ->  71
+   0.0040800    0.0006400  12 ->  72
+  -0.0261800   -0.0167600  13 ->  21
+  -0.0261800   -0.0167600  14 ->  22
+   0.0688900    0.0246900  13 ->  33
+   0.0688900    0.0246900  14 ->  34
+  -0.0019700   -0.0007500  13 ->  41
+  -0.0019700   -0.0007500  14 ->  42
+  -0.0128300   -0.0020100  13 ->  61
+  -0.0128300   -0.0020100  14 ->  62
+   0.5976100    0.8105100  15 ->  17
+   0.5976100    0.8105100  16 ->  18
+   0.0439100    0.0074300  15 ->  35
+   0.0439100    0.0074300  16 ->  36
+  -0.0001400   -0.0010000  15 ->  67
+  -0.0001400   -0.0010000  16 ->  68
+ =============================================
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ ---------------------------------------------
+ | 3 >
+ TD-HF/DFT excited state   3
+ Singlet   
+
+  -0.0467300   -0.0157100  LUMO+3a  
+                           HOMO-5a  
+  -0.0467300   -0.0157100  LUMO+3b  
+                           HOMO-5b  
+  -0.0304900   -0.0081700  LUMO+5a  
+                           HOMO-5a  
+  -0.0304900   -0.0081700  LUMO+5b  
+                           HOMO-5b  
+  -0.0258600   -0.0036600  LUMO+11a 
+                           HOMO-5a  
+  -0.0258600   -0.0036600  LUMO+11b 
+                           HOMO-5b  
+  -0.0020300   -0.0008100  LUMO+14a 
+                           HOMO-5a  
+  -0.0020300   -0.0008100  LUMO+14b 
+                           HOMO-5b  
+   0.0224400    0.0049800  LUMO+16a 
+                           HOMO-5a  
+   0.0224400    0.0049800  LUMO+16b 
+                           HOMO-5b  
+   0.0019500   -0.0004500  LUMO+24a 
+                           HOMO-5a  
+   0.0019500   -0.0004500  LUMO+24b 
+                           HOMO-5b  
+  -0.0042200   -0.0007200  LUMO+27a 
+                           HOMO-5a  
+  -0.0042200   -0.0007200  LUMO+27b 
+                           HOMO-5b  
+  -0.0008200   -0.0001200  LUMO+29a 
+                           HOMO-5a  
+  -0.0008200   -0.0001200  LUMO+29b 
+                           HOMO-5b  
+  -0.0779900   -0.0382500  LUMO+1a  
+                           HOMO-4a  
+  -0.0779900   -0.0382500  LUMO+1b  
+                           HOMO-4b  
+  -0.0014200    0.0008600  LUMO+6a  
+                           HOMO-4a  
+  -0.0014200    0.0008600  LUMO+6b  
+                           HOMO-4b  
+   0.0146900    0.0021500  LUMO+10a 
+                           HOMO-4a  
+   0.0146900    0.0021500  LUMO+10b 
+                           HOMO-4b  
+   0.0169300    0.0037100  LUMO+15a 
+                           HOMO-4a  
+   0.0169300    0.0037100  LUMO+15b 
+                           HOMO-4b  
+  -0.0010800   -0.0008600  LUMO+21a 
+                           HOMO-4a  
+  -0.0010800   -0.0008600  LUMO+21b 
+                           HOMO-4b  
+   0.0005600   -0.0000600  LUMO+23a 
+                           HOMO-4a  
+   0.0005600   -0.0000600  LUMO+23b 
+                           HOMO-4b  
+  -0.0013200   -0.0000400  LUMO+28a 
+                           HOMO-4a  
+  -0.0013200   -0.0000400  LUMO+28b 
+                           HOMO-4b  
+  -0.0736200   -0.0345400  LUMO+4a  
+                           HOMO-3a  
+  -0.0736200   -0.0345400  LUMO+4b  
+                           HOMO-3b  
+   0.0202300    0.0053100  LUMO+13a 
+                           HOMO-3a  
+   0.0202300    0.0053100  LUMO+13b 
+                           HOMO-3b  
+   0.0030200    0.0010000  LUMO+17a 
+                           HOMO-3a  
+   0.0030200    0.0010000  LUMO+17b 
+                           HOMO-3b  
+  -0.0031700   -0.0004100  LUMO+26a 
+                           HOMO-3a  
+  -0.0031700   -0.0004100  LUMO+26b 
+                           HOMO-3b  
+   0.0026100   -0.0008500  LUMO+3a  
+                           HOMO-2a  
+   0.0026100   -0.0008500  LUMO+3b  
+                           HOMO-2b  
+   0.1015900    0.0445300  LUMO+5a  
+                           HOMO-2a  
+   0.1015900    0.0445300  LUMO+5b  
+                           HOMO-2b  
+   0.0707700    0.0198300  LUMO+11a 
+                           HOMO-2a  
+   0.0707700    0.0198300  LUMO+11b 
+                           HOMO-2b  
+   0.0247800    0.0067000  LUMO+14a 
+                           HOMO-2a  
+   0.0247800    0.0067000  LUMO+14b 
+                           HOMO-2b  
+  -0.0231000   -0.0053000  LUMO+16a 
+                           HOMO-2a  
+  -0.0231000   -0.0053000  LUMO+16b 
+                           HOMO-2b  
+  -0.0018800    0.0003200  LUMO+24a 
+                           HOMO-2a  
+  -0.0018800    0.0003200  LUMO+24b 
+                           HOMO-2b  
+   0.0040800    0.0006400  LUMO+27a 
+                           HOMO-2a  
+   0.0040800    0.0006400  LUMO+27b 
+                           HOMO-2b  
+  -0.0261800   -0.0167600  LUMO+2a  
+                           HOMO-1a  
+  -0.0261800   -0.0167600  LUMO+2b  
+                           HOMO-1b  
+   0.0688900    0.0246900  LUMO+8a  
+                           HOMO-1a  
+   0.0688900    0.0246900  LUMO+8b  
+                           HOMO-1b  
+  -0.0019700   -0.0007500  LUMO+12a 
+                           HOMO-1a  
+  -0.0019700   -0.0007500  LUMO+12b 
+                           HOMO-1b  
+  -0.0128300   -0.0020100  LUMO+22a 
+                           HOMO-1a  
+  -0.0128300   -0.0020100  LUMO+22b 
+                           HOMO-1b  
+   0.5976100    0.8105100  LUMOa    
+                           HOMOa    
+   0.5976100    0.8105100  LUMOb    
+                           HOMOb    
+   0.0439100    0.0074300  LUMO+9a  
+                           HOMOa    
+   0.0439100    0.0074300  LUMO+9b  
+                           HOMOb    
+  -0.0001400   -0.0010000  LUMO+25a 
+                           HOMOa    
+  -0.0001400   -0.0010000  LUMO+25b 
+                           HOMOb    
+ =============================================
+
+ Sum of (X + Y)*(X - Y) of electronic state | i >
+ ==========================
+   i   Sum[(X + Y)*(X - Y)]
+ --------------------------
+   0   1.00000000
+   3   1.00000595
+ ==========================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ ---------------------------------------------
+ | 3 >
+ TD-HF/DFT excited state   3
+ Singlet   
+
+  48.44  15 ->  17
+  48.44  16 ->  18
+   0.45  11 ->  27
+   0.45  12 ->  28
+   0.30   7 ->  19
+   0.30   8 ->  20
+   0.25   9 ->  25
+   0.25  10 ->  26
+   0.17  13 ->  33
+   0.17  14 ->  34
+   0.14  11 ->  39
+   0.14  12 ->  40
+ =============================================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ ---------------------------------------------
+ | 3 >
+ TD-HF/DFT excited state   3
+ Singlet   
+
+  48.44  LUMOa    
+         HOMOa    
+  48.44  LUMOb    
+         HOMOb    
+   0.45  LUMO+5a  
+         HOMO-2a  
+   0.45  LUMO+5b  
+         HOMO-2b  
+   0.30  LUMO+1a  
+         HOMO-4a  
+   0.30  LUMO+1b  
+         HOMO-4b  
+   0.25  LUMO+4a  
+         HOMO-3a  
+   0.25  LUMO+4b  
+         HOMO-3b  
+   0.17  LUMO+8a  
+         HOMO-1a  
+   0.17  LUMO+8b  
+         HOMO-1b  
+   0.14  LUMO+11a 
+         HOMO-2a  
+   0.14  LUMO+11b 
+         HOMO-2b  
+ =============================================
+
+
+ --- Entering SUBROUTINE vc_int_pgf
+
+ --------------
+ Density matrix
+ --------------
+
+ gamma: one-particle reduced density matrix
+ between electronic states | i > and | j >
+
+ Trace of gamma
+ =============================
+   i   j   n_ci_ci   Tr[gamma]
+ -----------------------------
+   0   3      66       0.00000
+ =============================
+
+ Calculating density matrix in terms of CGFs
+ from gamma and CGF coefficients
+ Done
+
+ -------------
+ Dipole moment
+ -------------
+
+ Dipole moment in atomic units
+ ====================================================
+   i   j      mu_x       mu_y       mu_z       |mu|
+ ----------------------------------------------------
+   0   3    0.00000    0.00000   -1.31330    1.31330
+ ====================================================
+
+ Dipole moment in debye
+ ====================================================
+   i   j      mu_x       mu_y       mu_z       |mu|
+ ----------------------------------------------------
+   0   3    0.00000    0.00000   -3.33807    3.33807
+ ====================================================
+
+ -----------------
+ Vibronic coupling
+ -----------------
+
+ Reading elfld_cgf_atm from ELFLD_CGF_ATM                 
+ Done
+
+ --------------------------------
+ Vibronic coupling constant (VCC)
+ --------------------------------
+
+ Freq   : frequency (cm-1)
+ VCC_en : electronic part of VCC (a.u.)
+ VCC_nn : nucelar part of VCC (a.u.)
+ VCC = VCC_en + VCC_nn
+
+ ====================================================
+ Mode    Freq      VCC_en       VCC_nn       VCC
+ ----------------------------------------------------
+   1    833.17   0.00000000   0.00000000   0.00000000
+   2    955.82   0.00000000   0.00000000   0.00000000
+   3    976.05   0.00000000   0.00000000   0.00000000
+   4   1069.38   0.00000000   0.00000000   0.00000000
+   5   1247.00  -0.00000000   0.00000000  -0.00000000
+   6   1396.09   0.00000000   0.00000000   0.00000000
+   7   1494.71   0.00050718   0.00000000   0.00050718
+   8   1720.97   0.00000000   0.00000000   0.00000000
+   9   3153.86   0.00050252   0.00000000   0.00050252
+  10   3169.35   0.00000000   0.00000000   0.00000000
+  11   3223.57  -0.00000000   0.00000000  -0.00000000
+  12   3249.09   0.00000000   0.00000000   0.00000000
+ ====================================================
+
+ --- Leaving SUBROUTINE vc_int_pgf
+
+
+ ****************************
+ **                        **
+ **   Normal termination   **
+ **                        **
+ ****************************
+
+
+ Total CPU time =     0.00 seconds
+
+ --- Leaving d77.exe on 2024/4/23 at 12:26:2 (time zone = UTC+0900)
+
+ --------------- End of d77 execution script ---------------

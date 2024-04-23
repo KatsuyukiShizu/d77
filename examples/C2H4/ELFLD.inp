@@ -1,0 +1,10 @@
+$comment
+Input file for calculating electric field integrals between CGFs
+$end_comment
+
+$control
+property = vc
+runtyp = calc_int_cgf
+$end_control
+
+INPDIR_ELEC = ../INP_ELEC

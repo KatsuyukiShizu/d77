@@ -21,8 +21,6 @@ else
   PROPERTY=$(grep PROPERTY ${DPPINP} | awk '{print $3}')
 fi
 
-echo "PROPERTY: ${PROPERTY}"
-
 grep --quiet 'QC_METHOD' ${DPPINP}
 CHECK_QC_METHOD=$(echo $?)
 if [ ${CHECK_QC_METHOD} = 1 ] ; then # Missing QC_METHOD
@@ -35,7 +33,6 @@ else
   QC_METHOD=$(grep QC_METHOD ${DPPINP} | awk '{print $3}')
 fi
 
-echo "QC_METHOD: ${QC_METHOD}"
 echo ${QC_METHOD}  >> TEMP_CONTROL_ELEC  
 echo ${PROPERTY}   >> TEMP_CONTROL_ELEC  
 

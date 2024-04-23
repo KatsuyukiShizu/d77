@@ -12,8 +12,8 @@ SUBROUTINE dipole_density
   USE ifmod, ONLY: write_messages, &
                   &calc_opr_dmat, &
                   &calc_dmat_cgf, &
-                  &cube_dipole_density, &
-                  &write_mat
+                  &write_mat, &
+                  &cube_dipole_density
   USE global_constants
   USE global_read_input
   USE global_read_data

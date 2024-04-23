@@ -1,0 +1,70 @@
+STATE =  1
+X only :  0
+Y only :  0
+X and Y: 34
+X total: 34
+y total: 34
+
+STATE =  2
+X only :  0
+Y only :  0
+X and Y: 12
+X total: 12
+y total: 12
+
+STATE =  3
+X only :  0
+Y only :  0
+X and Y: 33
+X total: 33
+y total: 33
+
+STATE =  4
+X only :  1
+Y only :  0
+X and Y: 11
+X total: 12
+y total: 11
+
+STATE =  5
+X only :  0
+Y only :  0
+X and Y: 16
+X total: 16
+y total: 16
+
+STATE =  6
+X only :  0
+Y only :  0
+X and Y: 12
+X total: 12
+y total: 12
+
+STATE =  7
+X only :  0
+Y only :  0
+X and Y: 18
+X total: 18
+y total: 18
+
+STATE =  8
+X only :  0
+Y only :  0
+X and Y: 16
+X total: 16
+y total: 16
+
+STATE =  9
+X only :  0
+Y only :  1
+X and Y: 11
+X total: 11
+y total: 12
+
+STATE = 10
+X only :  0
+Y only :  0
+X and Y:  4
+X total:  4
+y total:  4
+

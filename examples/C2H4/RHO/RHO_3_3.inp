@@ -1,0 +1,29 @@
+$comment
+Input file for calculating electron density of S1
+| 3 > : lowest excited singlet state (S1)
+$end_comment
+
+$control
+property = rho
+runtyp = density
+method = td
+$end_control
+
+$elec_state
+bra = < 3 |
+ket = | 3 >
+$end_elec_state
+
+$grid
+xmin = -5.0
+xmax =  5.0
+ymin = -5.0
+ymax =  5.0
+zmin = -5.0
+zmax =  5.0
+dx = 0.20
+dy = 0.20
+dz = 0.20
+$end_grid
+
+INPDIR_ELEC = ../../INP_ELEC

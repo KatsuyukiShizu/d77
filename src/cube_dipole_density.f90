@@ -204,12 +204,12 @@ SUBROUTINE cube_dipole_density(dmat_cgf, int_rho, int_dd)
             int_dd(1:3) = int_dd(1:3) + dd(1:3, icol)
           ENDDO ! icol = 1, ncol
 
-          CALL cube_write_density(fid_rho, rho)
+          CALL cube_write_density(fid_rho, rho(1:mod_nz_ncol))
           DO i_xyz = 1, 3 
             CALL cube_write_density(fid_er(i_xyz),&
-                 minus_er(i_xyz, 1:6))
+                 minus_er(i_xyz, 1:mod_nz_ncol))
             CALL cube_write_density(fid_dd(i_xyz),&
-                 dd(i_xyz, 1:6))
+                 dd(i_xyz, 1:mod_nz_ncol))
           ENDDO
         ELSE ! n_line > 2
           DO i_line = 1, n_line - 1
@@ -255,7 +255,7 @@ SUBROUTINE cube_dipole_density(dmat_cgf, int_rho, int_dd)
             int_dd(1:3) = int_dd(1:3) + dd(1:3, icol)
           ENDDO ! icol = 1, ncol
 
-          CALL cube_write_density(fid_rho, rho)
+          CALL cube_write_density(fid_rho, rho(1:mod_nz_ncol))
           DO i_xyz = 1, 3 
             CALL cube_write_density(fid_er(i_xyz),&
                  minus_er(i_xyz, 1:mod_nz_ncol))

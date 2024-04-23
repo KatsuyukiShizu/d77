@@ -1,0 +1,25 @@
+$comment
+Input file for calculating spin-orbit coupling 
+between S0 and T2 (Ms = 0)
+| 0 >: ground state (S0)
+| 2 >: second lowest triplet state (T2)
+$end_comment
+
+$control
+property = soc
+runtyp = int_pgf
+method = td
+effcharg_soc = read
+$end_control
+
+$spin_orbit
+ms = 0
+$end_spin_orbit
+
+$elec_state
+bra = < 0 |
+ket = | 2 >
+$end_elec_state
+
+INPDIR_ELEC = ../../INP_ELEC
+INPDIR_SOC_CGF = ../../SOC_CGF

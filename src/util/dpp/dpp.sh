@@ -1,4 +1,15 @@
 #!/bin/sh
+
+# This script is part of d77 and performs data preprocessing for d77.
+
+# d77 is free software and can be redistributed and/or modified
+# under the terms of the GNU General Public License v3.0
+# as published by the Free Software Foundation.
+# https://www.gnu.org/licenses/gpl-3.0.html
+
+# For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
+
+
 shopt -s nocasematch
 
 export DPPINP='dpp.inp' # Input file
@@ -27,7 +38,6 @@ fi
 # Removing existing temporary files
 echo  
 echo 'Removing the existing temporary files' 
-echo ' ' 
 rm -f ${DPPOUT} 
 sh "${DIR_d77_dpp}/rm_temp_files.sh"
 
@@ -93,6 +103,7 @@ else
   export QC_PROGRAM_VIB=$(grep QC_PROGRAM_VIB ${DPPINP} | awk '{print $3}')
 fi
 
+echo 
 echo "PROPERTY: ${PROPERTY}"
 echo "QC_METHOD: ${QC_METHOD}"
 echo "QC_PROGRAM_ELEC: ${QC_PROGRAM_ELEC}"

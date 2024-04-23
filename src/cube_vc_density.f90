@@ -188,7 +188,7 @@ SUBROUTINE cube_vc_density(dmat_cgf, int_rho, int_vcd)
             int_vcd(:) = int_vcd(:) + vcd(:, icol)
           ENDDO ! icol = 1, ncol
 
-          CALL cube_write_density(fid_rho, rho)
+          CALL cube_write_density(fid_rho, rho(1:mod_nz_ncol))
           DO i_mode_calc = 1, n_mode_calc 
             CALL cube_write_density(fid_dvne(i_mode_calc),&
                  dvne(i_mode_calc, 1:mod_nz_ncol))

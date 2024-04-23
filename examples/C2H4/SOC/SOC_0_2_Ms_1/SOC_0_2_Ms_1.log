@@ -1,0 +1,355 @@
+
+ --------------- d77 execution script ---------------
+
+
+
+ ****************************************************
+ **                                                **
+ **             d77: version 20240423              **
+ **                                                **
+ **  Visual understanding of molecular properties  **
+ **                                                **
+ **        Coded by SHIZU Katsuyuki (Japan)        **
+ **                                                **
+ ****************************************************
+
+ d77 is free software and can be redistributed and/or modified
+ under the terms of the GNU General Public License v3.0
+ as published by the Free Software Foundation.
+ https://www.gnu.org/licenses/gpl-3.0.html
+
+ For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
+
+
+
+ --- Entering d77.exe on 2024/4/23 at 11:12:0 (time zone = UTC+0900)
+
+ ===== Copy of your input file =====
+
+ $comment
+ Input file for calculating spin-orbit coupling
+ between S0 and T2 (Ms = 1)
+ | 0 >: ground state (S0)
+ | 2 >: second lowest triplet state (T2)
+ $end_comment
+ 
+ $control
+ property = soc
+ runtyp = int_pgf
+ method = td
+ effcharg_soc = read
+ $end_control
+ 
+ $spin_orbit
+ ms = 1
+ $end_spin_orbit
+ 
+ $elec_state
+ bra = < 0 |
+ ket = | 2 >
+ $end_elec_state
+ 
+ INPDIR_ELEC = ../../INP_ELEC
+ INPDIR_SOC_CGF = ../../SOC_CGF
+
+ ===================================
+
+ Reading $CONTROL options in your input file
+ Done
+ ms = 1                                                                                              
+
+ Reading general information of the system from CONTROL_ELEC
+ Done
+
+ Information of the system
+ =============================
+ Number of atoms:         6
+ Charge:                  0
+ Spin multiplicity:       1
+ Number of electrons:     16
+ Number of CGFs:          38
+ Number of spin orbitals: 76
+ =============================
+
+ Threshold values
+ =================================
+ Threshold_s_cgf:        0.100E-04
+ Threshold_e_ab:         0.100E-03
+ Threshold_ci_ci:        0.100E-07
+ Threshold_contribution: 0.100E+00
+ Threshold_distance:     0.400E+01
+ =================================
+
+ Reading nuclear coordinates from COORD
+ Reading atomic numbers from ATMNUM
+ Reading nuclear charges from NUCCHARG
+ Done
+
+ Reading primitive Gaussian functions (PGFs) from ATMORB
+ Reading expantion coefficients for CGFs (MO coefficients) from
+ COEFAREF and COEFBREF
+ Constructing contracted Gaussian functions (CGFs) from the PGFs
+
+ Names of spin orbitals
+ =================================
+    75   76   LUMO+29a   LUMO+29b 
+    73   74   LUMO+28a   LUMO+28b 
+    71   72   LUMO+27a   LUMO+27b 
+    69   70   LUMO+26a   LUMO+26b 
+    67   68   LUMO+25a   LUMO+25b 
+    65   66   LUMO+24a   LUMO+24b 
+    63   64   LUMO+23a   LUMO+23b 
+    61   62   LUMO+22a   LUMO+22b 
+    59   60   LUMO+21a   LUMO+21b 
+    57   58   LUMO+20a   LUMO+20b 
+    55   56   LUMO+19a   LUMO+19b 
+    53   54   LUMO+18a   LUMO+18b 
+    51   52   LUMO+17a   LUMO+17b 
+    49   50   LUMO+16a   LUMO+16b 
+    47   48   LUMO+15a   LUMO+15b 
+    45   46   LUMO+14a   LUMO+14b 
+    43   44   LUMO+13a   LUMO+13b 
+    41   42   LUMO+12a   LUMO+12b 
+    39   40   LUMO+11a   LUMO+11b 
+    37   38   LUMO+10a   LUMO+10b 
+    35   36   LUMO+9a    LUMO+9b  
+    33   34   LUMO+8a    LUMO+8b  
+    31   32   LUMO+7a    LUMO+7b  
+    29   30   LUMO+6a    LUMO+6b  
+    27   28   LUMO+5a    LUMO+5b  
+    25   26   LUMO+4a    LUMO+4b  
+    23   24   LUMO+3a    LUMO+3b  
+    21   22   LUMO+2a    LUMO+2b  
+    19   20   LUMO+1a    LUMO+1b  
+    17   18   LUMOa      LUMOb    
+ ---------------------------------
+    15   16   HOMOa      HOMOb    
+    13   14   HOMO-1a    HOMO-1b  
+    11   12   HOMO-2a    HOMO-2b  
+     9   10   HOMO-3a    HOMO-3b  
+     7    8   HOMO-4a    HOMO-4b  
+     5    6   HOMO-5a    HOMO-5b  
+     3    4   HOMO-6a    HOMO-6b  
+     1    2   HOMO-7a    HOMO-7b  
+ =================================
+
+ Nuclear coordinates (bohr)
+ ==============================================
+ Atom        x             y             z
+ ----------------------------------------------
+   1     0.00000000    0.00000000    1.25734557
+   2     0.00000000    0.00000000   -1.25734557
+   3     0.00000000    1.74392800    2.34382016
+   4    -0.00000000   -1.74392800    2.34382016
+   5    -0.00000000   -1.74392800   -2.34382016
+   6     0.00000000    1.74392800   -2.34382016
+ ==============================================
+
+ Nuclear charges (elementary charge)
+ =================================
+ Atom   Element   Atomic   Nuclear
+        symbol    number   charge 
+ ---------------------------------
+   1       C         6       6.0
+   2       C         6       6.0
+   3       H         1       1.0
+   4       H         1       1.0
+   5       H         1       1.0
+   6       H         1       1.0
+ =================================
+
+ Zeff for SOC calculations (elementary charge)
+ =================================
+ Atom   Element   Atomic   Zeff   
+        symbol    number          
+ ---------------------------------
+   1       C         6       3.6
+   2       C         6       3.6
+   3       H         1       1.0
+   4       H         1       1.0
+   5       H         1       1.0
+   6       H         1       1.0
+ =================================
+
+ Reading X + Y and X - Y from XY
+ Done
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Triplet   
+
+   0.0188090    0.0030547   6 ->  55
+   0.0207041    0.0039598   8 ->  57
+   0.0195869    0.0110167  10 ->  31
+   0.0134775    0.0078489  10 ->  53
+   0.0070145    0.0022345  12 ->  55
+   1.0163953    0.9740537  14 ->  17
+  -0.0302076   -0.0221466  14 ->  35
+   0.0029981    0.0009617  14 ->  67
+  -0.1031527   -0.0858710  16 ->  21
+  -0.0145098    0.0051195  16 ->  33
+  -0.0125016   -0.0043841  16 ->  41
+   0.0082307   -0.0011879  16 ->  61
+ =============================================
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Triplet   
+
+   0.0188090    0.0030547  LUMO+19a 
+                           HOMO-5b  
+   0.0207041    0.0039598  LUMO+20a 
+                           HOMO-4b  
+   0.0195869    0.0110167  LUMO+7a  
+                           HOMO-3b  
+   0.0134775    0.0078489  LUMO+18a 
+                           HOMO-3b  
+   0.0070145    0.0022345  LUMO+19a 
+                           HOMO-2b  
+   1.0163953    0.9740537  LUMOa    
+                           HOMO-1b  
+  -0.0302076   -0.0221466  LUMO+9a  
+                           HOMO-1b  
+   0.0029981    0.0009617  LUMO+25a 
+                           HOMO-1b  
+  -0.1031527   -0.0858710  LUMO+2a  
+                           HOMOb    
+  -0.0145098    0.0051195  LUMO+8a  
+                           HOMOb    
+  -0.0125016   -0.0043841  LUMO+12a 
+                           HOMOb    
+   0.0082307   -0.0011879  LUMO+22a 
+                           HOMOb    
+ =============================================
+
+ Sum of (X + Y)*(X - Y) of electronic state | i >
+ ==========================
+   i   Sum[(X + Y)*(X - Y)]
+ --------------------------
+   0   1.00000000
+   2   1.00000076
+ ==========================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Triplet   
+
+  99.00  14 ->  17
+   0.89  16 ->  21
+ =============================================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Triplet   
+
+  99.00  LUMOa    
+         HOMO-1b  
+   0.89  LUMO+2a  
+         HOMOb    
+ =============================================
+
+
+ --- Entering SUBROUTINE soc_int_pgf
+
+ --------------
+ Density matrix
+ --------------
+
+ gamma: one-particle reduced density matrix
+ between electronic states | i > and | j >
+
+ Trace of gamma
+ =============================
+   i   j   n_ci_ci   Tr[gamma]
+ -----------------------------
+   0   2      12       0.00000
+ =============================
+
+ Calculating density matrix in terms of CGFs
+ from gamma and CGF coefficients
+ Done
+
+ Reading x components of soc_cgf from SOC_CGF_X
+ Reading y components of soc_cgf from SOC_CGF_Y
+ Done
+
+ ----------------------------------
+ Spin-orbit coupling constant (SOC)
+ ----------------------------------
+
+ alpha: fine-structure constant
+ alpha   =   0.007297
+ 1/alpha = 137.036001
+
+ < 0 | SOC operator | 2 > (a.u.)
+ ========================================
+       x             y             z      
+ ----------------------------------------
+  0.51216E-16  -0.24164E-16   0.00000E+00
+ ========================================
+
+ < 0 | SOC operator | 2 > * alpha**2/2 (a.u.)
+ ========================================
+       x             y             z      
+ ----------------------------------------
+  0.68182E-21  -0.32169E-21   0.00000E+00
+ ========================================
+
+ < 0 | SOC operator | 2 > * alpha**2/2 (cm-1)
+ ========================================
+       x             y             z      
+ ----------------------------------------
+  0.14964E-15  -0.70604E-16   0.00000E+00
+ ========================================
+
+ --- Leaving SUBROUTINE soc_int_pgf
+
+
+ ****************************
+ **                        **
+ **   Normal termination   **
+ **                        **
+ ****************************
+
+
+ Total CPU time =     0.01 seconds
+
+ --- Leaving d77.exe on 2024/4/23 at 11:12:1 (time zone = UTC+0900)
+
+ --------------- End of d77 execution script ---------------
