@@ -1,4 +1,15 @@
 #!/bin/sh
+
+# This script is part of d77.
+
+# d77 is free software and can be redistributed and/or modified
+# under the terms of the GNU General Public License v3.0
+# as published by the Free Software Foundation.
+# https://www.gnu.org/licenses/gpl-3.0.html
+
+# For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
+
+
 shopt -s nocasematch
 
 EXE=d77
@@ -13,15 +24,29 @@ cd ${RESDIR}
 
 echo 
 echo " --------------- ${EXE} execution script ---------------"
+
+###
 echo 
 echo " Host = `hostname`"
 echo " OS   = `uname`"
 echo " Date = `date`"
 echo 
 echo " d77 is running in directory: $(pwd)"
-echo 
+###
 
-cp "${DIRPWD}/${JOB}.inp" INPUT
+export INPUT_d77=${JOB}.inp
+if [ -f "${DIRPWD}/${JOB}.inp" ] ; then
+  cp "${DIRPWD}/${JOB}.inp" INPUT
+else
+  echo " Missing ${JOB}.inp"
+  echo " Removing ${RESDIR} directory"
+  rm -rf "${DIRPWD}/${RESDIR}"
+  echo 
+  echo " Error termination"
+  echo 
+  echo " --------------- End of ${EXE} execution script ---------------"
+  exit
+fi
 
 PROPERTY=$(grep -i Property INPUT | awk '{print $3}')
 METHOD=$(grep -i Method INPUT | awk '{print $3}')
@@ -56,6 +81,62 @@ case ${RUNTYP} in
     fi
     ln -s $INPDIR_ELEC/* .
   ;; # Calc_int_cgf)
+
+  Density) 
+
+    if [ -n "${INPDIR_ELEC}" ]; then
+      if [ ! -d "${INPDIR_ELEC}" ] ; then
+        echo " No ${INPDIR_ELEC} directory"
+        echo
+        echo " Error termination"
+        echo
+        echo " --------------- End of ${EXE} execution script ---------------"
+        exit
+      else
+        :
+      fi
+    else
+      echo " INPDIR_ELEC is empty"
+      echo
+      echo " Error termination"
+      echo
+      echo " --------------- End of ${EXE} execution script ---------------"
+      exit
+    fi
+    ln -s $INPDIR_ELEC/* .
+
+    case $PROPERTY in
+
+      Dipole)
+        :
+      ;;
+      Vc)
+
+        if [ -n "${INPDIR_VIB}" ]; then
+          if [ ! -d "${INPDIR_VIB}" ] ; then
+            echo " No ${INPDIR_VIB} directory"
+            echo
+            echo " Error termination"
+            echo
+            echo " --------------- End of ${EXE} execution script ---------------"
+            exit
+          else
+            :
+          fi
+        else
+          echo " INPDIR_VIB is empty"
+          echo
+          echo " Error termination"
+          echo
+          echo " --------------- End of ${EXE} execution script ---------------"
+          exit
+        fi
+        ln -s $INPDIR_VIB/* .
+
+      ;;
+    esac
+
+  ;;
 
   Int_pgf) 
 
@@ -151,17 +232,22 @@ case ${RUNTYP} in
   ;; # Int_pgf)
   
   *) 
-    echo "xInvalid Runtyp: ${RUNTYP}" 
+    echo "Invalid Runtyp: ${RUNTYP}" 
     exit
   ;;
 esac
 
-##echo ' INPUT file       = '${DIRPWD}/${JOB}.inp
-##echo ' RESULTS directry = '${DIRPWD}/${RESDIR}
-##echo
+
+###
+echo
+echo ' INPUT file       = '${DIRPWD}/${JOB}.inp
+echo ' RESULTS directry = '${DIRPWD}/${RESDIR}
+###
+
 echo
 echo
-"$DIR_d77_EXE"/d77.exe
+echo
+"${DIR_d77_EXE}/d77.exe"
 
 array=(\
 ATMNUM CNTEXP SHELLTYP ATMORB COEFAREF NUCCHARG ZEFF_SOC ATMWT COEFBREF \
@@ -180,7 +266,7 @@ do
   fi
 done
 
-case $RUNTYP in
+case ${RUNTYP} in
   Int_pgf)
 
     array=(\
@@ -201,10 +287,10 @@ case $RUNTYP in
     :
 esac
 
-mv INPUT $JOB.inp 
-mv ../$JOB.log . 
+mv INPUT ${JOB}.inp 
+mv ../${JOB}.log . 
 echo 
-echo ' --------------- End of '$EXE' execution script ---------------'
+echo " --------------- End of ${EXE} execution script ---------------"
 exit
 
 

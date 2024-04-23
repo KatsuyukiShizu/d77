@@ -1,11 +1,11 @@
 ! This subroutine is part of d77 and computes
 ! one-particle reduced density matrix (gamma).
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 SUBROUTINE calc_opr_dmat&
@@ -30,7 +30,7 @@ SUBROUTINE calc_opr_dmat&
   INTEGER, INTENT(IN) :: left_state, right_state
 
 ! Output variables
-  INTEGER, INTENT(OUT) :: n_ci_ci
+  INTEGER, INTENT(OUT)          :: n_ci_ci
   DOUBLE PRECISION, INTENT(OUT) :: opr_dmat(:,:)
   DOUBLE PRECISION, INTENT(OUT) :: trace_opr_dmat 
 
@@ -42,16 +42,12 @@ SUBROUTINE calc_opr_dmat&
   INTEGER :: a_ras_temp(1:Max_n_tuple), r_ras_temp(1:Max_n_tuple)
   INTEGER :: a(1:Max_n_tuple), r(1:Max_n_tuple), &
             &b(1:Max_n_tuple), s(1:Max_n_tuple)
-  DOUBLE PRECISION :: ci_coef_temp
-  DOUBLE PRECISION :: ci_coef_left, ci_coef_right
   INTEGER :: min_a, max_r, min_b, max_s
   INTEGER :: min_so_temp, max_so_temp
   INTEGER :: min_so(1:Max_n_ci_ci), max_so(1:Max_n_ci_ci)
-
+ 
   INTEGER :: p, q
   INTEGER :: counter, i_ci_ci
-  DOUBLE PRECISION :: ci_ci_temp 
-  DOUBLE PRECISION :: ci_ci(1:Max_n_ci_ci)
   INTEGER :: tuple_left_ci_ci(1:Max_n_ci_ci), &
             &tuple_right_ci_ci(1:Max_n_ci_ci)
   INTEGER :: a_ci_ci(1:Max_n_tuple, 1:Max_n_ci_ci), &
@@ -59,7 +55,14 @@ SUBROUTINE calc_opr_dmat&
             &b_ci_ci(1:Max_n_tuple, 1:Max_n_ci_ci), &
             &s_ci_ci(1:Max_n_tuple, 1:Max_n_ci_ci)
 
-!
+  DOUBLE PRECISION :: ci_coef_temp
+  DOUBLE PRECISION :: ci_coef_left, ci_coef_right
+  DOUBLE PRECISION :: ci_ci_temp 
+  DOUBLE PRECISION :: ci_ci(1:Max_n_ci_ci)
+
+  IF(Debug == 'Yes') &
+ &CALL write_messages(2, Text_blank, type_program, name_program)
+
 ! ----------------------
 ! Initializing variables
 ! ----------------------
@@ -470,8 +473,21 @@ SUBROUTINE calc_opr_dmat&
   END SELECT    
 
   DO p = 1, N_so!, 2!, 2!1, n_cgf
-    !WRITE(*,*) opr_dmat(p, p)
     trace_opr_dmat = trace_opr_dmat + opr_dmat(p, p)
   ENDDO ! p  
+
+  IF(Save_opr_dmat == 'Yes') THEN
+    OPEN(Fopr_dmat, FILE=Fname(Fopr_dmat))
+      DO p = 1, N_so!, 2!, 2!1, n_cgf
+        DO q = 1, N_so
+          WRITE(Fopr_dmat, *) p, q, opr_dmat(p, q)
+        ENDDO ! q
+      ENDDO ! p
+    CLOSE(Fopr_dmat)
+  ELSE
+  ENDIF
+
+  IF(Debug == 'Yes') &
+ &CALL write_messages(3, Text_blank, type_program, name_program)
 
 END SUBROUTINE calc_opr_dmat

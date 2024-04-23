@@ -1,38 +1,40 @@
 ! This module is part of d77 and computes
 ! one-electron integrals between primitive Gaussian functions.
-!
+
 ! The method of calculation is based on the McMurchie-Davidson formulation:
 ! McMurchie, L. E. & Davidson, E. R.,
 ! "One- and two-electron integrals over cartesian gaussian functions",
 ! J. Comput. Phys. 26, 218-231 (1978)
 ! DOI: https://doi.org/10.1016/0021-9991(78)90092-X
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 ! pgf means primitive Gaussian function (PGF)
-!
+
 ! FUNCTION func_int_pgf_pgf
 ! Overlap integral < PGF_A | PGF_B > 
-!
+
 ! FUNCTION func_int_pgf_r_pgf
 ! < PGF_A | r | PGF_B >
-!
+
 ! FUNCTION func_int_pgf_inv_r_pgf
 ! Nuclear attraction integral 
-!
+
 ! FUNCTION func_int_pgf_r_pgf
 ! Electric field integral
-!
+
 ! FUNCTION func_int_pgf_r_pgf
 ! Spin-orbit integral 
 
 MODULE func_int_pgf 
-  USE ifmod, ONLY: write_messages, calc_def, calc_rlmn_0
+  USE ifmod, ONLY: write_messages, &
+                  &calc_def, &
+                  &calc_rlmn_0
   USE global_constants
   USE global_read_input
   IMPLICIT NONE
@@ -45,10 +47,6 @@ MODULE func_int_pgf
            &cntexp_a, cntexp_b,&
            &lmn_a, lmn_b) &
    &RESULT(int_pgf_pgf) 
-!
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
     
 !   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'func_int_pgf_pgf'
@@ -57,18 +55,21 @@ MODULE func_int_pgf
 !   Input variable
     DOUBLE PRECISION, INTENT(IN) :: xyzao_a(1:3), xyzao_b(1:3)
     DOUBLE PRECISION, INTENT(IN) :: cntexp_a, cntexp_b
-    INTEGER, INTENT(IN) :: lmn_a(1:3), lmn_b(1:3)
+    INTEGER, INTENT(IN)          :: lmn_a(1:3), lmn_b(1:3)
     
 !   Output variable
     DOUBLE PRECISION :: int_pgf_pgf
     
 !   Local variables
-    DOUBLE PRECISION :: xyzao_ab(1:3)
-    DOUBLE PRECISION :: xyzao_ab2
-    DOUBLE PRECISION :: xyzao_p(1:3), cntexp_p, e_ab
-    DOUBLE PRECISION :: pi_over_alpha_p
+    DOUBLE PRECISION              :: xyzao_ab(1:3)
+    DOUBLE PRECISION              :: xyzao_ab2
+    DOUBLE PRECISION              :: xyzao_p(1:3), cntexp_p, e_ab
+    DOUBLE PRECISION              :: pi_over_alpha_p
     DOUBLE PRECISION, ALLOCATABLE :: d(:,:,:), e(:,:,:), f(:,:,:)
     
+    IF(Debug == 'Yes') &
+   &CALL write_messages(2, Text_blank, type_program, name_program)
+
     xyzao_ab = 0.0D0; xyzao_ab = 0.0D0
     xyzao_p = 0.0D0; cntexp_p = 0.0D0; e_ab = 0.0D0
 
@@ -93,12 +94,17 @@ MODULE func_int_pgf
          &d, e, f)
 
 !   Eq (3.4)        
+    int_pgf_pgf = 0.0D0
     int_pgf_pgf = d(0, lmn_a(1), lmn_b(1)) & 
                &* e(0, lmn_a(2), lmn_b(2)) &
                &* f(0, lmn_a(3), lmn_b(3))
     int_pgf_pgf = int_pgf_pgf * pi_over_alpha_p * e_ab
    
     DEALLOCATE(d, e, f)
+    
+    IF(Debug == 'Yes') &
+   &CALL write_messages(3, Text_blank, type_program, name_program)
+
   END FUNCTION func_int_pgf_pgf
 
   FUNCTION func_int_pgf_r_pgf&
@@ -134,6 +140,9 @@ MODULE func_int_pgf
     DOUBLE PRECISION :: pi_over_alpha_p
     DOUBLE PRECISION, ALLOCATABLE :: d(:,:,:), e(:,:,:), f(:,:,:)
     
+    IF(Debug == 'Yes') &
+   &CALL write_messages(2, Text_blank, type_program, name_program)
+    
     xyzao_ab = 0.0D0; xyzao_ab = 0.0D0
     xyzao_p = 0.0D0; cntexp_p = 0.0D0; e_ab = 0.0D0
 
@@ -155,6 +164,7 @@ MODULE func_int_pgf
          &lmn_a, lmn_b, cntexp_p, &
          &d, e, f)
 
+    int_pgf_r_pgf = 0.0D0
     IF(lmn_a(1) == 0 .AND. lmn_b(1) == 0) THEN    
       int_pgf_r_pgf(1) = d(0, 0, 0) * (xyzao_p(1) - xyz_c(1)) 
     ELSE
@@ -189,6 +199,10 @@ MODULE func_int_pgf
     int_pgf_r_pgf = int_pgf_r_pgf * pi_over_alpha_p * e_ab  
 
     DEALLOCATE(d, e, f)
+    
+    IF(Debug == 'Yes') &
+   &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END FUNCTION func_int_pgf_r_pgf
 
 
@@ -212,11 +226,11 @@ MODULE func_int_pgf
 !   Input variable
     DOUBLE PRECISION, INTENT(IN) :: xyzao_a(1:3), xyzao_b(1:3)
     DOUBLE PRECISION, INTENT(IN) :: cntexp_a, cntexp_b
-    INTEGER, INTENT(IN) :: lmn_a(1:3), lmn_b(1:3)
+    INTEGER, INTENT(IN)          :: lmn_a(1:3), lmn_b(1:3)
     DOUBLE PRECISION, INTENT(IN) :: xyz_c(1:3)
 
 !   Output variable
-    DOUBLE PRECISION, DIMENSION(1:3) :: int_pgf_elfld_pgf
+    DOUBLE PRECISION :: int_pgf_elfld_pgf(1:3)
 
 !   Local variables
     DOUBLE PRECISION :: xyzao_ab(1:3)
@@ -231,6 +245,9 @@ MODULE func_int_pgf
     DOUBLE PRECISION, ALLOCATABLE :: d(:,:,:), e(:,:,:), f(:,:,:)
     DOUBLE PRECISION :: def
 
+    IF(Debug == 'Yes') &
+   &CALL write_messages(2, Text_blank, type_program, name_program)
+    
     xyzao_ab = 0.0D0; xyzao_ab = 0.0D0
     xyzao_p = 0.0D0; cntexp_p = 0.0D0; e_ab = 0.0D0
     abc = 0.0D0; t = 0.0D0
@@ -249,7 +266,7 @@ MODULE func_int_pgf
     l = lmn_a(1) + lmn_b(1)  
     m = lmn_a(2) + lmn_b(2)  
     n = lmn_a(3) + lmn_b(3)  
-!    WRITE(*,*) 'lmn=', l, m, n, 'in func_int_elf'
+
 !   Calculating d(L; l_A, l_B) * e (M; m_A, m_B) * f(N; n_A, n_B)
     ALLOCATE(d(0:l, 0:lmn_a(1), 0:lmn_b(1))); d = 0.0D0
     ALLOCATE(e(0:m, 0:lmn_a(2), 0:lmn_b(2))); e = 0.0D0
@@ -294,7 +311,12 @@ MODULE func_int_pgf
       ENDDO
     ENDDO
     int_pgf_elfld_pgf = int_pgf_elfld_pgf * e_ab * pi_over_alpha_p  
+   
     DEALLOCATE(d, e, f)
+    
+    IF(Debug == 'Yes') &
+   &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END FUNCTION func_int_pgf_elfld_pgf
 
 
@@ -305,10 +327,6 @@ MODULE func_int_pgf
            &xyz_c) &
    &RESULT(int_pgf_soc_pgf)
 
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
-
 !   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'func_int_pgf_soc_pgf'
     CHARACTER(LEN=100), PARAMETER :: type_program = 'FUNCTION'
@@ -316,7 +334,7 @@ MODULE func_int_pgf
 !   Input variable
     DOUBLE PRECISION, INTENT(IN) :: xyzao_a(1:3), xyzao_b(1:3)
     DOUBLE PRECISION, INTENT(IN) :: cntexp_a, cntexp_b
-    INTEGER, INTENT(IN) :: lmn_a(1:3), lmn_b(1:3)
+    INTEGER, INTENT(IN)          :: lmn_a(1:3), lmn_b(1:3)
     DOUBLE PRECISION, INTENT(IN) :: xyz_c(1:3)
 
 !   Output variable
@@ -333,21 +351,12 @@ MODULE func_int_pgf
     INTEGER :: lmn_a_temp(1:3), lmn_b_temp(1:3)
     DOUBLE PRECISION :: term(1:8)
 
-!    IF(Debug == .True.) &
-!   &CALL write_messages(2, Text_blank, type_program, name_program)
+    IF(Debug == 'Yes') &
+   &CALL write_messages(2, Text_blank, type_program, name_program)
 
     xyzao_ab = 0.0D0; xyzao_ab = 0.0D0
     xyzao_p = 0.0D0; cntexp_p = 0.0D0!; e_ab = 0.0D0
     abc = 0.0D0; t = 0.0D0
-
-!   Calculating alpha_p
-    !xyzao_ab = xyzao_b - xyzao_a
-    !xyzao_ab2 = DOT_PRODUCT(xyzao_ab, xyzao_ab)
-    !xyzao_p = cntexp_a * xyzao_a + cntexp_b * xyzao_b
-    !cntexp_p = cntexp_a + cntexp_b
-    !xyzao_p = xyzao_p / cntexp_p
-    !e_ab = DEXP(-xyzao_ab2*cntexp_a*cntexp_b/cntexp_p)
-    !pi_over_alpha_p = 2.0D0*Pi/cntexp_p
 
     int_pgf_soc_pgf = 0.0D0
 
@@ -698,6 +707,10 @@ MODULE func_int_pgf
                 &xyz_c) * alpha_ab_4
    
     int_pgf_soc_pgf(2) = SUM(term)
+    
+    IF(Debug == 'Yes') &
+   &CALL write_messages(3, Text_blank, type_program, name_program)
+
   END FUNCTION func_int_pgf_soc_pgf
 
 
@@ -707,13 +720,8 @@ MODULE func_int_pgf
            &lmn_a, lmn_b, &
            &xyz_c) &
    &RESULT(int_pgf_inv_r_pgf)
-!
-!  < phi_A | 1/rC | phi_B >
-!
 
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
+!  < phi_A | 1/rC | phi_B >
 
 !   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'func_int_pgf_inv_r_pgf'
@@ -722,7 +730,7 @@ MODULE func_int_pgf
 !   Input variable
     DOUBLE PRECISION, INTENT(IN) :: xyzao_a(1:3), xyzao_b(1:3)
     DOUBLE PRECISION, INTENT(IN) :: cntexp_a, cntexp_b
-    INTEGER, INTENT(IN) :: lmn_a(1:3), lmn_b(1:3)
+    INTEGER, INTENT(IN)          :: lmn_a(1:3), lmn_b(1:3)
     DOUBLE PRECISION, INTENT(IN) :: xyz_c(1:3)
 
 !   Output variable
@@ -741,6 +749,9 @@ MODULE func_int_pgf
     DOUBLE PRECISION, ALLOCATABLE :: d(:,:,:), e(:,:,:), f(:,:,:)
     DOUBLE PRECISION :: def
 
+    IF(Debug == 'Yes') &
+   &CALL write_messages(2, Text_blank, type_program, name_program)
+    
     IF(MINVAL(lmn_a(1:3)) < 0 .OR. MINVAL(lmn_b(1:3)) < 0) &
    &CALL write_messages(2, Text_blank, type_program, name_program)
 
@@ -789,7 +800,12 @@ MODULE func_int_pgf
       ENDDO
     ENDDO
     int_pgf_inv_r_pgf = int_pgf_inv_r_pgf * e_ab * pi_over_alpha_p
+   
     DEALLOCATE(d, e, f)
+    
+    IF(Debug == 'Yes') &
+   &CALL write_messages(2, Text_blank, type_program, name_program)
+  
   END FUNCTION func_int_pgf_inv_r_pgf
 
 ! --------------
@@ -801,10 +817,6 @@ MODULE func_int_pgf
            &cntexp_a, cntexp_b, &
            &lmn_a, lmn_b) &
    &RESULT(kinetic)
-
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
 
 !   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'func_kinetic'
@@ -827,6 +839,8 @@ MODULE func_int_pgf
     DOUBLE PRECISION, ALLOCATABLE :: d(:,:,:), e(:,:,:), f(:,:,:)
     DOUBLE PRECISION :: alpha_a_2, alpha_b_2, alpha_ab_4
 
+    IF(Debug == 'Yes') &
+   &CALL write_messages(2, Text_blank, type_program, name_program)
 
     xyzao_ab = 0.0D0; xyzao_ab = 0.0D0
     xyzao_p = 0.0D0; cntexp_p = 0.0D0; e_ab = 0.0D0
@@ -939,14 +953,14 @@ MODULE func_int_pgf
     kinetic = kinetic * e_ab * pi_over_alpha_p 
 
     DEALLOCATE(d, e, f)
+    
+    IF(Debug == 'Yes') &
+   &CALL write_messages(3, Text_blank, type_program, name_program)
+ 
   END FUNCTION func_int_pgf_ke_pgf
 
   FUNCTION func_fj(max_j, t) &
    &RESULT(fj)
-
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
 
 !   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'func_fj'
@@ -964,8 +978,10 @@ MODULE func_int_pgf
     DOUBLE PRECISION :: small_t, large_t
     INTEGER :: j
 
+    IF(Debug == 'Yes') &
+   &CALL write_messages(2, Text_blank, type_program, name_program)
+    
     g = 0.0D0
-    !WRITE(*,*) max_j
 
     small_t = 1.0D-8
     large_t = 36.0D0 + 2.0D0 * DBLE(max_j)
@@ -1020,6 +1036,10 @@ MODULE func_int_pgf
       WRITE(6,*) 't is out of range'
       STOP
     ENDIF
+    
+    IF(Debug == 'Yes') &
+   &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END FUNCTION func_fj
 
   FUNCTION func_fj_tab(j, t) &
@@ -1045,6 +1065,9 @@ MODULE func_int_pgf
     DOUBLE PRECISION :: fj_tab(0:1200)
     INTEGER :: it
 
+    IF(Debug == 'Yes') &
+   &CALL write_messages(2, Text_blank, type_program, name_program)
+    
     IF(j >= 10) THEN
       WRITE(6,'(1X, A)') 'fj is unavailable'
     ELSE
@@ -13099,6 +13122,10 @@ MODULE func_int_pgf
     t_max = dt* DBLE(it+1)
     slope = (fj_tab(it+1) - fj_tab(it))/dt
     fj = fj_tab(it) + slope * (t-t_min)
+    
+    IF(Debug == 'Yes') &
+   &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END FUNCTION func_fj_tab
 
 END MODULE func_int_pgf        

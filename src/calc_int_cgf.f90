@@ -1,11 +1,11 @@
 ! This subroutine is part of d77 and computes
 ! one-electron integrals between contracted Gaussian functions.
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 SUBROUTINE calc_int_cgf
@@ -24,29 +24,24 @@ SUBROUTINE calc_int_cgf
   CHARACTER(LEN=100), PARAMETER :: name_program = 'calc_int_cgf'
   CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
 
-
-! ---------------
-! Local variables
-! ---------------
-
 ! DO loop variables
   INTEGER :: i_atm, i_cgf, j_cgf, i_pgf, j_pgf, i_xyz
 
 ! Kinetic energy integral < pgf |  | pgf >
-  DOUBLE PRECISION :: int_ke_gf(1:3) ! (1,2,3) = (x,y,z)
+  DOUBLE PRECISION              :: int_ke_gf(1:3) ! (1,2,3) = (x,y,z)
   DOUBLE PRECISION, ALLOCATABLE :: ke_cgf(:,:), ke_cgf_xyz(:,:,:)
 
 ! Potential energy integral: < pgf | 1/r | pgf >
-  DOUBLE PRECISION :: int_pe_gf ! < pgf | 1/r | pgf >
+  DOUBLE PRECISION              :: int_pe_gf ! < pgf | 1/r | pgf >
   DOUBLE PRECISION, ALLOCATABLE :: pe_cgf_atm(:,:,:), pe_cgf(:,:)
 
 ! Electric field integral: < pgf | x/r^3 | pgf >, < pgf | y/r^3 | pgf >, < pgf | z/r^3 | pgf >
-  DOUBLE PRECISION :: int_elfld_gf(1:3)
+  DOUBLE PRECISION              :: int_elfld_gf(1:3)
   DOUBLE PRECISION, ALLOCATABLE :: elfld_cgf_atm(:,:,:,:)
 
 ! Spin-orbit coupling
-  DOUBLE PRECISION :: int_soc_pgf(1:3)
-  DOUBLE PRECISION :: int_soc_pgf_atm(1:3)
+  DOUBLE PRECISION              :: int_soc_pgf(1:3)
+  DOUBLE PRECISION              :: int_soc_pgf_atm(1:3)
   DOUBLE PRECISION, ALLOCATABLE :: soc_cgf_atm(:,:,:,:), soc_cgf(:,:,:)
 
   INTEGER :: n_repeat
@@ -57,7 +52,6 @@ SUBROUTINE calc_int_cgf
   CALL write_messages(2, Text_blank, type_program, name_program)
 
   n_repeat = 0
-
 
   IF(Property == 'Ke') THEN
     WRITE(6,'(1X)')
@@ -101,7 +95,7 @@ SUBROUTINE calc_int_cgf
       ENDDO ! j_cgf
     ENDDO ! i_cgf
   
-    IF(Save_ke_cgf_g16_format == 'Yes') THEN
+    IF(Save_g16_format == 'Yes') THEN   
       fid = Fke_cgf_g16_format
       WRITE(6,'(1X, A)') 'saving them in the IOP(3/33=1) format of Gaussian 16'
       CALL write_g16_log_format(fid, ke_cgf)
@@ -158,7 +152,7 @@ SUBROUTINE calc_int_cgf
       ENDDO
     ENDDO
   
-    IF(Save_pe_cgf_g16_format == 'Yes') THEN
+    IF(Save_g16_format == 'Yes') THEN   
       fid = Fpe_cgf_g16_format
       WRITE(6,'(1X, A)') 'saving them in the IOP(3/33=1) format of Gaussian 16'
       CALL write_g16_log_format(Fid, -pe_cgf)
@@ -229,7 +223,6 @@ SUBROUTINE calc_int_cgf
   ENDIF
 
   IF(Property == 'Soc') THEN
-    WRITE(6,'(1X)')
     WRITE(6,'(1X)')
     WRITE(6,'(1X, A)') '-------------------'
     WRITE(6,'(1X, A)') 'Spin-orbit coupling'
@@ -307,7 +300,6 @@ SUBROUTINE calc_int_cgf
         ENDDO
       ENDDO
     CLOSE(fid)
-    WRITE(6,'(1X, A)') 'Done'
 
     fid = Fsoc_cgf_y
     WRITE(6,'(1X, 2A)') 'Saving the y components to a file ', TRIM(ADJUSTL(Fname(fid)))
@@ -318,7 +310,6 @@ SUBROUTINE calc_int_cgf
         ENDDO
       ENDDO
     CLOSE(fid)
-    WRITE(6,'(1X, A)') 'Done'
 
     fid = Fsoc_cgf_z
     WRITE(6,'(1X, 2A)') 'Saving the z components to a file ', TRIM(ADJUSTL(Fname(fid)))
@@ -330,26 +321,29 @@ SUBROUTINE calc_int_cgf
       ENDDO
     CLOSE(fid)
     WRITE(6,'(1X, A)') 'Done'    
-    WRITE(6,'(1X)')     
-    
-!   Saving soc_cgf in the IOP(3/33=1) format of Gaussian 16
-    fid = Fsoc_cgf_x_g16_format
-    WRITE(6,'(1X, A)') 'saving them in the IOP(3/33=1) format of Gaussian 16.'
-    WRITE(6,'(1X, 2A)') 'Saving the x components to a file ', &
-                 &TRIM(ADJUSTL(Fname(fid)))
-    CALL write_g16_log_format(fid, -soc_cgf(:,:,1))
-    !CALL write_mat_atm(fid, soc_cgf_atm(:,:,:,1)) ! 1 means the x components
-    fid = Fsoc_cgf_y_g16_format
-    WRITE(6,'(1X, 2A)') 'Saving the y components to a file ', &
-                 &TRIM(ADJUSTL(Fname(fid)))
-    CALL write_g16_log_format(fid, -soc_cgf(:,:,2))
-    !CALL write_mat_atm(fid, soc_cgf_atm(:,:,:,2)) ! 2 means the y components
-    fid = Fsoc_cgf_z_g16_format
-    WRITE(6,'(1X, 2A)') 'Saving the z components to a file ', &
-                 &TRIM(ADJUSTL(Fname(fid)))
-    CALL write_g16_log_format(fid, -soc_cgf(:,:,3))
-    !CALL write_mat_atm(fid, soc_cgf_atm(:,:,:,3)) ! 3 means the z components
-    WRITE(6,'(1X, A)') 'Done'
+
+    IF(Save_g16_format == 'Yes') THEN   
+!     Saving soc_cgf in the IOP(3/33=1) format of Gaussian 16
+      fid = Fsoc_cgf_x_g16_format
+      WRITE(6,'(1X, A)') 'saving them in the IOP(3/33=1) format of Gaussian 16.'
+      WRITE(6,'(1X, 2A)') 'Saving the x components to a file ', &
+                   &TRIM(ADJUSTL(Fname(fid)))
+      CALL write_g16_log_format(fid, -soc_cgf(:,:,1))
+      !CALL write_mat_atm(fid, soc_cgf_atm(:,:,:,1)) ! 1 means the x components
+      fid = Fsoc_cgf_y_g16_format
+      WRITE(6,'(1X, 2A)') 'Saving the y components to a file ', &
+                   &TRIM(ADJUSTL(Fname(fid)))
+      CALL write_g16_log_format(fid, -soc_cgf(:,:,2))
+      !CALL write_mat_atm(fid, soc_cgf_atm(:,:,:,2)) ! 2 means the y components
+      fid = Fsoc_cgf_z_g16_format
+      WRITE(6,'(1X, 2A)') 'Saving the z components to a file ', &
+                   &TRIM(ADJUSTL(Fname(fid)))
+      CALL write_g16_log_format(fid, -soc_cgf(:,:,3))
+      !CALL write_mat_atm(fid, soc_cgf_atm(:,:,:,3)) ! 3 means the z components
+      WRITE(6,'(1X, A)') 'Done'
+    ELSE
+    ENDIF
+
   ELSE
   ENDIF
 

@@ -1,24 +1,23 @@
 ! This subroutine is part of d77 and computes
 ! diagonal/off-diagonal vibronic coupling constants.
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 SUBROUTINE vc_int_pgf
-  USE ifmod, ONLY: write_messages, calc_opr_dmat, calc_dmat_cgf, write_mat
+  USE ifmod, ONLY: write_messages, &
+                  &calc_opr_dmat, &
+                  &calc_dmat_cgf, &
+                  &write_mat
   USE global_constants
   USE global_read_input
   USE global_read_data
   USE func_int_pgf, ONLY: func_int_pgf_r_pgf, func_int_pgf_elfld_pgf
   IMPLICIT NONE
-
-! ------------------------
-! Declaration of variables
-! ------------------------
 
 ! Program name
   CHARACTER(LEN=100), PARAMETER :: name_program = 'vc_int_pgf'
@@ -63,9 +62,9 @@ SUBROUTINE vc_int_pgf
 
 
   WRITE(6,'(1X)')
-  WRITE(6,'(1X, A)') '--------------------------'
-  WRITE(6,'(1X, A)') 'Calculating density matrix'
-  WRITE(6,'(1X, A)') '--------------------------'
+  WRITE(6,'(1X, A)') '--------------'
+  WRITE(6,'(1X, A)') 'Density matrix'
+  WRITE(6,'(1X, A)') '--------------'
 
 ! -------------------------------------------------------
 ! Calculating one particle reduced density matrix (gamma)
@@ -95,10 +94,11 @@ SUBROUTINE vc_int_pgf
     WRITE(6,'(1X, A)') 'Done'
     WRITE(6,'(1X)')
   ELSEIF(Gen_dmat_cgf == 'Calc') THEN
+!   dmat_cgf is calculated from opr_dmat.
     ALLOCATE(opr_dmat(1:N_so, 1:N_so)); opr_dmat = 0.0D0
     WRITE(6,'(1X)')
-    WRITE(6,'(1X, A)') 'gamma: one-particle reduced density matrix between'
-    WRITE(6,'(1X, A)') 'electronic states |i> and |j> in terms of spin orbitals'
+    WRITE(6,'(1X, A)') 'gamma: one-particle reduced density matrix'
+    WRITE(6,'(1X, A)') 'between electronic states | i > and | j >'
     IF(Gen_opr_dmat == 'Read') THEN
       fid = Fopr_dmat
       WRITE(6,'(1X, 2A)') 'Reading opr_dmat from ', Fname(fid)
@@ -121,7 +121,6 @@ SUBROUTINE vc_int_pgf
         CALL write_mat(fid, opr_dmat)
       ELSE
       ENDIF
-      WRITE(6,'(1X, A)') 'Done'
       WRITE(6,'(1X)')
       WRITE(6,'(1X, A)') 'Trace of gamma'
       WRITE(6,'(1X, A)') REPEAT('=', 29)
@@ -129,7 +128,6 @@ SUBROUTINE vc_int_pgf
       WRITE(6,'(1X, A)') REPEAT('-', 29)
       WRITE(6,'(1X, I3, 1X, I3, 3X, I5, 2X, F12.5)') Bra, Ket, n_ci_ci, trace_opr_dmat
       WRITE(6,'(1X, A)') REPEAT('=', 29)
-      WRITE(6,'(1X)')
     ENDIF
 
     CALL calc_dmat_cgf(opr_dmat, dmat_cgf)
@@ -206,23 +204,22 @@ SUBROUTINE vc_int_pgf
   dipole(1:3) = dipole_elec(1:3) + dipole_nuc(1:3)
   dipole_norm = DSQRT(DOT_PRODUCT(dipole, dipole))
 
-
   WRITE(6,'(1X)')
-  WRITE(6,'(1X, A)') 'Dipole moments in atomic units'
-
   n_repeat = 52
+  WRITE(6,'(1X, A)') 'Dipole moment in atomic units'
   WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
-  WRITE(6,'(1X, A3, 1X, A3, 7X, A)') 'i', 'j', 'x          y          z        Total'
+  WRITE(6,'(1X, A3, 1X, A3, 6X, A)') 'i', 'j', 'mu_x       mu_y       mu_z       |mu|'
   WRITE(6,'(1X, A)') REPEAT('-', n_repeat)
   WRITE(6,'(1X, I3, 1X, I3, 4F11.5)') bra, ket, dipole(1:3), dipole_norm
   WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
   WRITE(6,'(1X)')
-  WRITE(6,'(1X, A)') 'Dipole moments in debye'
+  WRITE(6,'(1X, A)') 'Dipole moment in debye'
   WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
-  WRITE(6,'(1X, A3, 1X, A3, 7X, A)') 'i', 'j', 'x          y          z        Total'
+  WRITE(6,'(1X, A3, 1X, A3, 6X, A)') 'i', 'j', 'mu_x       mu_y       mu_z       |mu|'
   WRITE(6,'(1X, A)') REPEAT('-', n_repeat)
   WRITE(6,'(1X, I3, 1X, I3, 4F11.5)') bra, ket, dipole(1:3)*Debye, dipole_norm*Debye
   WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
+
 
   fid = Fdipole_au
   OPEN(fid, FILE = Fname(fid))
@@ -259,7 +256,9 @@ SUBROUTINE vc_int_pgf
       ENDDO
     ENDDO
     WRITE(6,'(1X, A)') 'Done'
+
   ELSEIF(Gen_elfld_cgf_atm == 'Calc') THEN
+
     WRITE(6,'(1X, A)') 'Calculating electric field integrals between CGFs'
     int_elfld_gf(1:3) = 0.0D0
     DO i_atm = 1, n_atm
@@ -290,24 +289,6 @@ SUBROUTINE vc_int_pgf
         &= elfld_cgf_atm(i_cgf, j_cgf, :, :)
       ENDDO
     ENDDO
-
-    IF(Save_elfld_cgf_atm == 'Yes') THEN
-      WRITE(6,'(1X, A)') 'Saving electric field integrals'
-      OPEN(Felfld_cgf_atm, FILE=Fname(Felfld_cgf_atm))
-        DO i_atm = 1, n_atm
-          DO i_xyz = 1, 3 
-            DO i_cgf = 1, n_cgf
-              DO j_cgf = i_cgf, n_cgf
-                WRITE(Felfld_cgf_atm, '(F15.8, 3I5)')&
-                elfld_cgf_atm(i_cgf, j_cgf, i_xyz, i_atm), i_xyz, i_cgf, j_cgf
-              ENDDO
-            ENDDO
-          ENDDO
-        ENDDO
-      CLOSE(Felfld_cgf_atm)
-    ELSE
-    ENDIF
-    WRITE(6,'(1X, A)') 'Done'
 
   ELSE
   ENDIF ! Gen_elfld_cgf_atm == 

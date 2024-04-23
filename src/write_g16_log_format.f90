@@ -1,10 +1,10 @@
 ! This subroutine is part of d77 and prints data in Gaussian 16 formats.
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 SUBROUTINE write_g16_log_format(fid, data)

@@ -1,12 +1,12 @@
 ! The main program of d77
-!
+
 ! d77 provides visual understanding of molecular properties.
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 ! Global constants are defined in MODULE 'global_constants.f90'.
@@ -17,10 +17,6 @@ PROGRAM main
   USE global_read_data
   IMPLICIT NONE
 
-! ------------------------
-! Declaration of variables
-! ------------------------
-
 ! Program name
   CHARACTER(LEN=100), PARAMETER :: name_program = 'main'
   CHARACTER(LEN=100), PARAMETER :: type_program = 'PROGRAM'
@@ -28,13 +24,9 @@ PROGRAM main
 ! CPU time
   CHARACTER(LEN=100) :: text_date_time
 
-
-! ---------------
-! Local variables
-! ---------------
-
 ! DO loop variables  
   INTEGER :: i_atm
+
 
 ! Assigning global variables
   CALL assign_globals ! SUBROUTINE 'assign_globals' in MODULE 'global_constants.f90'.
@@ -87,6 +79,17 @@ PROGRAM main
     WRITE(6,'(1X, A, I0)') 'Number of vib. modes:    ', N_mode_calc
   ENDIF
   WRITE(6,'(1X, A)')     '============================='
+
+
+  WRITE(6,'(1X)')
+  WRITE(6,'(1X, A)')     'Threshold values'
+  WRITE(6,'(1X, A)')     '================================='
+  WRITE(6,'(1X, A, E9.3)') 'Threshold_s_cgf:        ', Threshold_s_cgf
+  WRITE(6,'(1X, A, E9.3)') 'Threshold_e_ab:         ', Threshold_e_ab
+  WRITE(6,'(1X, A, E9.3)') 'Threshold_ci_ci:        ', Threshold_ci_ci
+  WRITE(6,'(1X, A, E9.3)') 'Threshold_contribution: ', Threshold_contribution
+  WRITE(6,'(1X, A, E9.3)') 'Threshold_distance:     ', Threshold_distance
+  WRITE(6,'(1X, A)')     '================================='
 
 
 ! -----------------------------------
@@ -199,14 +202,18 @@ PROGRAM main
         CASE DEFAULT ! Invalid Property
       END SELECT  
 
-    !CASE('Density') ! Runtyp = Density
-    !  SELECT CASE(Property)
-    !    CASE('Vc')
-    !      CALL vc_density
+    CASE('Density') ! Runtyp = Density
+      SELECT CASE(Property)
+        CASE('Rho')
+          CALL rho
+        CASE('Dipole')
+          CALL dipole_density
+        CASE('Vc')
+          CALL vc_density
     !    CASE('Soc')
     !      CALL soc_density
-    !    CASE DEFAULT ! Invalid Property
-    !  END SELECT  
+        CASE DEFAULT ! Invalid Property
+      END SELECT  
 
     CASE DEFAULT ! Invalid Runtyp
   END SELECT  
@@ -280,6 +287,8 @@ PROGRAM main
   !END SELECT  
 
 ! Writing end time
+  WRITE(6,'(1X)')
+  WRITE(6,'(1X)')
   text_date_time = '--- Leaving d77.exe'
   CALL write_messages(9999, text_date_time, type_program, name_program)
 

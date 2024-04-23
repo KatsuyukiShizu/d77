@@ -1,10 +1,10 @@
 ! This module is part of d77 and reads global variables.
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 MODULE global_read_data
@@ -162,6 +162,7 @@ MODULE global_read_data
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
+
   END SUBROUTINE read_data_elec_0
 
 
@@ -726,6 +727,7 @@ MODULE global_read_data
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END SUBROUTINE read_data_elec_1
 
 !***************************************************************************************************
@@ -1559,6 +1561,7 @@ MODULE global_read_data
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END SUBROUTINE read_data_ci_coef
 
 
@@ -1658,10 +1661,10 @@ MODULE global_read_data
 !   *******************************************
 !
 !   TD-DFT
-!     N_state = the number of states in CICOEF
+!     N_state = the number of states in XY
 !     i_state =  0 : ground state (= HF determinant)
-!     i_state =  1 : 1st excited state <- state 1 in CICOEF
-!     i_state =  n : nth excited state <- state n in CICOEF
+!     i_state =  1 : 1st excited state <- state 1 in XY
+!     i_state =  n : nth excited state <- state n in XY
 
 
     ALLOCATE(n_line_ex_state(1:N_state)); n_line_ex_state = 0
@@ -1709,7 +1712,7 @@ MODULE global_read_data
     ENDDO
 
     WRITE(6,'(1X)')
-    WRITE(6,'(1X, A)') 'Reading X+Y and X-Y from '//TRIM(Fname(fid))
+    WRITE(6,'(1X, A)') 'Reading X + Y and X - Y from '//TRIM(Fname(fid))
 
 !   fid = Fxy
     OPEN(fid, FILE = Fname(fid))
@@ -1803,27 +1806,38 @@ MODULE global_read_data
 !   Calculating contributions from individual electronic configurations
 !   to electronic states
     ALLOCATE(contribution(1:Max_n_elec_config, 0:N_state)); contribution = 0.0D0
-    ALLOCATE(contribution_sort(1:Max_n_elec_config/2, 0:N_state)); contribution_sort = 0.0D0
+!   ALLOCATE(contribution_sort(1:Max_n_elec_config/2, 0:N_state)); contribution_sort = 0.0D0
+    ALLOCATE(contribution_sort(1:Max_n_elec_config, 0:N_state)); contribution_sort = 0.0D0
     ALLOCATE(n_contribution(0:N_state)); n_contribution = 0
-    ALLOCATE(a_ras_sort(1:1,1:Max_n_elec_config/2,0:N_state)); a_ras_sort = 0
-    ALLOCATE(r_ras_sort(1:1,1:Max_n_elec_config/2,0:N_state)); r_ras_sort = 0
+    !ALLOCATE(a_ras_sort(1:1,1:Max_n_elec_config/2,0:N_state)); a_ras_sort = 0
+    !ALLOCATE(r_ras_sort(1:1,1:Max_n_elec_config/2,0:N_state)); r_ras_sort = 0
+    ALLOCATE(a_ras_sort(1:1,1:Max_n_elec_config,0:N_state)); a_ras_sort = 0
+    ALLOCATE(r_ras_sort(1:1,1:Max_n_elec_config,0:N_state)); r_ras_sort = 0
     DO i_state = 1, N_state
       SELECT CASE(Mult_ex(i_state))
         CASE('Singlet', 'Unknown')
-          DO i = 1, n_elec_config(i_state)/2
+          !DO i = 1, n_elec_config(i_state)/2
+          DO i = 1, n_elec_config(i_state)
             contribution(i, i_state) &
-           &= 200.0D0 &
-           &* X_plus_y(2*i-1, i_state) &
-           &* X_minus_y(2*i-1, i_state) &
+           !&= 200.0D0 &
+           &= 100.0D0 &
+           !&* X_plus_y(2*i-1, i_state) &
+           !&* X_minus_y(2*i-1, i_state) &
+           &* X_plus_y(i, i_state) &
+           &* X_minus_y(i, i_state) &
            &/ sum_ci2(i_state)
           ENDDO
         CASE('Triplet')
           IF(Ms == 0) THEN
-            DO i = 1, n_elec_config(i_state)/2
+            !DO i = 1, n_elec_config(i_state)/2
+            DO i = 1, n_elec_config(i_state)
               contribution(i, i_state) &
-             &= 200.0D0 &
-             &* X_plus_y(2*i-1, i_state) &
-             &* X_minus_y(2*i-1, i_state) &
+             !&= 200.0D0 &
+             &= 100.0D0 &
+             !&* X_plus_y(2*i-1, i_state) &
+             !&* X_minus_y(2*i-1, i_state) &
+             &* X_plus_y(i, i_state) &
+             &* X_minus_y(i, i_state) &
              &/ sum_ci2(i_state)
             ENDDO
           ELSEIF(Ms ==  1 .OR. Ms == -1) THEN
@@ -1843,8 +1857,10 @@ MODULE global_read_data
     DO i_state = 1, N_state
       SELECT CASE(Mult_ex(i_state))
         CASE('Singlet', 'Unknown')
-          n_contribution(i_state) = n_elec_config(i_state)/2
-          DO i = 1, n_elec_config(i_state)/2
+          !n_contribution(i_state) = n_elec_config(i_state)/2
+          n_contribution(i_state) = n_elec_config(i_state)
+          !DO i = 1, n_elec_config(i_state)/2
+          DO i = 1, n_elec_config(i_state)
             contribution_maxval = MAXVAL(contribution(:, i_state))
             IF(ABS(contribution_maxval) < Threshold_contribution) THEN
               n_contribution(i_state) = i - 1
@@ -1853,14 +1869,18 @@ MODULE global_read_data
             ENDIF    
             contribution_maxloc = MAXLOC(contribution(:, i_state), 1)
             contribution_sort(i, i_state) = contribution_maxval
-            a_ras_sort(1, i, i_state) = A_ras(1, 2*contribution_maxloc-1, i_state)
-            r_ras_sort(1, i, i_state) = R_ras(1, 2*contribution_maxloc-1, i_state)
+            !a_ras_sort(1, i, i_state) = A_ras(1, 2*contribution_maxloc-1, i_state)
+            !r_ras_sort(1, i, i_state) = R_ras(1, 2*contribution_maxloc-1, i_state)
+            a_ras_sort(1, i, i_state) = A_ras(1, contribution_maxloc, i_state)
+            r_ras_sort(1, i, i_state) = R_ras(1, contribution_maxloc, i_state)
             contribution(contribution_maxloc, i_state) = 0.0D0
           ENDDO
         CASE('Triplet')
           IF(Ms == 0) THEN
-            n_contribution(i_state) = n_elec_config(i_state)/2
-            DO i = 1, n_elec_config(i_state)/2
+            !n_contribution(i_state) = n_elec_config(i_state)/2
+            n_contribution(i_state) = n_elec_config(i_state)
+            !DO i = 1, n_elec_config(i_state)/2
+            DO i = 1, n_elec_config(i_state)
               contribution_maxval = MAXVAL(contribution(:, i_state))
               IF(ABS(contribution_maxval) < Threshold_contribution) THEN
                 n_contribution(i_state) = i - 1
@@ -1869,8 +1889,10 @@ MODULE global_read_data
               ENDIF
               contribution_maxloc = MAXLOC(contribution(:, i_state), 1)
               contribution_sort(i, i_state) = contribution_maxval
-              a_ras_sort(1, i, i_state) = A_ras(1, 2*contribution_maxloc-1, i_state)
-              r_ras_sort(1, i, i_state) = R_ras(1, 2*contribution_maxloc-1, i_state)
+              !a_ras_sort(1, i, i_state) = A_ras(1, 2*contribution_maxloc-1, i_state)
+              !r_ras_sort(1, i, i_state) = R_ras(1, 2*contribution_maxloc-1, i_state)
+              a_ras_sort(1, i, i_state) = A_ras(1, contribution_maxloc, i_state)
+              r_ras_sort(1, i, i_state) = R_ras(1, contribution_maxloc, i_state)
               contribution(contribution_maxloc, i_state) = 0.0D0
             ENDDO
           ELSEIF(Ms ==  1 .OR. Ms == -1) THEN
@@ -1895,13 +1917,14 @@ MODULE global_read_data
     ENDDO
 
 
-!   Writing CI coefficients in terms of spin-orbital numbers
+!   Writing X + Y and X - Y in terms of spin-orbital numbers
     WRITE(6,'(1X)')
     n_repeat = 45
-    WRITE(6,'(1X, A)') 'CI coefficients and electronic configurations'
+    WRITE(6,'(1X, A)') 'X + Y, X - Y, and electronic configurations'
     WRITE(6,'(1X, A)') 'in terms of spin-orbital numbers'
     WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
-    IF(Property == 'Check' .OR. Property == 'Cicoef_only') THEN
+    IF(Property == 'Cicoef_only') THEN
+     
       WRITE(6,'(1X, A, I0, A)') '| ', 0, ' >'
       WRITE(6,'(1X, A)') 'HF ground state'
       WRITE(6,'(1X, A)') 'Singlet'
@@ -1920,7 +1943,9 @@ MODULE global_read_data
          &R_ras(1, i_elec_config, i_state)
         ENDDO
       ENDDO
-    ELSE
+
+    ELSE ! Property /= 'Cicoef_only'
+      
       IF(Bra == 0) THEN
         WRITE(6,'(1X, A, I0, A)') '| ', 0, ' >'
         WRITE(6,'(1X, A)') 'HF ground state'
@@ -1941,6 +1966,7 @@ MODULE global_read_data
       ENDIF
 
       IF(Ket == Bra) THEN
+!       Skip writing information of Ket      
       ELSEIF(Ket == 0) THEN
         WRITE(6,'(1X, A)') REPEAT('-', n_repeat)
         WRITE(6,'(1X, A, I0, A)') '| ', 0, ' >'
@@ -1964,15 +1990,15 @@ MODULE global_read_data
 
     ENDIF 
     WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
-    WRITE(6,'(1X)')
 
-!   Writing CI coefficients in terms of spin-orbital names
+!   Writing X + Y and X - Y in terms of spin-orbital names
     WRITE(6,'(1X)')
     n_repeat = 45
-    WRITE(6,'(1X, A)') 'CI coefficients and electronic configurations'
+    WRITE(6,'(1X, A)') 'X + Y, X - Y, and electronic configurations'
     WRITE(6,'(1X, A)') 'in terms of spin-orbital names'
     WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
-    IF(Property == 'Check' .OR. Property == 'Cicoef_only') THEN
+    IF(Property == 'Cicoef_only') THEN
+
       WRITE(6,'(1X, A, I0, A)') '| ', 0, ' >'
       WRITE(6,'(1X, A)') 'HF ground state'
       WRITE(6,'(1X, A)') 'Singlet'
@@ -1985,7 +2011,7 @@ MODULE global_read_data
         WRITE(6,'(1X, A)') mult_ex(i_state)
         WRITE(6,'(1X)')
         DO i_elec_config = 1, n_elec_config(i_state)
-          so_occ_name(1) = So_name(A_ras(1, i_elec_config, i_state))
+          so_occ_name(1)   = So_name(A_ras(1, i_elec_config, i_state))
           so_unocc_name(1) = So_name(R_ras(1, i_elec_config, i_state))
           WRITE(6,'(1X, F11.7, F13.7, 1X, A9)') &
          &X_plus_y(i_elec_config, i_state), &
@@ -1995,7 +2021,7 @@ MODULE global_read_data
         ENDDO
       ENDDO
     
-    ELSE ! Property /= 'Check'
+    ELSE ! Property /= 'Cicoef_only'
 
       IF(Bra == 0) THEN
         WRITE(6,'(1X, A, I0, A)') '| ', 0, ' >'
@@ -2009,7 +2035,7 @@ MODULE global_read_data
         WRITE(6,'(1X, A)') mult_ex(Bra)
         WRITE(6,'(1X)')
         DO i_elec_config = 1, n_elec_config(Bra)
-          so_occ_name(1) = So_name(A_ras(1, i_elec_config, Bra))
+          so_occ_name(1)   = So_name(A_ras(1, i_elec_config, Bra))
           so_unocc_name(1) = So_name(R_ras(1, i_elec_config, Bra))
           WRITE(6,'(1X, F11.7, F13.7, 2X, A9)') X_plus_y(i_elec_config, Bra), &
                        &X_minus_y(i_elec_config, Bra), &
@@ -2033,7 +2059,7 @@ MODULE global_read_data
         WRITE(6,'(1X, A)') mult_ex(Ket)
         WRITE(6,'(1X)')
         DO i_elec_config = 1, n_elec_config(Ket)
-          so_occ_name(1) = So_name(A_ras(1, i_elec_config, Ket))
+          so_occ_name(1)   = So_name(A_ras(1, i_elec_config, Ket))
           so_unocc_name(1) = So_name(R_ras(1, i_elec_config, Ket))
           WRITE(6,'(1X, F11.7, F13.7, 2X, A9)') X_plus_y(i_elec_config, Ket), &
                        &X_minus_y(i_elec_config, Ket), &
@@ -2045,14 +2071,12 @@ MODULE global_read_data
     ENDIF
     WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
     WRITE(6,'(1X)')
-!   End of writing CI coefficients in terms of so numbers
+!   End of writing X + Y and X - Y in terms of so numbers
 
-
-    WRITE(6,'(1X, A)') 'Sum of squared CI coefficients of'
-    WRITE(6,'(1X, A)') 'electronic state |i>'
-    n_repeat = 16
+    WRITE(6,'(1X, A)') 'Sum of (X + Y)*(X - Y) of electronic state | i >'
+    n_repeat = 26
     WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
-    WRITE(6,'(1X, A)') '  i   Sum[ci**2]'
+    WRITE(6,'(1X, A)') '  i   Sum[(X + Y)*(X - Y)]'
     WRITE(6,'(1X, A)') REPEAT('-', n_repeat)
     IF(Property == 'Check' .OR. Property == 'Cicoef_only') THEN
       WRITE(6,'(1X, I3, F13.8)') 0, 1.0D0
@@ -2082,7 +2106,7 @@ MODULE global_read_data
     WRITE(6,'(1X, A)') 'Contributions from individual electronic configurations'
     WRITE(6,'(1X, A)') 'to electronic states in terms of spin-orbital numbers'
     WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
-    IF(Property == 'Check' .OR. Property == 'Cicoef_only') THEN
+    IF(Property == 'Cicoef_only') THEN
       WRITE(6,'(1X, A, I0, A)') '| ', 0, ' >'
       WRITE(6,'(1X, A)') 'HF ground state'
       WRITE(6,'(1X, A)') 'Singlet'
@@ -2097,11 +2121,13 @@ MODULE global_read_data
         WRITE(6,'(1X)')
         DO i = 1, n_contribution(i_state)
           WRITE(6,'(1X, F6.2, I4, A3,  I4)') contribution_sort(i, i_state), &
-                       &(a_ras_sort(1, i, i_state)+1)/2, arrow, &
-                       &(r_ras_sort(1, i, i_state)+1)/2
+                       !&(a_ras_sort(1, i, i_state)+1)/2, arrow, &
+                       !&(r_ras_sort(1, i, i_state)+1)/2
+                       &a_ras_sort(1, i, i_state), arrow, &
+                       &r_ras_sort(1, i, i_state)
         ENDDO
       ENDDO
-    ELSE ! Property /= 'Check'
+    ELSE ! Property /= 'Cicoef_only'
       IF(Bra == 0) THEN
         WRITE(6,'(1X, A, I0, A)') '| ', 0, ' >'
         WRITE(6,'(1X, A)') 'HF ground state'
@@ -2115,8 +2141,10 @@ MODULE global_read_data
         WRITE(6,'(1X)')
         DO i = 1, n_contribution(Bra)
           WRITE(6,'(1X, F6.2, I4, A3,  I4)') contribution_sort(i, Bra), &
-                       &(a_ras_sort(1, i, Bra)+1)/2, arrow, &
-                       &(r_ras_sort(1, i, Bra)+1)/2
+                       !&(a_ras_sort(1, i, Bra)+1)/2, arrow, &
+                       !&(r_ras_sort(1, i, Bra)+1)/2
+                       &a_ras_sort(1, i, Bra), arrow, &
+                       &r_ras_sort(1, i, Bra)
         ENDDO
       ENDIF
 
@@ -2136,8 +2164,10 @@ MODULE global_read_data
         WRITE(6,'(1X)')
         DO i = 1, n_contribution(Ket)
           WRITE(6,'(1X, F6.2, I4, A3,  I4)') contribution_sort(i, Ket), &
-                       &(a_ras_sort(1, i, Ket)+1)/2, arrow, &
-                       &(r_ras_sort(1, i, Ket)+1)/2
+                       !&(a_ras_sort(1, i, Ket)+1)/2, arrow, &
+                       !&(r_ras_sort(1, i, Ket)+1)/2
+                       &a_ras_sort(1, i, Ket), arrow, &
+                       &r_ras_sort(1, i, Ket)
         ENDDO
       ENDIF
     ENDIF
@@ -2290,29 +2320,25 @@ MODULE global_read_data
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END SUBROUTINE read_data_ci_coef_td
 
 
   SUBROUTINE so_num2so_name
 
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
-
-!   Constants
+!   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'so_num2so_name'
     CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
 
 !   Local variables
-
     INTEGER :: i_cgf
     CHARACTER(LEN=1), ALLOCATABLE :: spin_name(:)
-    INTEGER :: int_mo_name
-    CHARACTER(LEN=1) :: char_int_mo_name_1
-    CHARACTER(LEN=2) :: char_int_mo_name_2
-    CHARACTER(LEN=3) :: char_int_mo_name_3
-    CHARACTER(LEN=4) :: char_int_mo_name_4
-    CHARACTER(LEN=5) :: char_int_mo_name_5
+    INTEGER                       :: int_mo_name
+    CHARACTER(LEN=1)              :: char_int_mo_name_1
+    CHARACTER(LEN=2)              :: char_int_mo_name_2
+    CHARACTER(LEN=3)              :: char_int_mo_name_3
+    CHARACTER(LEN=4)              :: char_int_mo_name_4
+    CHARACTER(LEN=5)              :: char_int_mo_name_5
   
 
     IF(Debug == 'Yes') &
@@ -2406,9 +2432,9 @@ MODULE global_read_data
     CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
 
 !   Local variables
-    INTEGER mx, my, mz
-    INTEGER ix, iy, iz
-    DOUBLE PRECISION xyz_center(1:3)
+    INTEGER :: mx, my, mz
+    INTEGER :: ix, iy, iz
+    DOUBLE PRECISION :: xyz_center(1:3)
 
     IF(Debug == 'Yes') &
    &CALL write_messages(2, Text_blank, type_program, name_program)
@@ -2500,14 +2526,13 @@ MODULE global_read_data
 
 !   Global variables
     Dtau = 0.0D0
-    Dx = 0.25D0; Dy = 0.25D0; Dz = 0.25D0
-    Delta = 2.0D0
     Nx=0; Ny=0; Nz=0
 
     WRITE(6,'(1X)') 
     WRITE(6,'(1X, A)') 'Calculating grid size for cube files'
 
 !   Default grids
+    Delta = 2.0D0
     Xmin = MINVAL(Xyznuc(1,:)) - Delta; Xmax = MAXVAL(Xyznuc(1,:)) + Delta
     Ymin = MINVAL(Xyznuc(2,:)) - Delta; Ymax = MAXVAL(Xyznuc(2,:)) + Delta
     Zmin = MINVAL(Xyznuc(3,:)) - Delta; Zmax = MAXVAL(Xyznuc(3,:)) + Delta
@@ -2520,6 +2545,7 @@ MODULE global_read_data
     value_real = 0.0D0
     value_int = 0
 
+    Dx = 0.25D0; Dy = 0.25D0; Dz = 0.25D0
     IF(n_line_grid /= 0 .AND.&
       n_line_grid + 1 < n_line_end_grid) THEN
       DO i_line = n_line_grid + 1, n_line_end_grid - 1
@@ -2527,6 +2553,11 @@ MODULE global_read_data
         i_symbol = INDEX(text_temp, '=')
         CALL get_text_left_symbol(text_temp, i_symbol, text_left)
         CALL get_text_right_symbol(text_temp, i_symbol, text_right)
+
+
+!       Capitalize the first letter of text_left and make the rest lowercase.
+        CALL cap_text(text_left)
+
         CALL get_typ(text_left, real_int_char)
         SELECT CASE(real_int_char)
           CASE('REAL'); CALL get_real(text_right, value_real)
@@ -2540,9 +2571,9 @@ MODULE global_read_data
           CASE('Ymax'); Ymax = value_real
           CASE('Zmin'); Zmin = value_real
           CASE('Zmax'); Zmax = value_real
-          CASE('Dx'); Dx = value_real
-          CASE('Dy'); Dy = value_real
-          CASE('Dz'); Dz = value_real
+          CASE('Dx');   Dx = value_real
+          CASE('Dy');   Dy = value_real
+          CASE('Dz');   Dz = value_real
           CASE DEFAULT
             WRITE(6,'(1X, A)') 'Incorrect GRID keyward'
             CALL write_messages(-9999, Text_blank, type_program, name_program)
@@ -2550,8 +2581,10 @@ MODULE global_read_data
       ENDDO
     ELSE
     ENDIF
+    Dtau = 0.0D0
     Dtau = Dx*Dy*Dz
 
+    Nx=0; Ny=0; Nz=0
     DO
       Nx = INT((Xmax - Xmin)/Dx) + 1
       IF(Nx < 0) THEN
@@ -2625,7 +2658,7 @@ MODULE global_read_data
     WRITE(6,'(1X, A)') '--------------------------'
     WRITE(6,'(1X)')
     WRITE(6,'(1X, A)') 'Minimum and maximum values of'
-    WRITE(6,'(1X, A)') 'x, y, and z coordinates (a.u.)'
+    WRITE(6,'(1X, A)') 'x, y, and z coordinates (bohr)'
     WRITE(6,'(1X, A)') '========================='
     WRITE(6,'(1X, A)') '        Min         Max  '
     WRITE(6,'(1X, A)') '-------------------------'
@@ -2635,8 +2668,8 @@ MODULE global_read_data
     WRITE(6,'(1X, A)') '========================='
 
     WRITE(6,'(1X)')
-    WRITE(6,'(1X, A)') 'Grid size (a.u.) and the number of'
-    WRITE(6,'(1X, A)') 'lattice ponts of x, y, and z coordinates'
+    WRITE(6,'(1X, A)') 'Grid size (bohr): Dx, Dy, Dz'
+    WRITE(6,'(1X, A)') 'The number of lattice ponts: Nx, Ny, Nz'
     WRITE(6,'(1X, A)') '===================='
     WRITE(6,'(1X, A, F8.4, 4X, A, I4)') 'Dx', Dx, 'Nx', Nx
     WRITE(6,'(1X, A, F8.4, 4X, A, I4)') 'Dy', Dy, 'Ny', Ny
@@ -2645,6 +2678,7 @@ MODULE global_read_data
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END SUBROUTINE cube_grid
 
 
@@ -2654,10 +2688,6 @@ MODULE global_read_data
 
   SUBROUTINE read_data_vib_0
 
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
-
 !   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'read_data_vib_0'
     CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
@@ -2665,7 +2695,6 @@ MODULE global_read_data
     IF(Debug == 'Yes') &
    &CALL write_messages(2, Text_blank, type_program, name_program)
 
-!   Initializing global variable
     N_mode = 0
     OPEN(Fcontrol_vib, FILE = Fname(Fcontrol_vib))
       READ(Fcontrol_vib,*) N_mode ! Number of vibrational modes
@@ -2673,13 +2702,10 @@ MODULE global_read_data
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END SUBROUTINE read_data_vib_0
 
   SUBROUTINE read_data_vib_1
-
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
 
 !   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'read_data_vib_1'
@@ -2692,10 +2718,6 @@ MODULE global_read_data
 
     IF(Debug == 'Yes') &
    &CALL write_messages(2, Text_blank, type_program, name_program)
-
-!   ----------------------
-!   Initializing variables
-!   ----------------------
 
 !   Global variables
     ALLOCATE(Atmwt(1:N_atm)); Atmwt = 0.0D0
@@ -2773,17 +2795,16 @@ MODULE global_read_data
       ENDDO
     ENDDO
     WRITE(6,'(1X, A)') 'Done'
+    
+    IF(Debug == 'Yes') &
+   &CALL write_messages(3, Text_blank, type_program, name_program)
 
   END SUBROUTINE read_data_vib_1
 
 
   SUBROUTINE read_mode_calc
 
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
-
-!   Constants
+!   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'read_inp_mode_calc'
     CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
 
@@ -2806,10 +2827,6 @@ MODULE global_read_data
     ELSE
       N_mode_calc = N_mode
     ENDIF
-
-!   ----------------------
-!   Initializing variables
-!   ----------------------
 
 !   Global variables
     ALLOCATE(Mode_calc(1:N_mode_calc)); Mode_calc = 0
@@ -2835,12 +2852,12 @@ MODULE global_read_data
       Vibmode_calc(1:3, 1:N_atm, i_mode_calc)&
       = Vibmode(1:3, 1:N_atm, Mode_calc(i_mode_calc))
     ENDDO
-    
     Freq_calc = Freq_calc * Scale_fac_freq
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
-  END SUBROUTINE read_mode_calc
+
+END SUBROUTINE read_mode_calc
 
 
 ! -----------------
@@ -2849,15 +2866,11 @@ MODULE global_read_data
 
   SUBROUTINE read_data_ex_energy
 
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
-
 !   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'read_data_ex_energy'
     CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
 
-!   Local variables
+!   Local variable
     INTEGER :: i_state
 
     IF(Debug == 'Yes') &
@@ -2885,6 +2898,7 @@ MODULE global_read_data
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
+  
   END SUBROUTINE read_data_ex_energy
 
 END MODULE global_read_data

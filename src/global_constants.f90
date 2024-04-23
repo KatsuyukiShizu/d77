@@ -1,16 +1,16 @@
 ! This module is part of d77 and defines global constants.
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 MODULE global_constants
   IMPLICIT NONE
 
-  CHARACTER(LEN=8),  SAVE :: Program_ver 
+  CHARACTER(LEN=8),   SAVE :: Program_ver 
   CHARACTER(LEN=100), SAVE :: Text_blank 
 
 ! --------
@@ -51,6 +51,7 @@ MODULE global_constants
   DOUBLE PRECISION, SAVE :: Threshold_e_ab_default 
   DOUBLE PRECISION, SAVE :: Threshold_ci_ci_default  
   DOUBLE PRECISION, SAVE :: Threshold_contribution_default  
+  DOUBLE PRECISION, SAVE :: Threshold_distance_default  
 
 ! -----
 ! Grids 
@@ -92,7 +93,7 @@ MODULE global_constants
 
 ! Fsc     : Fine-structure constant
 ! Inv_fsc : Inverse fine-structure constant
-  DOUBLE PRECISION, SAVE :: Fsc, Inv_fsc, Au_to_wavenumber_soc
+  DOUBLE PRECISION, SAVE :: Fsc, Inv_fsc
 
 ! -------------------------
 ! Electromagnetic constants
@@ -118,6 +119,7 @@ MODULE global_constants
   DOUBLE PRECISION, SAVE :: Meter_to_bohr, Ang_to_bohr
   DOUBLE PRECISION, SAVE :: Hartree_to_ev, Ev_to_hartree
   DOUBLE PRECISION, SAVE :: StatC, Debye, Debye_si, Dipole_au
+  DOUBLE PRECISION, SAVE :: Joule_to_wavenumber, Hartree_to_wavenumber
 
 ! --------------------------
 ! Physico-chemical constants
@@ -174,20 +176,21 @@ MODULE global_constants
 CONTAINS
 
   SUBROUTINE assign_globals
-    Program_ver = '20230828'
+    Program_ver = '20240423'
     Text_blank = REPEAT(' ',100)
     Max_n_atm = 30; Max_n_mode = 100
     Max_ne = 100
     Max_n_cgf = 1000
     Max_n_pgf = 30
     Max_n_state = 20 
-    Max_n_elec_config = 1000 
+    Max_n_elec_config = 1000
     Max_n_ci_ci = Max_n_elec_config**2
     Max_n_tuple = 4 
     Threshold_s_cgf_default = 1.0D-5
-    Threshold_ci_ci_default = 1.0D-8 
     Threshold_e_ab_default = 1.0D-4 
+    Threshold_ci_ci_default = 1.0D-8 
     Threshold_contribution_default = 1.0D-1 
+    Threshold_distance_default = 4.0D0 ! [A]   
     Max_nx = 500; Max_ny = 500; Max_nz = 500
 
 !   -----------------------------------
@@ -218,15 +221,6 @@ CONTAINS
 !   Electric constant (epsilon0)
     Eps0 = 8.8541878128D-12 ! [F m-1]
   
-!   ----------------------------
-!   Atomic and nuclear constants
-!   ----------------------------
-
-!   Fine-structure constant
-    Fsc = 7.2973525693D-3 
-    Inv_fsc = 137.035999084D+0 
-    Au_to_wavenumber_soc = 218996.692D0
-
 !   -------------------------
 !   Electromagnetic constants
 !   -------------------------
@@ -241,12 +235,12 @@ CONTAINS
 !   ------------
 
     Me = 9.1093837015D-31 ! 1 [me] = Me [kg]
-    Bohr = 0.529177210903D-10 ! 1 [bohr] = Bohr [m]
-!   Bohr = 4.0* Pi * Eps0 * Dirac**2.0D0 / (Me * Echarg**2.0D0)
+    Bohr = 4.0* Pi * Eps0 * Dirac**2.0D0 / (Me * Echarg**2.0D0) ! 1 [bohr] = Bohr [m]
+!   Bohr = 5.2917721897717314E-011 (0.529177210903D-10, NIST)
     Meter_to_bohr = 1/Bohr ! 1 [m] = Meter_to_bohr [bohr]
     Ang_to_bohr = 1.0D-10*Meter_to_bohr ! 1 [A] = Ang_to_bohr [bohr] 
-    Hartree = 4.3597447222071E-18 ! 1 [hartree] = Hartree [J]
-!   Hartree = Dirac * C_m * Fsc
+    Hartree = Echarg**2.0D0 / (4.0D0*Pi*Eps0*Bohr) ! 1 [hartree] = Hartree [J]
+!   Hartree = 4.3597445838389197E-018 (4.3597447222071D-18, NIST)     
     Hartree_to_ev = Hartree * Joule_to_ev ! 1 [hartree] = Hartree_to_ev [eV]
 !   Hartree_to_ev = 27.211386668405989     
     Ev_to_hartree = 1/Hartree_to_ev ! 1 [eV] = Ev_to_hartre [hartree]
@@ -264,6 +258,21 @@ CONTAINS
 !   Dipole_au = 8.4783535556893754E-030
     Debye = Dipole_au / Debye_si
 !   Debye = 2.5417464522531574
+
+!   ----------------------------
+!   Atomic and nuclear constants
+!   ----------------------------
+
+!   Fine-structure constant
+    Fsc = (Echarg**2.0D0)/(4.0D0*Pi*Eps0*Dirac*C_m)
+!   Fsc = 7.2973524535065231E-003 (7.2973525693D-3, NIST)
+    Inv_fsc = 1.0D0/Fsc
+!   Inv_fsc = 137.03600125816592 (137.035999084D+0, NIST)
+
+    Joule_to_wavenumber = 1.0D0/(Planck*C_cm) ! 1 [J] = Joule_to_wavenumber [cm-1]
+!   Joule_to_wavenumber = 5.0341165675427087E+022
+    Hartree_to_wavenumber = Hartree * Joule_to_wavenumber  ! 1 [J] = Joule_to_wavenumber [cm-1]
+!   Hartree_to_wavenumber = 219474.62439758098
 
 !   --------------------------
 !   Physico-chemical constants

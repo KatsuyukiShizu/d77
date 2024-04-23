@@ -5,12 +5,12 @@
 ! "One- and two-electron integrals over cartesian gaussian functions",
 ! J. Comput. Phys. 26, 218-231 (1978)
 ! DOI: https://doi.org/10.1016/0021-9991(78)90092-X
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 SUBROUTINE calc_rlmn_0&
@@ -30,16 +30,16 @@ SUBROUTINE calc_rlmn_0&
   CHARACTER(LEN=100), PARAMETER :: name_program = 'calc_rlmn_0'
   CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
 
-! Input variable
+! Input variables
   DOUBLE PRECISION, INTENT(IN) :: a, b, c, t
   DOUBLE PRECISION, INTENT(IN) :: alpha
-  INTEGER, INTENT(IN) :: l, m, n, max_j
+  INTEGER, INTENT(IN)          :: l, m, n, max_j
 
-! Output variable
+! Output variables
   DOUBLE PRECISION, INTENT(OUT) :: rlmn
 
 ! Local variables
-  DOUBLE PRECISION, DIMENSION(0:max_j) :: fj
+  DOUBLE PRECISION, DIMENSION(0:max_j)                :: fj
   DOUBLE PRECISION, DIMENSION(0:l, 0:m, 0:n, 0:max_j) :: rlmnj
   INTEGER :: j, i_l, i_m, i_n
   

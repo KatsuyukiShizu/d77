@@ -1,12 +1,12 @@
 ! This subroutine is part of d77 and computes
 ! density matrices between contracted Gaussian functions
 ! required for calculating spin-orbit couplings.
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU Lesser General Public License v3.0
 ! as published by the Free Software Foundation.
 ! http://www.gnu.org/licenses
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 SUBROUTINE calc_dmat_soc_cgf(opr_dmat, dmat_soc_cgf)
@@ -24,8 +24,10 @@ SUBROUTINE calc_dmat_soc_cgf(opr_dmat, dmat_soc_cgf)
   CHARACTER(LEN=100), PARAMETER :: name_program = 'calc_dmat_soc_cgf'
   CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
 
-! Output variables
-  DOUBLE PRECISION, INTENT(IN) :: opr_dmat(:,:)
+! Input variable
+  DOUBLE PRECISION, INTENT(IN)  :: opr_dmat(:,:)
+
+! Output variable
   DOUBLE PRECISION, INTENT(OUT) :: dmat_soc_cgf(:,:,:)
 
 ! Local variables
@@ -36,9 +38,9 @@ SUBROUTINE calc_dmat_soc_cgf(opr_dmat, dmat_soc_cgf)
  &CALL write_messages(2, Text_blank, type_program, name_program)
 
   dmat_soc_cgf = 0.0D0
-
   WRITE(6,'(1X)')
   WRITE(6,'(1X, A)') 'Calculating density matrix in terms of CGFs'
+  WRITE(6,'(1X, A)') 'from gamma and CGF coefficients'
   IF(Ms == 0) THEN
     DO nu_cgf = 1, N_cgf
       DO mu_cgf = 1, N_cgf

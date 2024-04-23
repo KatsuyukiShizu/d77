@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# This script is part of d77.
+
+# d77 is free software and can be redistributed and/or modified
+# under the terms of the GNU General Public License v3.0
+# as published by the Free Software Foundation.
+# https://www.gnu.org/licenses/gpl-3.0.html
+
+# For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
+
 export DIRPWD=$(pwd)
 
 export JOB=$(basename $1 .inp)

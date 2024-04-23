@@ -5,12 +5,12 @@
 ! "One- and two-electron integrals over cartesian gaussian functions",
 ! J. Comput. Phys. 26, 218-231 (1978)
 ! DOI: https://doi.org/10.1016/0021-9991(78)90092-X
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 SUBROUTINE calc_def&
@@ -19,27 +19,23 @@ SUBROUTINE calc_def&
            &d, e, f)
   IMPLICIT NONE
 
-! ------------------------
-! Declaration of variables
-! ------------------------
-
 ! Program name
   CHARACTER(LEN=100), PARAMETER :: name_program = 'calc_def'
   CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
 
-! Input variable
+! Input variables
   DOUBLE PRECISION, INTENT(IN) :: xyz_a(1:3), xyz_b(1:3), xyz_p(1:3)
-  INTEGER, INTENT(IN) :: lmn_a(1:3), lmn_b(1:3)
+  INTEGER, INTENT(IN)          :: lmn_a(1:3), lmn_b(1:3)
   DOUBLE PRECISION, INTENT(IN) :: cntexp_p
 
-! Output variable
+! Output variables
   DOUBLE PRECISION, INTENT(OUT) :: d(0:lmn_a(1)+lmn_b(1), 0:lmn_a(1), 0:lmn_b(1)) 
   DOUBLE PRECISION, INTENT(OUT) :: e(0:lmn_a(2)+lmn_b(2), 0:lmn_a(2), 0:lmn_b(2)) 
   DOUBLE PRECISION, INTENT(OUT) :: f(0:lmn_a(3)+lmn_b(3), 0:lmn_a(3), 0:lmn_b(3)) 
 
 ! Local variables
   DOUBLE PRECISION :: const_p
-  INTEGER :: l, m, n, i_a, i_b
+  INTEGER          :: l, m, n, i_a, i_b
   DOUBLE PRECISION :: d_temp(-1:lmn_a(1)+lmn_b(1)+2, 0:lmn_a(1), 0:lmn_b(1)), & 
                      &e_temp(-1:lmn_a(2)+lmn_b(2)+2, 0:lmn_a(2), 0:lmn_b(2)), & 
                      &f_temp(-1:lmn_a(3)+lmn_b(3)+2, 0:lmn_a(3), 0:lmn_b(3)) 
@@ -49,13 +45,11 @@ SUBROUTINE calc_def&
   d = 0.0D0; e = 0.0D0; f = 0.0D0
   d_temp = 0.0D0; e_temp = 0.0D0; f_temp = 0.0D0
 
-
-! Calculating d(L; lmn_a(1), lmn_b(1)), e (M; lmn_a(2), lmn_b(2)), or f(N; lmn_a(3), lmn_b(3))
-
+! Calculating d(L; lmn_a(1), lmn_b(1)), e(M; lmn_a(2), lmn_b(2)), or f(N; lmn_a(3), lmn_b(3))
   d(0, 0, 0) = 1.0D0; e(0, 0, 0) = 1.0D0; f(0, 0, 0) = 1.0D0
   d_temp(0, 0, 0) = 1.0D0; e_temp(0, 0, 0) = 1.0D0; f_temp(0, 0, 0) = 1.0D0
 
-  ! i_b = 0
+! i_b = 0
   IF(lmn_a(1) >= 1) THEN
     DO i_a = 0, lmn_a(1)-1
       DO l = 0, i_a+1

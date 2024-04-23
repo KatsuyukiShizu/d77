@@ -1,10 +1,10 @@
 ! This subroutine is part of d77 and prints messages.
-!
+
 ! d77 is free software and can be redistributed and/or modified
 ! under the terms of the GNU General Public License v3.0
 ! as published by the Free Software Foundation.
 ! https://www.gnu.org/licenses/gpl-3.0.html
-!
+
 ! For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
 SUBROUTINE write_messages(message_number, text, type_program, name_program)
@@ -56,11 +56,9 @@ SUBROUTINE write_messages(message_number, text, type_program, name_program)
     WRITE(6,'(1X)')
     WRITE(6,'(1X)')
     WRITE(6,'(1X, 2A, 1X, A)') '--- Entering ', TRIM(type_program), TRIM(name_program)
-    !CALL FLUSH(6)
   ELSEIF(message_number == 3) THEN
     WRITE(6,'(1X)')
     WRITE(6,'(1X, 2A, 1X, A)') '--- Leaving ',  TRIM(type_program), TRIM(name_program)
-    !CALL FLUSH(6)
   ELSEIF(message_number == 12) THEN
     WRITE(6,'(1X)')
     WRITE(6,'(1X, A)') 'gamma_ij: one-particle reduced density matrix between'
@@ -69,8 +67,6 @@ SUBROUTINE write_messages(message_number, text, type_program, name_program)
     WRITE(6,'(1X, A)') 'Trace of gamma_ij'
 
   ELSEIF(message_number == 9999) THEN
-    WRITE(6,'(1X)')
-    WRITE(6,'(1X)')
     WRITE(6,'(1X, A)') '****************************'
     WRITE(6,'(1X, A)') '**                        **'
     WRITE(6,'(1X, A)') '**   Normal termination   **'
@@ -80,13 +76,13 @@ SUBROUTINE write_messages(message_number, text, type_program, name_program)
     WRITE(6,'(1X)')
     CALL CPU_TIME(Time_end)
     WRITE(6,'(1X, A, F8.2, A)') 'Total CPU time = ', Time_end-Time_start, ' seconds'
+    WRITE(6,'(1X)')
     CALL DATE_AND_TIME(date, time, zone, date_time)
     WRITE(6,'(1X, A, A, I4, A, I0, A, I0, A, I0, A, I0, A, I0, A, A, A)') &
    &ADJUSTL(TRIM(text)), &
    &' on ', date_time(1), '/', date_time(2), '/', date_time(3), &
    &' at ', date_time(5), ':', date_time(6), ':', date_time(7), &
    &' (time zone = UTC', zone, ')'
-    WRITE(6,'(1X)')
 
 ! ------------------------------
 ! Messages for error termination
@@ -97,7 +93,6 @@ SUBROUTINE write_messages(message_number, text, type_program, name_program)
       WRITE(6,'(1X, A)') TRIM(ADJUSTL(text))
     ELSE
     ENDIF
-    WRITE(6,'(1X)')
     WRITE(6,'(1X, 2A, 1X, A, A)') 'd77 was terminated in ', TRIM(type_program), TRIM(name_program)
     WRITE(6,'(1X)')
     WRITE(6,'(1X)')
