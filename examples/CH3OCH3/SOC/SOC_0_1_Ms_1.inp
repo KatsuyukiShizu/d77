@@ -1,8 +1,8 @@
 $comment
 Input file for calculating spin-orbit coupling 
 between S0 and T1 (Ms = 1)
-| 0 >: ground state (S0)
-| 1 >: lowest triplet state (T1)
+| 0 > : ground state (S0)
+| 1 > : lowest triplet state (T1)
 $comment
 
 $control
@@ -17,8 +17,8 @@ ms = 1
 $end_spin_orbit
 
 $elec_state
-Bra = < 0 |
-Ket = | 1 >
+bra = < 0 |
+ket = | 1 >
 $end_elec_state
 
 INPDIR_ELEC = ../../INP_ELEC

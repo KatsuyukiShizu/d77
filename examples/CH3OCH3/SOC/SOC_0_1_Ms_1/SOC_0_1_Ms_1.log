@@ -5,7 +5,7 @@
 
  ****************************************************
  **                                                **
- **             d77: version 20230828              **
+ **             d77: version 20240423              **
  **                                                **
  **  Visual understanding of molecular properties  **
  **                                                **
@@ -22,13 +22,15 @@
 
 
 
+ --- Entering d77.exe on 2024/4/24 at 15:22:52 (time zone = UTC+0900)
+
  ===== Copy of your input file =====
 
  $comment
  Input file for calculating spin-orbit coupling
  between S0 and T1 (Ms = 1)
- | 0 >: ground state (S0)
- | 1 >: lowest triplet state (T1)
+ | 0 > : ground state (S0)
+ | 1 > : lowest triplet state (T1)
  $comment
  
  $control
@@ -43,8 +45,8 @@
  $end_spin_orbit
  
  $elec_state
- Bra = < 0 |
- Ket = | 1 >
+ bra = < 0 |
+ ket = | 1 >
  $end_elec_state
  
  INPDIR_ELEC = ../../INP_ELEC
@@ -68,6 +70,15 @@
  Number of CGFs:          72
  Number of spin orbitals: 144
  =============================
+
+ Threshold values
+ =================================
+ Threshold_s_cgf:        0.100E-04
+ Threshold_e_ab:         0.100E-03
+ Threshold_ci_ci:        0.100E-07
+ Threshold_contribution: 0.100E+00
+ Threshold_distance:     0.400E+01
+ =================================
 
  Reading nuclear coordinates from COORD
  Reading atomic numbers from ATMNUM
@@ -206,10 +217,10 @@
   10       H         1       1.0
  =================================
 
- Reading X+Y and X-Y from XY
+ Reading X + Y and X - Y from XY
  Done
 
- CI coefficients and electronic configurations
+ X + Y, X - Y, and electronic configurations
  in terms of spin-orbital numbers
  =============================================
  | 0 >
@@ -344,8 +355,7 @@
   -0.0001414    0.0001414  32 -> 129
  =============================================
 
-
- CI coefficients and electronic configurations
+ X + Y, X - Y, and electronic configurations
  in terms of spin-orbital names
  =============================================
  | 0 >
@@ -600,14 +610,13 @@
                            HOMOb    
  =============================================
 
- Sum of squared CI coefficients of
- electronic state |i>
- ================
-   i   Sum[ci**2]
- ----------------
+ Sum of (X + Y)*(X - Y) of electronic state | i >
+ ==========================
+   i   Sum[(X + Y)*(X - Y)]
+ --------------------------
    0   1.00000000
    1   0.99999970
- ================
+ ==========================
 
  Contributions from individual electronic configurations
  to electronic states in terms of spin-orbital numbers
@@ -622,9 +631,9 @@
  TD-HF/DFT excited state   1
  Triplet   
 
-  99.26  16 ->  17
-   0.36  16 ->  21
-   0.20  10 ->  17
+  99.26  32 ->  33
+   0.36  32 ->  41
+   0.20  20 ->  33
  =============================================
 
  Contributions from individual electronic configurations
@@ -651,14 +660,12 @@
 
  --- Entering SUBROUTINE soc_int_pgf
 
- --------------------------
- Calculating density matrix
- --------------------------
+ --------------
+ Density matrix
+ --------------
 
- gamma: one-particle reduced density matrix between
- electronic states |i> and |j> in terms of spin orbitals
-
- Done
+ gamma: one-particle reduced density matrix
+ between electronic states | i > and | j >
 
  Trace of gamma
  =============================
@@ -667,44 +674,41 @@
    0   1     120       0.00000
  =============================
 
-
  Calculating density matrix in terms of CGFs
+ from gamma and CGF coefficients
  Done
 
-
- Reading x components of soc_cgf from 
- SOC_CGF_X                     
- Reading y components of soc_cgf from 
- SOC_CGF_Y                     
-
+ Reading x components of soc_cgf from SOC_CGF_X
+ Reading y components of soc_cgf from SOC_CGF_Y
+ Done
 
  ----------------------------------
  Spin-orbit coupling constant (SOC)
  ----------------------------------
 
- Alpha: fine-structure constant
- Alpha   =      0.007297
- 1/Alpha = 137.03599908
+ alpha: fine-structure constant
+ alpha   =   0.007297
+ 1/alpha = 137.036001
 
- < 0 | Soc | 1 > (a.u.)
+ < 0 | SOC operator | 1 > (a.u.)
  ========================================
        x             y             z      
  ----------------------------------------
   0.25153E-16  -0.18366E-15   0.00000E+00
  ========================================
 
- < 0 | Soc | 1 > * Alpha**2/2 (a.u.)
+ < 0 | SOC operator | 1 > * alpha**2/2 (a.u.)
  ========================================
        x             y             z      
  ----------------------------------------
   0.33486E-21  -0.24451E-20   0.00000E+00
  ========================================
 
- < 0 | Soc | 1 > * Alpha**2/2 (cm-1)
+ < 0 | SOC operator | 1 > * alpha**2/2 (cm-1)
  ========================================
        x             y             z      
  ----------------------------------------
-  0.73334E-16  -0.53547E-15   0.00000E+00
+  0.73494E-16  -0.53663E-15   0.00000E+00
  ========================================
 
  --- Leaving SUBROUTINE soc_int_pgf
@@ -717,7 +721,8 @@
  ****************************
 
 
- Total CPU time =     1.62 seconds
+ Total CPU time =     0.19 seconds
 
+ --- Leaving d77.exe on 2024/4/24 at 15:22:53 (time zone = UTC+0900)
 
  --------------- End of d77 execution script ---------------

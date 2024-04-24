@@ -1,0 +1,336 @@
+
+ --------------- d77 execution script ---------------
+
+
+
+ ****************************************************
+ **                                                **
+ **             d77: version 20240423              **
+ **                                                **
+ **  Visual understanding of molecular properties  **
+ **                                                **
+ **        Coded by SHIZU Katsuyuki (Japan)        **
+ **                                                **
+ ****************************************************
+
+ d77 is free software and can be redistributed and/or modified
+ under the terms of the GNU General Public License v3.0
+ as published by the Free Software Foundation.
+ https://www.gnu.org/licenses/gpl-3.0.html
+
+ For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
+
+
+
+ --- Entering d77.exe on 2024/4/24 at 14:40:16 (time zone = UTC+0900)
+
+ ===== Copy of your input file =====
+
+ $comment
+ Input file for calculating electron density of S0
+ | 0 > : ground state (S0)
+ $end_comment
+ 
+ $control
+ property = rho
+ runtyp = density
+ method = td
+ $end_control
+ 
+ $elec_state
+ bra = < 0 |
+ ket = | 0 >
+ $end_elec_state
+ 
+ $grid
+ xmin = -5.0
+ xmax =  5.0
+ ymin = -5.0
+ ymax =  5.0
+ zmin = -5.0
+ zmax =  5.0
+ dx = 0.20
+ dy = 0.20
+ dz = 0.20
+ $end_grid
+ 
+ INPDIR_ELEC = ../../INP_ELEC
+
+ ===================================
+
+ Reading $CONTROL options in your input file
+ Done
+
+ Reading general information of the system from CONTROL_ELEC
+ Done
+
+ Information of the system
+ =============================
+ Number of atoms:         10
+ Charge:                  0
+ Spin multiplicity:       1
+ Number of electrons:     32
+ Number of CGFs:          72
+ Number of spin orbitals: 144
+ =============================
+
+ Threshold values
+ =================================
+ Threshold_s_cgf:        0.100E-04
+ Threshold_e_ab:         0.100E-03
+ Threshold_ci_ci:        0.100E-07
+ Threshold_contribution: 0.100E+00
+ Threshold_distance:     0.400E+01
+ =================================
+
+ Reading nuclear coordinates from COORD
+ Reading atomic numbers from ATMNUM
+ Reading nuclear charges from NUCCHARG
+ Done
+
+ Reading primitive Gaussian functions (PGFs) from ATMORB
+ Reading expantion coefficients for CGFs (MO coefficients) from
+ COEFAREF and COEFBREF
+ Constructing contracted Gaussian functions (CGFs) from the PGFs
+
+ Names of spin orbitals
+ =================================
+   143  144   LUMO+55a   LUMO+55b 
+   141  142   LUMO+54a   LUMO+54b 
+   139  140   LUMO+53a   LUMO+53b 
+   137  138   LUMO+52a   LUMO+52b 
+   135  136   LUMO+51a   LUMO+51b 
+   133  134   LUMO+50a   LUMO+50b 
+   131  132   LUMO+49a   LUMO+49b 
+   129  130   LUMO+48a   LUMO+48b 
+   127  128   LUMO+47a   LUMO+47b 
+   125  126   LUMO+46a   LUMO+46b 
+   123  124   LUMO+45a   LUMO+45b 
+   121  122   LUMO+44a   LUMO+44b 
+   119  120   LUMO+43a   LUMO+43b 
+   117  118   LUMO+42a   LUMO+42b 
+   115  116   LUMO+41a   LUMO+41b 
+   113  114   LUMO+40a   LUMO+40b 
+   111  112   LUMO+39a   LUMO+39b 
+   109  110   LUMO+38a   LUMO+38b 
+   107  108   LUMO+37a   LUMO+37b 
+   105  106   LUMO+36a   LUMO+36b 
+   103  104   LUMO+35a   LUMO+35b 
+   101  102   LUMO+34a   LUMO+34b 
+    99  100   LUMO+33a   LUMO+33b 
+    97   98   LUMO+32a   LUMO+32b 
+    95   96   LUMO+31a   LUMO+31b 
+    93   94   LUMO+30a   LUMO+30b 
+    91   92   LUMO+29a   LUMO+29b 
+    89   90   LUMO+28a   LUMO+28b 
+    87   88   LUMO+27a   LUMO+27b 
+    85   86   LUMO+26a   LUMO+26b 
+    83   84   LUMO+25a   LUMO+25b 
+    81   82   LUMO+24a   LUMO+24b 
+    79   80   LUMO+23a   LUMO+23b 
+    77   78   LUMO+22a   LUMO+22b 
+    75   76   LUMO+21a   LUMO+21b 
+    73   74   LUMO+20a   LUMO+20b 
+    71   72   LUMO+19a   LUMO+19b 
+    69   70   LUMO+18a   LUMO+18b 
+    67   68   LUMO+17a   LUMO+17b 
+    65   66   LUMO+16a   LUMO+16b 
+    63   64   LUMO+15a   LUMO+15b 
+    61   62   LUMO+14a   LUMO+14b 
+    59   60   LUMO+13a   LUMO+13b 
+    57   58   LUMO+12a   LUMO+12b 
+    55   56   LUMO+11a   LUMO+11b 
+    53   54   LUMO+10a   LUMO+10b 
+    51   52   LUMO+9a    LUMO+9b  
+    49   50   LUMO+8a    LUMO+8b  
+    47   48   LUMO+7a    LUMO+7b  
+    45   46   LUMO+6a    LUMO+6b  
+    43   44   LUMO+5a    LUMO+5b  
+    41   42   LUMO+4a    LUMO+4b  
+    39   40   LUMO+3a    LUMO+3b  
+    37   38   LUMO+2a    LUMO+2b  
+    35   36   LUMO+1a    LUMO+1b  
+    33   34   LUMOa      LUMOb    
+ ---------------------------------
+    31   32   HOMOa      HOMOb    
+    29   30   HOMO-1a    HOMO-1b  
+    27   28   HOMO-2a    HOMO-2b  
+    25   26   HOMO-3a    HOMO-3b  
+    23   24   HOMO-4a    HOMO-4b  
+    21   22   HOMO-5a    HOMO-5b  
+    19   20   HOMO-6a    HOMO-6b  
+    17   18   HOMO-7a    HOMO-7b  
+    15   16   HOMO-8a    HOMO-8b  
+    13   14   HOMO-9a    HOMO-9b  
+    11   12   HOMO-10a   HOMO-10b 
+     9   10   HOMO-11a   HOMO-11b 
+     7    8   HOMO-12a   HOMO-12b 
+     5    6   HOMO-13a   HOMO-13b 
+     3    4   HOMO-14a   HOMO-14b 
+     1    2   HOMO-15a   HOMO-15b 
+ =================================
+
+ Nuclear coordinates (bohr)
+ ==============================================
+ Atom        x             y             z
+ ----------------------------------------------
+   1     0.00000000    0.00000000    0.34999784
+   2     0.00000000   -0.00000000    2.64744995
+   3    -0.00000000    2.44350938   -1.16164085
+   4    -0.00000000    4.06028346    0.11980471
+   5     1.66470496    2.53503137   -2.39487646
+   6    -1.66470496    2.53503137   -2.39487646
+   7    -0.00000000   -2.44350938   -1.16164085
+   8    -1.66470496   -2.53503137   -2.39487646
+   9     1.66470496   -2.53503137   -2.39487646
+  10    -0.00000000   -4.06028346    0.11980471
+ ==============================================
+
+ Nuclear charges (elementary charge)
+ =================================
+ Atom   Element   Atomic   Nuclear
+        symbol    number   charge 
+ ---------------------------------
+   1       C         6       6.0
+   2       O         8       8.0
+   3       C         6       6.0
+   4       H         1       1.0
+   5       H         1       1.0
+   6       H         1       1.0
+   7       C         6       6.0
+   8       H         1       1.0
+   9       H         1       1.0
+  10       H         1       1.0
+ =================================
+
+ Reading X + Y and X - Y from XY
+ Done
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ =============================================
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ =============================================
+
+ Sum of (X + Y)*(X - Y) of electronic state | i >
+ ==========================
+   i   Sum[(X + Y)*(X - Y)]
+ --------------------------
+   0   1.00000000
+ ==========================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ =============================================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ =============================================
+
+
+ --- Entering SUBROUTINE rho
+
+ --------------
+ Density matrix
+ --------------
+
+ gamma: one-particle reduced density matrix
+ between electronic states | i > and | j >
+
+ Trace of gamma
+ =============================
+   i   j   n_ci_ci   Tr[gamma]
+ -----------------------------
+   0   0       1      32.00000
+ =============================
+
+ Calculating density matrix in terms of CGFs
+ from gamma and CGF coefficients
+ Done
+
+ ----------------
+ Electron density
+ ----------------
+
+ Calculating grid size for cube files
+ Done
+
+ --------------------------
+ Information for cube grids
+ --------------------------
+
+ Minimum and maximum values of
+ x, y, and z coordinates (bohr)
+ =========================
+         Min         Max  
+ -------------------------
+ x    -5.11000     5.11000
+ y    -5.11000     5.11000
+ z    -5.11000     5.11000
+ =========================
+
+ Grid size (bohr): Dx, Dy, Dz
+ The number of lattice ponts: Nx, Ny, Nz
+ ====================
+ Dx  0.2000    Nx  52
+ Dy  0.2000    Ny  52
+ Dz  0.2000    Nz  52
+ ====================
+
+ Calculating xyz coordinates of lattice points
+ Done
+
+ Generating and opening cube files
+ Done
+
+ Calculating and writing electron density
+
+ Closing cube files
+ Done
+
+ ----------------------------------------
+ Integral of electron density:   31.33869
+ ----------------------------------------
+ This value should be approximately equal to 32.
+
+ --- Leaving SUBROUTINE rho
+
+
+ ****************************
+ **                        **
+ **   Normal termination   **
+ **                        **
+ ****************************
+
+
+ Total CPU time =    21.09 seconds
+
+ --- Leaving d77.exe on 2024/4/24 at 14:41:1 (time zone = UTC+0900)
+
+ --------------- End of d77 execution script ---------------

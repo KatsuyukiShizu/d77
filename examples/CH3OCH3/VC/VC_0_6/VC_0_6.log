@@ -5,7 +5,7 @@
 
  ****************************************************
  **                                                **
- **             d77: version 20230828              **
+ **             d77: version 20240423              **
  **                                                **
  **  Visual understanding of molecular properties  **
  **                                                **
@@ -22,13 +22,15 @@
 
 
 
+ --- Entering d77.exe on 2024/4/24 at 15:15:23 (time zone = UTC+0900)
+
  ===== Copy of your input file =====
 
  $comment
  Input file for calculating vibronic coupling constants
  between S0 and S1
- | 0 >: ground state (S0)
- | 6 >: second lowest excited singlet state (S2)
+ | 0 > : ground state (S0)
+ | 6 > : second lowest excited singlet state (S2)
  $comment
  
  $control
@@ -38,8 +40,8 @@
  $end_control
  
  $elec_state
- Bra = < 0 |
- Ket = | 6 >
+ bra = < 0 |
+ ket = | 6 >
  $end_elec_state
  
  INPDIR_ELEC = ../../INP_ELEC
@@ -71,6 +73,15 @@
  Number of spin orbitals: 144
  Number of vib. modes:    24
  =============================
+
+ Threshold values
+ =================================
+ Threshold_s_cgf:        0.100E-04
+ Threshold_e_ab:         0.100E-03
+ Threshold_ci_ci:        0.100E-07
+ Threshold_contribution: 0.100E+00
+ Threshold_distance:     0.400E+01
+ =================================
 
  Reading nuclear coordinates from COORD
  Reading atomic numbers from ATMNUM
@@ -193,10 +204,10 @@
   10       H         1       1.0       1.00783
  =============================================
 
- Reading X+Y and X-Y from XY
+ Reading X + Y and X - Y from XY
  Done
 
- CI coefficients and electronic configurations
+ X + Y, X - Y, and electronic configurations
  in terms of spin-orbital numbers
  =============================================
  | 0 >
@@ -545,8 +556,7 @@
   -0.0001400    0.0001400  32 -> 138
  =============================================
 
-
- CI coefficients and electronic configurations
+ X + Y, X - Y, and electronic configurations
  in terms of spin-orbital names
  =============================================
  | 0 >
@@ -1229,14 +1239,13 @@
                            HOMOb    
  =============================================
 
- Sum of squared CI coefficients of
- electronic state |i>
- ================
-   i   Sum[ci**2]
- ----------------
+ Sum of (X + Y)*(X - Y) of electronic state | i >
+ ==========================
+   i   Sum[(X + Y)*(X - Y)]
+ --------------------------
    0   1.00000000
    6   1.00000025
- ================
+ ==========================
 
  Contributions from individual electronic configurations
  to electronic states in terms of spin-orbital numbers
@@ -1251,7 +1260,8 @@
  TD-HF/DFT excited state   6
  Singlet   
 
-  99.80  16 ->  18
+  49.90  31 ->  35
+  49.90  32 ->  36
  =============================================
 
  Contributions from individual electronic configurations
@@ -1267,20 +1277,21 @@
  TD-HF/DFT excited state   6
  Singlet   
 
-  99.80  LUMO+1a  
+  49.90  LUMO+1a  
          HOMOa    
+  49.90  LUMO+1b  
+         HOMOb    
  =============================================
 
 
  --- Entering SUBROUTINE vc_int_pgf
 
- --------------------------
- Calculating density matrix
- --------------------------
+ --------------
+ Density matrix
+ --------------
 
- gamma: one-particle reduced density matrix between
- electronic states |i> and |j> in terms of spin orbitals
- Done
+ gamma: one-particle reduced density matrix
+ between electronic states | i > and | j >
 
  Trace of gamma
  =============================
@@ -1288,7 +1299,6 @@
  -----------------------------
    0   6     332       0.00000
  =============================
-
 
  Calculating density matrix in terms of CGFs
  from gamma and CGF coefficients
@@ -1298,16 +1308,16 @@
  Dipole moment
  -------------
 
- Dipole moments in atomic units
+ Dipole moment in atomic units
  ====================================================
-   i   j       x          y          z        Total
+   i   j      mu_x       mu_y       mu_z       |mu|
  ----------------------------------------------------
    0   6   -0.00000    0.29880    0.00000    0.29880
  ====================================================
 
- Dipole moments in debye
+ Dipole moment in debye
  ====================================================
-   i   j       x          y          z        Total
+   i   j      mu_x       mu_y       mu_z       |mu|
  ----------------------------------------------------
    0   6   -0.00000    0.75948    0.00000    0.75948
  ====================================================
@@ -1367,7 +1377,8 @@
  ****************************
 
 
- Total CPU time =     1.48 seconds
+ Total CPU time =     0.44 seconds
 
+ --- Leaving d77.exe on 2024/4/24 at 15:15:24 (time zone = UTC+0900)
 
  --------------- End of d77 execution script ---------------

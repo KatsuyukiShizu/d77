@@ -1,0 +1,6 @@
+   10  ! Number of atoms in reference system
+    0  ! Charge of reference system
+    1  ! Multiplicity of reference system
+   32  ! Number of electrons in reference system
+   72  ! Number of basis functions
+   72  ! Number of independent basis functions

@@ -1,0 +1,40 @@
+$comment
+Input file for calculating vibronic coupling densities
+for S0-S1 transition
+| 0 > : ground state (S0)
+| 2 > : lowest excited singlet state (S1)
+$end_comment
+
+$control
+property = vc
+runtyp = density
+method = td
+$end_control
+
+$elec_state
+bra = < 0 |
+ket = | 2 >
+$end_elec_state
+
+$vibmode
+1
+8
+15
+21
+$end_vibmode
+
+$grid
+xmin = -8.0
+xmax =  8.0
+ymin = -8.0
+ymax =  8.0
+zmin = -8.0
+zmax =  8.0
+dx = 0.20
+dy = 0.20
+dz = 0.20
+$end_grid
+
+INPDIR_ELEC = ../../INP_ELEC
+INPDIR_VIB = ../../INP_VIB
+INPDIR_ELFLD = ../../ELFLD

@@ -5,7 +5,7 @@
 
  ****************************************************
  **                                                **
- **             d77: version 20230828              **
+ **             d77: version 20240423              **
  **                                                **
  **  Visual understanding of molecular properties  **
  **                                                **
@@ -22,6 +22,8 @@
 
 
 
+ --- Entering d77.exe on 2024/4/24 at 15:14:39 (time zone = UTC+0900)
+
  ===== Copy of your input file =====
 
  $comment
@@ -29,7 +31,7 @@
  between T1 and T2
  | 1 > : lowest triplet state (T1)
  | 3 > : second lowest triplet state (T2)
- $comment
+ $end_comment
  
  $control
  property = vc
@@ -38,8 +40,8 @@
  $end_control
  
  $elec_state
- Bra = < 1 |
- Ket = | 3 >
+ bra = < 1 |
+ ket = | 3 >
  $end_elec_state
  
  INPDIR_ELEC = ../../INP_ELEC
@@ -71,6 +73,15 @@
  Number of spin orbitals: 144
  Number of vib. modes:    24
  =============================
+
+ Threshold values
+ =================================
+ Threshold_s_cgf:        0.100E-04
+ Threshold_e_ab:         0.100E-03
+ Threshold_ci_ci:        0.100E-07
+ Threshold_contribution: 0.100E+00
+ Threshold_distance:     0.400E+01
+ =================================
 
  Reading nuclear coordinates from COORD
  Reading atomic numbers from ATMNUM
@@ -193,10 +204,10 @@
   10       H         1       1.0       1.00783
  =============================================
 
- Reading X+Y and X-Y from XY
+ Reading X + Y and X - Y from XY
  Done
 
- CI coefficients and electronic configurations
+ X + Y, X - Y, and electronic configurations
  in terms of spin-orbital numbers
  =============================================
  | 1 >
@@ -834,8 +845,7 @@
   -0.0001400    0.0001400  26 -> 128
  =============================================
 
-
- CI coefficients and electronic configurations
+ X + Y, X - Y, and electronic configurations
  in terms of spin-orbital names
  =============================================
  | 1 >
@@ -1858,14 +1868,13 @@
                            HOMO-3b  
  =============================================
 
- Sum of squared CI coefficients of
- electronic state |i>
- ================
-   i   Sum[ci**2]
- ----------------
+ Sum of (X + Y)*(X - Y) of electronic state | i >
+ ==========================
+   i   Sum[(X + Y)*(X - Y)]
+ --------------------------
    1   0.99999970
    3   1.00000285
- ================
+ ==========================
 
  Contributions from individual electronic configurations
  to electronic states in terms of spin-orbital numbers
@@ -1874,18 +1883,23 @@
  TD-HF/DFT excited state   1
  Triplet   
 
-  99.26  16 ->  17
-   0.36  16 ->  21
-   0.20  10 ->  17
+  49.63  31 ->  33
+  49.63  32 ->  34
+   0.18  31 ->  41
+   0.18  32 ->  42
+   0.10  19 ->  33
+   0.10  20 ->  34
  ---------------------------------------------
  | 3 >
  TD-HF/DFT excited state   3
  Triplet   
 
-  93.64  15 ->  17
-   5.01   9 ->  17
-   0.71  15 ->  21
-   0.18   9 ->  21
+  46.82  29 ->  33
+  46.82  30 ->  34
+   2.51  17 ->  33
+   2.51  18 ->  34
+   0.35  29 ->  41
+   0.35  30 ->  42
  =============================================
 
  Contributions from individual electronic configurations
@@ -1895,37 +1909,46 @@
  TD-HF/DFT excited state   1
  Triplet   
 
-  99.26  LUMOa    
+  49.63  LUMOa    
          HOMOa    
-   0.36  LUMO+4a  
+  49.63  LUMOb    
+         HOMOb    
+   0.18  LUMO+4a  
          HOMOa    
-   0.20  LUMOa    
+   0.18  LUMO+4b  
+         HOMOb    
+   0.10  LUMOa    
          HOMO-6a  
+   0.10  LUMOb    
+         HOMO-6b  
  ---------------------------------------------
  | 3 >
  TD-HF/DFT excited state   3
  Triplet   
 
-  93.64  LUMOa    
+  46.82  LUMOa    
          HOMO-1a  
-   5.01  LUMOa    
+  46.82  LUMOb    
+         HOMO-1b  
+   2.51  LUMOa    
          HOMO-7a  
-   0.71  LUMO+4a  
+   2.51  LUMOb    
+         HOMO-7b  
+   0.35  LUMO+4a  
          HOMO-1a  
-   0.18  LUMO+4a  
-         HOMO-7a  
+   0.35  LUMO+4b  
+         HOMO-1b  
  =============================================
 
 
  --- Entering SUBROUTINE vc_int_pgf
 
- --------------------------
- Calculating density matrix
- --------------------------
+ --------------
+ Density matrix
+ --------------
 
- gamma: one-particle reduced density matrix between
- electronic states |i> and |j> in terms of spin orbitals
- Done
+ gamma: one-particle reduced density matrix
+ between electronic states | i > and | j >
 
  Trace of gamma
  =============================
@@ -1933,7 +1956,6 @@
  -----------------------------
    1   3   89764       0.00000
  =============================
-
 
  Calculating density matrix in terms of CGFs
  from gamma and CGF coefficients
@@ -1943,16 +1965,16 @@
  Dipole moment
  -------------
 
- Dipole moments in atomic units
+ Dipole moment in atomic units
  ====================================================
-   i   j       x          y          z        Total
+   i   j      mu_x       mu_y       mu_z       |mu|
  ----------------------------------------------------
    1   3   -0.00000    0.00000   -0.00000    0.00000
  ====================================================
 
- Dipole moments in debye
+ Dipole moment in debye
  ====================================================
-   i   j       x          y          z        Total
+   i   j      mu_x       mu_y       mu_z       |mu|
  ----------------------------------------------------
    1   3   -0.00000    0.00000   -0.00000    0.00000
  ====================================================
@@ -2012,7 +2034,8 @@
  ****************************
 
 
- Total CPU time =    89.00 seconds
+ Total CPU time =   137.09 seconds
 
+ --- Leaving d77.exe on 2024/4/24 at 15:20:43 (time zone = UTC+0900)
 
  --------------- End of d77 execution script ---------------
