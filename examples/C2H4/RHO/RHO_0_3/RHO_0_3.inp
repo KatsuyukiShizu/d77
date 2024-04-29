@@ -28,4 +28,4 @@ dy = 0.20
 dz = 0.20
 $end_grid
 
-INPDIR_ELEC = ../../INP_ELEC
+INPDIR_ELEC = ../INP_ELEC

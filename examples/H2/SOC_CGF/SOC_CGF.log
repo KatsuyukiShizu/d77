@@ -1,0 +1,136 @@
+ --------------- d77 execution script ---------------
+
+
+
+ ****************************************************
+ **                                                **
+ **             d77: version 20240427              **
+ **                                                **
+ **  Visual understanding of molecular properties  **
+ **                                                **
+ **        Coded by SHIZU Katsuyuki (Japan)        **
+ **                                                **
+ ****************************************************
+
+ d77 is free software and can be redistributed and/or modified
+ under the terms of the GNU General Public License v3.0
+ as published by the Free Software Foundation.
+ https://www.gnu.org/licenses/gpl-3.0.html
+
+ For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
+
+
+
+ --- Entering d77.exe on 2024/4/29 at 17:38:9 (time zone = UTC+0900)
+
+ ===== Copy of your input file =====
+
+ $comment
+ Input file for calculating spin-orbit integrals between CGFs
+ $end_comment
+ 
+ $control
+ property = soc
+ runtyp   = calc_int_cgf
+ $end_control
+ 
+ DIR_INP_ELEC = INP_ELEC
+
+ ===================================
+
+ Reading $CONTROL options in your input file.
+ Reading general information of the system from CONTROL_ELEC.
+
+ Information of the system
+ =============================
+ Number of atoms:         2
+ Charge:                  0
+ Spin multiplicity:       1
+ Number of electrons:     2
+ Number of CGFs:          4
+ Number of spin orbitals: 8
+ =============================
+
+ Threshold values
+ =================================
+ Threshold_s_cgf:        0.100E-04
+ Threshold_e_ab:         0.100E-03
+ Threshold_ci_ci:        0.100E-07
+ Threshold_contribution: 0.100E+00
+ Threshold_distance:     0.400E+01
+ =================================
+
+ Reading nuclear coordinates from COORD.
+ Reading atomic numbers from ATMNUM.
+ Reading nuclear charges from NUCCHARG.
+
+ Reading primitive Gaussian functions (PGFs) from ATMORB.
+ Reading expantion coefficients for CGFs (MO coefficients) from
+ COEFAREF and COEFBREF.
+ Constructing contracted Gaussian functions (CGFs) from the PGFs.
+
+ Names of spin orbitals
+ =================================
+     7    8   LUMO+2a    LUMO+2b  
+     5    6   LUMO+1a    LUMO+1b  
+     3    4   LUMOa      LUMOb    
+ ---------------------------------
+     1    2   HOMOa      HOMOb    
+ =================================
+
+ Nuclear coordinates (bohr)
+ ==============================================
+ Atom        x             y             z
+ ----------------------------------------------
+   1     0.00000000    0.00000000    0.70183307
+   2     0.00000000    0.00000000   -0.70183307
+ ==============================================
+
+ Nuclear charges (elementary charge)
+ =================================
+ Atom   Element   Atomic   Nuclear
+        symbol    number   charge 
+ ---------------------------------
+   1       H         1       1.0
+   2       H         1       1.0
+ =================================
+
+ Zeff for SOC calculations (elementary charge)
+ =================================
+ Atom   Element   Atomic   Zeff   
+        symbol    number          
+ ---------------------------------
+   1       H         1       1.0
+   2       H         1       1.0
+ =================================
+
+
+ --- Entering SUBROUTINE calc_int_cgf
+
+ -------------------
+ Spin-orbit coupling
+ -------------------
+
+ Calculating x, y, and z components of
+ spin-orbit couplings between CGFs.
+
+ Saving the x components to a file SOC_CGF_X
+ Saving the y components to a file SOC_CGF_Y
+ Saving the z components to a file SOC_CGF_Z
+ Done
+
+ --- Leaving SUBROUTINE calc_int_cgf
+
+
+ ****************************
+ **                        **
+ **   Normal termination   **
+ **                        **
+ ****************************
+
+
+ Total CPU time =     0.00 seconds
+
+ --- Leaving d77.exe on 2024/4/29 at 17:38:9 (time zone = UTC+0900)
+
+ --------------- End of d77 execution script ---------------

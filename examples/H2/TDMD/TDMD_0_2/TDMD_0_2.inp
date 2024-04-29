@@ -1,0 +1,32 @@
+$comment
+Input file for calculating transition dipole moment density 
+between S0 and S1 
+| 0 > : ground state (S0)
+| 2 > : lowest excited singlet state (S1)
+$end_comment
+
+$control
+property      = dipole
+runtyp        = density
+method        = td
+Save_rho_cube = No
+$end_control
+
+$elec_state
+bra = < 0 |
+ket = | 2 >
+$end_elec_state
+
+$grid
+xmin = -5.0
+xmax =  5.0
+ymin = -5.0
+ymax =  5.0
+zmin = -5.0
+zmax =  5.0
+dx   = 0.20
+dy   = 0.20
+dz   = 0.20
+$end_grid
+
+DIR_INP_ELEC = ../INP_ELEC

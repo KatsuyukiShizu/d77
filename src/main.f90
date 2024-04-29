@@ -11,10 +11,11 @@
 
 ! Global constants are defined in MODULE 'global_constants.f90'.
 PROGRAM main 
-  USE ifmod
+  USE ifmod 
   USE global_constants
   USE global_read_input
   USE global_read_data
+  USE cube
   IMPLICIT NONE
 
 ! Program name
@@ -38,8 +39,15 @@ PROGRAM main
   CALL CPU_TIME(Time_start)
   text_date_time = '--- Entering d77.exe'
   CALL write_messages(1, text_date_time, type_program, name_program)
-  
+      
   CALL read_input_control ! SUBROUTINE 'read_input_control' in MODULE 'global_read_input.f90'
+  
+  SELECT CASE(Runtyp)
+    CASE('Cube')
+      CALL cube_gen
+      GO TO 9999
+    CASE DEFAULT
+  END SELECT
 
 ! ---------------------------------------
 ! Reading general information of a system
@@ -286,6 +294,7 @@ PROGRAM main
     !CASE DEFAULT ! Property = ?
   !END SELECT  
 
+9999 CONTINUE
 ! Writing end time
   WRITE(6,'(1X)')
   WRITE(6,'(1X)')

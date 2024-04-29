@@ -1,0 +1,319 @@
+ --------------- d77 execution script ---------------
+
+
+
+ ****************************************************
+ **                                                **
+ **             d77: version 20240427              **
+ **                                                **
+ **  Visual understanding of molecular properties  **
+ **                                                **
+ **        Coded by SHIZU Katsuyuki (Japan)        **
+ **                                                **
+ ****************************************************
+
+ d77 is free software and can be redistributed and/or modified
+ under the terms of the GNU General Public License v3.0
+ as published by the Free Software Foundation.
+ https://www.gnu.org/licenses/gpl-3.0.html
+
+ For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
+
+
+
+ --- Entering d77.exe on 2024/4/29 at 17:38:23 (time zone = UTC+0900)
+
+ ===== Copy of your input file =====
+
+ $comment
+ Input file for calculating transition dipole moment density
+ between S0 and S1
+ | 0 > : ground state (S0)
+ | 2 > : lowest excited singlet state (S1)
+ $end_comment
+ 
+ $control
+ property      = dipole
+ runtyp        = density
+ method        = td
+ Save_rho_cube = No
+ $end_control
+ 
+ $elec_state
+ bra = < 0 |
+ ket = | 2 >
+ $end_elec_state
+ 
+ $grid
+ xmin = -5.0
+ xmax =  5.0
+ ymin = -5.0
+ ymax =  5.0
+ zmin = -5.0
+ zmax =  5.0
+ dx   = 0.20
+ dy   = 0.20
+ dz   = 0.20
+ $end_grid
+ 
+ DIR_INP_ELEC = ../INP_ELEC
+
+ ===================================
+
+ Reading $CONTROL options in your input file.
+ Reading general information of the system from CONTROL_ELEC.
+
+ Information of the system
+ =============================
+ Number of atoms:         2
+ Charge:                  0
+ Spin multiplicity:       1
+ Number of electrons:     2
+ Number of CGFs:          4
+ Number of spin orbitals: 8
+ =============================
+
+ Threshold values
+ =================================
+ Threshold_s_cgf:        0.100E-04
+ Threshold_e_ab:         0.100E-03
+ Threshold_ci_ci:        0.100E-07
+ Threshold_contribution: 0.100E+00
+ Threshold_distance:     0.400E+01
+ =================================
+
+ Reading nuclear coordinates from COORD.
+ Reading atomic numbers from ATMNUM.
+ Reading nuclear charges from NUCCHARG.
+
+ Reading primitive Gaussian functions (PGFs) from ATMORB.
+ Reading expantion coefficients for CGFs (MO coefficients) from
+ COEFAREF and COEFBREF.
+ Constructing contracted Gaussian functions (CGFs) from the PGFs.
+
+ Names of spin orbitals
+ =================================
+     7    8   LUMO+2a    LUMO+2b  
+     5    6   LUMO+1a    LUMO+1b  
+     3    4   LUMOa      LUMOb    
+ ---------------------------------
+     1    2   HOMOa      HOMOb    
+ =================================
+
+ Nuclear coordinates (bohr)
+ ==============================================
+ Atom        x             y             z
+ ----------------------------------------------
+   1     0.00000000    0.00000000    0.70183307
+   2     0.00000000    0.00000000   -0.70183307
+ ==============================================
+
+ Nuclear charges (elementary charge)
+ =================================
+ Atom   Element   Atomic   Nuclear
+        symbol    number   charge 
+ ---------------------------------
+   1       H         1       1.0
+   2       H         1       1.0
+ =================================
+
+ Reading X + Y and X - Y from XY.
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Singlet   
+
+   0.6516800    0.7642600   1 ->   3
+   0.6516800    0.7642600   2 ->   4
+   0.0827600    0.0234800   1 ->   7
+   0.0827600    0.0234800   2 ->   8
+ =============================================
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Singlet   
+
+   0.6516800    0.7642600  LUMOa    
+                           HOMOa    
+   0.6516800    0.7642600  LUMOb    
+                           HOMOb    
+   0.0827600    0.0234800  LUMO+2a  
+                           HOMOa    
+   0.0827600    0.0234800  LUMO+2b  
+                           HOMOb    
+ =============================================
+
+ Sum of (X + Y)*(X - Y) of electronic state | i >
+ ==========================
+   i   Sum[(X + Y)*(X - Y)]
+ --------------------------
+   0   1.00000000
+   2   0.99999232
+ ==========================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Singlet   
+
+  49.81   1 ->   3
+  49.81   2 ->   4
+   0.19   1 ->   7
+   0.19   2 ->   8
+ =============================================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Singlet   
+
+  49.81  LUMOa    
+         HOMOa    
+  49.81  LUMOb    
+         HOMOb    
+   0.19  LUMO+2a  
+         HOMOa    
+   0.19  LUMO+2b  
+         HOMOb    
+ =============================================
+
+
+ --- Entering SUBROUTINE dipole_density
+
+ --------------
+ Density matrix
+ --------------
+
+ gamma: one-particle reduced density matrix between
+ electronic states |i> and |j> in terms of spin orbitals
+
+ Trace of gamma
+ =============================
+   i   j   n_ci_ci   Tr[gamma]
+ -----------------------------
+   0   2       4       0.00000
+ =============================
+
+ Calculating density matrix in terms of CGFs
+ from gamma and CGF coefficients.
+
+ ---------------------
+ Dipole moment density
+ ---------------------
+
+ Calculating grid size for cube files.
+
+ --------------------------
+ Information for cube grids
+ --------------------------
+
+ Minimum and maximum values of
+ x, y, and z coordinates (bohr)
+ =========================
+         Min         Max  
+ -------------------------
+ x    -5.11000     5.11000
+ y    -5.11000     5.11000
+ z    -5.11000     5.11000
+ =========================
+
+ Grid size (bohr): Dx, Dy, Dz
+ The number of lattice ponts: Nx, Ny, Nz
+ ====================
+ Dx  0.2000    Nx  52
+ Dy  0.2000    Ny  52
+ Dz  0.2000    Nz  52
+ ====================
+
+ Calculating xyz coordinates of lattice points.
+
+ Generating and opening cube files.
+
+ Calculating overlap density and transition dipole moment densities.
+
+ Saving transition dipole moment densities to cube files.
+
+ Closing cube files.
+
+ -----------------------------------------------------
+ Integral of overlap (transition) density:    -0.00000
+ -----------------------------------------------------
+ This value should be approximately equal to zero.
+
+ -------------
+ Dipole moment
+ -------------
+
+ Calculating x, y, and z components of dipole moment
+ by integrating dipole moment densities.
+
+ Dipole moment in atomic units
+ ====================================================
+   i   j      mu_x       mu_y       mu_z       |mu|
+ ----------------------------------------------------
+   0   2    0.00000    0.00000   -1.30415    1.30415
+ ====================================================
+
+ Dipole moment in debye
+ ====================================================
+   i   j      mu_x       mu_y       mu_z       |mu|
+ ----------------------------------------------------
+   0   2    0.00000    0.00000   -3.31481    3.31481
+ ====================================================
+
+ Calculating projected dipole moment density.
+
+ Calculating the magnitude of dipole moment
+ by integrating projected dipole moment density.
+
+ |mu| =     1.30415
+
+ --- Leaving SUBROUTINE dipole_density
+
+
+ ****************************
+ **                        **
+ **   Normal termination   **
+ **                        **
+ ****************************
+
+
+ Total CPU time =     0.80 seconds
+
+ --- Leaving d77.exe on 2024/4/29 at 17:38:24 (time zone = UTC+0900)
+
+ --------------- End of d77 execution script ---------------

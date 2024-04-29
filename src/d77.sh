@@ -9,10 +9,17 @@
 
 # For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
 
-export DIRPWD=$(pwd)
+export DIR_PWD=$(pwd)
 
 export JOB=$(basename $1 .inp)
-export RESDIR=$2 
+export DIR_RES=$2 
+
+if [ -n "${DIR_RES}" ]; then
+  :
+else
+  DIR_RES=$JOB
+fi
+
 
 export OUTPUT_d77=${JOB}.log
 

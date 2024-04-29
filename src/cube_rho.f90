@@ -15,7 +15,7 @@ SUBROUTINE cube_rho(dmat_cgf, int_rho)
   USE global_read_input
   USE global_read_data
   USE func_rho, ONLY: func_phi_phi_cgf, func_rho_0
-  USE cube_write
+  USE cube
   IMPLICIT NONE
 
 ! Program name

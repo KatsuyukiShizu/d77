@@ -117,10 +117,6 @@ MODULE global_read_data
 
 !***************************************************************************************************
 
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
-
 !   Program name
     CHARACTER(LEN=100), PARAMETER :: name_program = 'read_data_elec_0'
     CHARACTER(LEN=100), PARAMETER :: type_program = 'SUBROUTINE'
@@ -128,8 +124,7 @@ MODULE global_read_data
     IF(Debug == 'Yes') &
    &CALL write_messages(2, Text_blank, type_program, name_program)
 
-    WRITE(6,'(1X)') 
-    WRITE(6,'(1X, A)') 'Reading general information of the system from '//TRIM(Fname(Fcontrol_elec))
+    WRITE(6,'(1X, A)') 'Reading general information of the system from '//TRIM(Fname(Fcontrol_elec))//'.'
     OPEN(Fcontrol_elec, FILE = Fname(Fcontrol_elec))
       READ(Fcontrol_elec,*) N_atm  ! Total number of atoms                                             
       READ(Fcontrol_elec,*) Charg  ! Total charge
@@ -158,7 +153,6 @@ MODULE global_read_data
       CALL write_messages(-9999, Text_blank, type_program, name_program)
     ELSE
     ENDIF
-    WRITE(6,'(1X, A)') 'Done'
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
@@ -239,7 +233,7 @@ MODULE global_read_data
 
 !   Reading the xyz coordinates (in bohr) of the atoms
     WRITE(6,'(1X)') 
-    WRITE(6,'(1X, A)') 'Reading nuclear coordinates from '//TRIM(Fname(Fcoord))
+    WRITE(6,'(1X, A)') 'Reading nuclear coordinates from '//TRIM(Fname(Fcoord))//'.'
     OPEN(Fcoord, FILE = Fname(Fcoord))
       DO i_atm = 1, N_atm
         DO i_xyz = 1, 3
@@ -249,8 +243,8 @@ MODULE global_read_data
     CLOSE(Fcoord)
 
 !   Reading the atomic numbers and nuclear charges of the atoms
-    WRITE(6,'(1X, A)') 'Reading atomic numbers from '//TRIM(Fname(Fatmnum))
-    WRITE(6,'(1X, A)') 'Reading nuclear charges from '//TRIM(Fname(Fnuccharg))
+    WRITE(6,'(1X, A)') 'Reading atomic numbers from '//TRIM(Fname(Fatmnum))//'.'
+    WRITE(6,'(1X, A)') 'Reading nuclear charges from '//TRIM(Fname(Fnuccharg))//'.'
     OPEN(Fatmnum, FILE = Fname(Fatmnum))
     OPEN(Fnuccharg, FILE = Fname(Fnuccharg))
       DO i_atm = 1, N_atm
@@ -259,7 +253,6 @@ MODULE global_read_data
       ENDDO
     CLOSE(Fatmnum)
     CLOSE(Fnuccharg)
-    WRITE(6,'(1X, A)') 'Done'
 
 !   Assigning effective nuclear charges for SOC calculation
     IF(Property == 'Soc') THEN
@@ -465,7 +458,7 @@ MODULE global_read_data
     ENDDO
 
     WRITE(6,'(1X)') 
-    WRITE(6,'(1X, A)') 'Reading primitive Gaussian functions (PGFs) from '//TRIM(Fname(Fao))
+    WRITE(6,'(1X, A)') 'Reading primitive Gaussian functions (PGFs) from '//TRIM(Fname(Fao))//'.'
     OPEN(Fao, FILE = Fname(Fao)) ! Fname(Fao) = 'ATMORB'
       DO i_cgf = 1, N_cgf
 !       Reading the atom to which the 'i_cgf'th CGF belongs  
@@ -640,7 +633,7 @@ MODULE global_read_data
   
 !   Reading expantion (MO) coefficients for CGFs
     WRITE(6,'(1X, A)') 'Reading expantion coefficients for CGFs (MO coefficients) from'
-    WRITE(6,'(1X, A)') TRIM(Fname(Fcoef_soa_ref))//' and '//TRIM(Fname(Fcoef_sob_ref))
+    WRITE(6,'(1X, A)') TRIM(Fname(Fcoef_soa_ref))//' and '//TRIM(Fname(Fcoef_sob_ref))//'.'
   
 !   Reading alpha MO coefficients
     OPEN(Fcoef_soa_ref, FILE = Fname(Fcoef_soa_ref))
@@ -658,11 +651,11 @@ MODULE global_read_data
         ENDDO
       ENDDO
     CLOSE(Fcoef_sob_ref)
-    WRITE(6,'(1X, A)') 'Constructing contracted Gaussian functions (CGFs) from the PGFs'
+    WRITE(6,'(1X, A)') 'Constructing contracted Gaussian functions (CGFs) from the PGFs.'
 
 !   Checking orthonormalization condition  
     IF(Check_orthonorm_s_cgf == 'Yes') THEN
-      WRITE(6,'(1X, A)') 'Checking the overlap integrals between the CGFs'
+      WRITE(6,'(1X, A)') 'Checking the overlap integrals between the CGFs.'
       large_overlap = 'No'
 
 !     Calculating overlap integrals between alpha spin orbitals
@@ -1712,7 +1705,7 @@ MODULE global_read_data
     ENDDO
 
     WRITE(6,'(1X)')
-    WRITE(6,'(1X, A)') 'Reading X + Y and X - Y from '//TRIM(Fname(fid))
+    WRITE(6,'(1X, A)') 'Reading X + Y and X - Y from '//TRIM(Fname(fid))//'.'
 
 !   fid = Fxy
     OPEN(fid, FILE = Fname(fid))
@@ -1800,7 +1793,6 @@ MODULE global_read_data
     DEALLOCATE(n_elec_config_as_read)
     DEALLOCATE(a_ras_as_read, r_ras_as_read)
     DEALLOCATE(x_plus_y_as_read, x_minus_y_as_read)
-    WRITE(6,'(1X, A)') 'Done'
 
 
 !   Calculating contributions from individual electronic configurations
@@ -2443,7 +2435,7 @@ MODULE global_read_data
     xyz_center = 0.0D0
 
     WRITE(6,'(1X)') 
-    WRITE(6,'(1X, A)') 'Calculating xyz coordinates of lattice points'
+    WRITE(6,'(1X, A)') 'Calculating xyz coordinates of lattice points.'
 
     ALLOCATE(xyz_lattice_point(1:3, 1:Nx, 1:Ny, 1:Nz)); xyz_lattice_point = 0.0D0
 
@@ -2490,18 +2482,12 @@ MODULE global_read_data
     zmin = xyz_lattice_point(3,  1,  1,  1)
     zmax = xyz_lattice_point(3,  1,  1, nz)
 
-    WRITE(6,'(1X, A)') 'Done'
-
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
   END SUBROUTINE gen_lattice_point
 
 
   SUBROUTINE cube_grid
-
-!   ------------------------
-!   Declaration of variables
-!   ------------------------
 
 !   Constants
     CHARACTER(LEN=100), PARAMETER :: name_program = 'cube_grid'
@@ -2520,16 +2506,12 @@ MODULE global_read_data
     IF(Debug == 'Yes') &
    &CALL write_messages(2, Text_blank, type_program, name_program)
 
-!   ----------------------
-!   Initializing variables
-!   ----------------------
-
 !   Global variables
     Dtau = 0.0D0
     Nx=0; Ny=0; Nz=0
 
     WRITE(6,'(1X)') 
-    WRITE(6,'(1X, A)') 'Calculating grid size for cube files'
+    WRITE(6,'(1X, A)') 'Calculating grid size for cube files.'
 
 !   Default grids
     Delta = 2.0D0
@@ -2650,7 +2632,6 @@ MODULE global_read_data
           CYCLE
       END SELECT
     ENDDO
-    WRITE(6,'(1X, A)') 'Done'
 
     WRITE(6,'(1X)')
     WRITE(6,'(1X, A)') '--------------------------'
@@ -2730,8 +2711,8 @@ MODULE global_read_data
     normfac_vibmode = 0.0D0
 
     WRITE(6,'(1X)') 
-    WRITE(6,'(1X, A)') 'Reading frequencies from '//TRIM(Fname(Ffreq))
-    WRITE(6,'(1X, A)') 'Reading vibrational modes from '//TRIM(Fname(Fvibmode))
+    WRITE(6,'(1X, A)') 'Reading frequencies from '//TRIM(Fname(Ffreq))//'.'
+    WRITE(6,'(1X, A)') 'Reading vibrational modes from '//TRIM(Fname(Fvibmode))//'.'
     OPEN(Ffreq, FILE = Fname(Ffreq))
     OPEN(Fvibmode, FILE = Fname(Fvibmode))
        DO i_mode = 1, n_mode
@@ -2745,7 +2726,6 @@ MODULE global_read_data
        ENDDO
     CLOSE(Ffreq)
     CLOSE(Fvibmode)
-    WRITE(6,'(1X, A)') 'Done'
 
     OPEN(Fatmwt, FILE = Fname(Fatmwt))
       DO i_atm = 1, n_atm
@@ -2794,7 +2774,6 @@ MODULE global_read_data
         ENDDO
       ENDDO
     ENDDO
-    WRITE(6,'(1X, A)') 'Done'
     
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)
@@ -2852,7 +2831,7 @@ MODULE global_read_data
       Vibmode_calc(1:3, 1:N_atm, i_mode_calc)&
       = Vibmode(1:3, 1:N_atm, Mode_calc(i_mode_calc))
     ENDDO
-    Freq_calc = Freq_calc * Scale_fac_freq
+    Freq_calc = Freq_calc * Scale_freq
 
     IF(Debug == 'Yes') &
    &CALL write_messages(3, Text_blank, type_program, name_program)

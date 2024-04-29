@@ -15,7 +15,7 @@ SUBROUTINE cube_vc_density(dmat_cgf, int_rho, int_vcd)
   USE global_read_data
   USE func_rho, ONLY: func_phi_phi_cgf, func_rho_0
   USE func_potential, ONLY: func_dvne
-  USE cube_write
+  USE cube
   IMPLICIT NONE
 
 ! Program name
@@ -63,28 +63,13 @@ SUBROUTINE cube_vc_density(dmat_cgf, int_rho, int_vcd)
 
   int_vcd = 0.0D0
 
+  ncol = 6 ! The number of column of cube files
   CALL cube_grid
   CALL gen_lattice_point
-
-  ncol = 6 ! The number of column of cube files
   mod_nz_ncol = MOD(nz, ncol)
-  fid_rho = 1000
-  fname_rho = 'RHO.cube'
-  IF(Bra == Ket) THEN
-    comment1_rho = 'Electron density'
-  ELSE
-    comment1_rho = 'Overlap density'
-  ENDIF
-  WRITE(text_bra, '(I2)') Bra
-  WRITE(text_ket, '(I2)') Ket
-  comment2_rho = '< '//TRIM(ADJUSTL(text_bra))//&
-                &' | density operator | '//TRIM(ADJUSTL(text_ket))//' >'
-
 
   WRITE(6,'(1X)') 
   WRITE(6,'(1X, A)') 'Generating and opening cube files'
-  OPEN(fid_rho, FILE = fname_rho)
-  CALL cube_write_header(fid_rho, comment1_rho, comment2_rho)
 
   DO i_mode_calc = 1, n_mode_calc
     fid_dvne(i_mode_calc) = i_mode_calc + 1000
@@ -135,72 +120,180 @@ SUBROUTINE cube_vc_density(dmat_cgf, int_rho, int_vcd)
   WRITE(6,'(1X, A)') 'and vibronic coupling density'
   
   int_rho = 0.0D0; int_vcd = 0.0D0
-  IF(mod_nz_ncol == 0) THEN ! 6 columns
-    n_line = nz/ncol ! The number of lines for each ix-iy pair
-    DO ix = 1, nx
-      xyz(1) = xyz_lattice_point(1, ix, 1, 1)  ! x coordinate
-      DO iy = 1, ny
-        xyz(2) = xyz_lattice_point(2, ix, iy, 1)  ! y coordinate
-        DO i_line = 1, n_line
-          rho = 0.0D0
-          vcd = 0.0D0
-          DO icol = 1, ncol
-            iz = (i_line - 1)*ncol + icol
-            xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
-            phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
-            rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
-            dvne(:,icol) = func_dvne(xyz, N_mode_calc)
-            vcd(:, icol) = rho(icol) * dvne(:, icol)
+  IF(Save_rho_cube == 'Yes') THEN
+    WRITE(6,'(1X, A)') 'Saving them to cube files.'
+    fid_rho = 1000
+    fname_rho = 'RHO.cube'
+    IF(Bra == Ket) THEN
+      comment1_rho = 'Electron density'
+    ELSE
+      comment1_rho = 'Overlap density'
+    ENDIF
+    WRITE(text_bra, '(I2)') Bra
+    WRITE(text_ket, '(I2)') Ket
+    comment2_rho = '< '//TRIM(ADJUSTL(text_bra))//&
+                  &' | density operator | '//TRIM(ADJUSTL(text_ket))//' >'
+  
+  
+    WRITE(6,'(1X)')
+    WRITE(6,'(1X, A)') 'Generating and opening cube files'
+    OPEN(fid_rho, FILE = fname_rho)
+    CALL cube_write_header(fid_rho, comment1_rho, comment2_rho)
 
-            int_rho = int_rho + rho(icol)
-            int_vcd(:) = int_vcd(:) + vcd(:, icol)
-          ENDDO ! icol = 1, ncol
-
-          CALL cube_write_density(fid_rho, rho)
-          DO i_mode_calc = 1, n_mode_calc 
-            CALL cube_write_density(fid_dvne(i_mode_calc),&
-                 dvne(i_mode_calc, 1:6))
-            CALL cube_write_density(fid_vcd(i_mode_calc),&
-                 vcd(i_mode_calc, 1:6))
-          ENDDO
-        ENDDO ! i_line = 1, n_line
-      ENDDO ! iy = 1, ny
-    ENDDO ! ix = 1, nx
-  ELSE ! 1-5 columns
-    n_line = (nz - mod_nz_ncol)/ncol + 1
-    DO ix = 1, nx
-      xyz(1) = xyz_lattice_point(1, ix, 1, 1)  ! x coordinate
-      DO iy = 1, ny
-        xyz(2) = xyz_lattice_point(2, ix, iy, 1)  ! y coordinate
-        rho = 0.0D0
-        vcd = 0.0D0
-        IF(n_line == 1) THEN
-          DO icol = 1, mod_nz_ncol
-            iz = icol
-            xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
-            phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
-            rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
- 
-            dvne(:,icol) = func_dvne(xyz, N_mode_calc)
-            vcd(:, icol) = rho(icol) * dvne(:, icol)
-
-            int_rho = int_rho + rho(icol)
-            int_vcd(:) = int_vcd(:) + vcd(:, icol)
-          ENDDO ! icol = 1, ncol
-
-          CALL cube_write_density(fid_rho, rho(1:mod_nz_ncol))
-          DO i_mode_calc = 1, n_mode_calc 
-            CALL cube_write_density(fid_dvne(i_mode_calc),&
-                 dvne(i_mode_calc, 1:mod_nz_ncol))
-            CALL cube_write_density(fid_vcd(i_mode_calc),&
-                 vcd(i_mode_calc, 1:mod_nz_ncol))
-          ENDDO
-        ELSE ! n_line > 2
-          DO i_line = 1, n_line - 1
+    IF(mod_nz_ncol == 0) THEN ! 6 columns
+      n_line = nz/ncol ! The number of lines for each ix-iy pair
+      DO ix = 1, nx
+        xyz(1) = xyz_lattice_point(1, ix, 1, 1)  ! x coordinate
+        DO iy = 1, ny
+          xyz(2) = xyz_lattice_point(2, ix, iy, 1)  ! y coordinate
+          DO i_line = 1, n_line
             rho = 0.0D0
             vcd = 0.0D0
             DO icol = 1, ncol
               iz = (i_line - 1)*ncol + icol
+              xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
+              phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
+              rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
+              dvne(:,icol) = func_dvne(xyz, N_mode_calc)
+              vcd(:, icol) = rho(icol) * dvne(:, icol)
+  
+              int_rho = int_rho + rho(icol)
+              int_vcd(:) = int_vcd(:) + vcd(:, icol)
+            ENDDO ! icol = 1, ncol
+  
+            CALL cube_write_density(fid_rho, rho)
+            DO i_mode_calc = 1, n_mode_calc 
+              CALL cube_write_density(fid_dvne(i_mode_calc),&
+                   dvne(i_mode_calc, 1:6))
+              CALL cube_write_density(fid_vcd(i_mode_calc),&
+                   vcd(i_mode_calc, 1:6))
+            ENDDO
+          ENDDO ! i_line = 1, n_line
+        ENDDO ! iy = 1, ny
+      ENDDO ! ix = 1, nx
+    ELSE ! 1-5 columns
+      n_line = (nz - mod_nz_ncol)/ncol + 1
+      DO ix = 1, nx
+        xyz(1) = xyz_lattice_point(1, ix, 1, 1)  ! x coordinate
+        DO iy = 1, ny
+          xyz(2) = xyz_lattice_point(2, ix, iy, 1)  ! y coordinate
+          rho = 0.0D0
+          vcd = 0.0D0
+          IF(n_line == 1) THEN
+            DO icol = 1, mod_nz_ncol
+              iz = icol
+              xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
+              phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
+              rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
+     
+              dvne(:,icol) = func_dvne(xyz, N_mode_calc)
+              vcd(:, icol) = rho(icol) * dvne(:, icol)
+     
+              int_rho = int_rho + rho(icol)
+              int_vcd(:) = int_vcd(:) + vcd(:, icol)
+            ENDDO ! icol = 1, ncol
+     
+            CALL cube_write_density(fid_rho, rho(1:mod_nz_ncol))
+            DO i_mode_calc = 1, n_mode_calc 
+              CALL cube_write_density(fid_dvne(i_mode_calc),&
+                   dvne(i_mode_calc, 1:mod_nz_ncol))
+              CALL cube_write_density(fid_vcd(i_mode_calc),&
+                   vcd(i_mode_calc, 1:mod_nz_ncol))
+            ENDDO
+          ELSE ! n_line > 2
+            DO i_line = 1, n_line - 1
+              rho = 0.0D0
+              vcd = 0.0D0
+              DO icol = 1, ncol
+                iz = (i_line - 1)*ncol + icol
+                xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
+                phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
+                rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
+       
+                dvne(:,icol) = func_dvne(xyz, N_mode_calc)
+                vcd(:, icol) = rho(icol) * dvne(:, icol)
+       
+                int_rho = int_rho + rho(icol)
+                int_vcd(:) = int_vcd(:) + vcd(:, icol)
+              ENDDO ! icol = 1, ncol
+              CALL cube_write_density(fid_rho, rho)
+              DO i_mode_calc = 1, n_mode_calc
+                CALL cube_write_density(fid_dvne(i_mode_calc),&
+                     dvne(i_mode_calc, 1:6))
+                CALL cube_write_density(fid_vcd(i_mode_calc),&
+                     vcd(i_mode_calc, 1:6))
+              ENDDO
+       
+            ENDDO ! i_line = 1, n_line - 1
+            ! The last line
+            rho = 0.0D0
+            vcd = 0.0D0
+            DO icol = 1, mod_nz_ncol
+              iz = (n_line - 1)*ncol + icol
+              xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
+              phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
+              rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
+         
+              dvne(:,icol) = func_dvne(xyz, N_mode_calc)
+              vcd(:, icol) = rho(icol) * dvne(:, icol)
+         
+              int_rho = int_rho + rho(icol)
+              int_vcd(:) = int_vcd(:) + vcd(:, icol)
+            ENDDO ! icol = 1, ncol
+         
+            CALL cube_write_density(fid_rho, rho(1:mod_nz_ncol))
+            DO i_mode_calc = 1, n_mode_calc
+              CALL cube_write_density(fid_dvne(i_mode_calc),&
+                   dvne(i_mode_calc, 1:mod_nz_ncol))
+              CALL cube_write_density(fid_vcd(i_mode_calc),&
+                   vcd(i_mode_calc, 1:mod_nz_ncol))
+            ENDDO
+          ENDIF
+        ENDDO ! iy = 1, ny
+      ENDDO ! ix = 1, nx
+    ENDIF
+  ELSE ! Save_rho_cube /= Yes
+    IF(mod_nz_ncol == 0) THEN ! 6 columns
+      n_line = nz/ncol ! The number of lines for each ix-iy pair
+      DO ix = 1, nx
+        xyz(1) = xyz_lattice_point(1, ix, 1, 1)  ! x coordinate
+        DO iy = 1, ny
+          xyz(2) = xyz_lattice_point(2, ix, iy, 1)  ! y coordinate
+          DO i_line = 1, n_line
+            rho = 0.0D0
+            vcd = 0.0D0
+            DO icol = 1, ncol
+              iz = (i_line - 1)*ncol + icol
+              xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
+              phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
+              rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
+              dvne(:,icol) = func_dvne(xyz, N_mode_calc)
+              vcd(:, icol) = rho(icol) * dvne(:, icol)
+
+              int_rho = int_rho + rho(icol)
+              int_vcd(:) = int_vcd(:) + vcd(:, icol)
+            ENDDO ! icol = 1, ncol
+
+            DO i_mode_calc = 1, n_mode_calc
+              CALL cube_write_density(fid_dvne(i_mode_calc),&
+                   dvne(i_mode_calc, 1:6))
+              CALL cube_write_density(fid_vcd(i_mode_calc),&
+                   vcd(i_mode_calc, 1:6))
+            ENDDO
+          ENDDO ! i_line = 1, n_line
+        ENDDO ! iy = 1, ny
+      ENDDO ! ix = 1, nx
+    ELSE ! 1-5 columns
+      n_line = (nz - mod_nz_ncol)/ncol + 1
+      DO ix = 1, nx
+        xyz(1) = xyz_lattice_point(1, ix, 1, 1)  ! x coordinate
+        DO iy = 1, ny
+          xyz(2) = xyz_lattice_point(2, ix, iy, 1)  ! y coordinate
+          rho = 0.0D0
+          vcd = 0.0D0
+          IF(n_line == 1) THEN
+            DO icol = 1, mod_nz_ncol
+              iz = icol
               xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
               phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
               rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
@@ -211,42 +304,64 @@ SUBROUTINE cube_vc_density(dmat_cgf, int_rho, int_vcd)
               int_rho = int_rho + rho(icol)
               int_vcd(:) = int_vcd(:) + vcd(:, icol)
             ENDDO ! icol = 1, ncol
-            CALL cube_write_density(fid_rho, rho)
+
             DO i_mode_calc = 1, n_mode_calc
               CALL cube_write_density(fid_dvne(i_mode_calc),&
-                   dvne(i_mode_calc, 1:6))
+                   dvne(i_mode_calc, 1:mod_nz_ncol))
               CALL cube_write_density(fid_vcd(i_mode_calc),&
-                   vcd(i_mode_calc, 1:6))
+                   vcd(i_mode_calc, 1:mod_nz_ncol))
             ENDDO
+          ELSE ! n_line > 2
+            DO i_line = 1, n_line - 1
+              rho = 0.0D0
+              vcd = 0.0D0
+              DO icol = 1, ncol
+                iz = (i_line - 1)*ncol + icol
+                xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
+                phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
+                rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
 
-          ENDDO ! i_line = 1, n_line - 1
-          ! The last line
-          rho = 0.0D0
-          vcd = 0.0D0
-          DO icol = 1, mod_nz_ncol
-            iz = (n_line - 1)*ncol + icol
-            xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
-            phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
-            rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
+                dvne(:,icol) = func_dvne(xyz, N_mode_calc)
+                vcd(:, icol) = rho(icol) * dvne(:, icol)
 
-            dvne(:,icol) = func_dvne(xyz, N_mode_calc)
-            vcd(:, icol) = rho(icol) * dvne(:, icol)
+                int_rho = int_rho + rho(icol)
+                int_vcd(:) = int_vcd(:) + vcd(:, icol)
+              ENDDO ! icol = 1, ncol
+              DO i_mode_calc = 1, n_mode_calc
+                CALL cube_write_density(fid_dvne(i_mode_calc),&
+                     dvne(i_mode_calc, 1:6))
+                CALL cube_write_density(fid_vcd(i_mode_calc),&
+                     vcd(i_mode_calc, 1:6))
+              ENDDO
 
-            int_rho = int_rho + rho(icol)
-            int_vcd(:) = int_vcd(:) + vcd(:, icol)
-          ENDDO ! icol = 1, ncol
+            ENDDO ! i_line = 1, n_line - 1
+            ! The last line
+            rho = 0.0D0
+            vcd = 0.0D0
+            DO icol = 1, mod_nz_ncol
+              iz = (n_line - 1)*ncol + icol
+              xyz(3) = xyz_lattice_point(3, ix, iy, iz)  ! z coordinate
+              phi_phi_cgf = func_phi_phi_cgf(xyz, N_cgf)
+              rho(icol) = func_rho_0(dmat_cgf, phi_phi_cgf)
 
-          CALL cube_write_density(fid_rho, rho(1:mod_nz_ncol))
-          DO i_mode_calc = 1, n_mode_calc
-            CALL cube_write_density(fid_dvne(i_mode_calc),&
-                 dvne(i_mode_calc, 1:mod_nz_ncol))
-            CALL cube_write_density(fid_vcd(i_mode_calc),&
-                 vcd(i_mode_calc, 1:mod_nz_ncol))
-          ENDDO
-        ENDIF
-      ENDDO ! iy = 1, ny
-    ENDDO ! ix = 1, nx
-  ENDIF
+              dvne(:,icol) = func_dvne(xyz, N_mode_calc)
+              vcd(:, icol) = rho(icol) * dvne(:, icol)
+
+              int_rho = int_rho + rho(icol)
+              int_vcd(:) = int_vcd(:) + vcd(:, icol)
+            ENDDO ! icol = 1, ncol
+
+            DO i_mode_calc = 1, n_mode_calc
+              CALL cube_write_density(fid_dvne(i_mode_calc),&
+                   dvne(i_mode_calc, 1:mod_nz_ncol))
+              CALL cube_write_density(fid_vcd(i_mode_calc),&
+                   vcd(i_mode_calc, 1:mod_nz_ncol))
+            ENDDO
+          ENDIF
+        ENDDO ! iy = 1, ny
+      ENDDO ! ix = 1, nx
+    ENDIF ! mod_nz_ncol = 0 or /= 0
+  ENDIF ! Save_rho_cube = Yes or /= Yes
 
   WRITE(6,'(1X)') 
   WRITE(6,'(1X, A)') 'Closing cube files'

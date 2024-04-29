@@ -1,0 +1,284 @@
+ --------------- d77 execution script ---------------
+
+
+
+ ****************************************************
+ **                                                **
+ **             d77: version 20240427              **
+ **                                                **
+ **  Visual understanding of molecular properties  **
+ **                                                **
+ **        Coded by SHIZU Katsuyuki (Japan)        **
+ **                                                **
+ ****************************************************
+
+ d77 is free software and can be redistributed and/or modified
+ under the terms of the GNU General Public License v3.0
+ as published by the Free Software Foundation.
+ https://www.gnu.org/licenses/gpl-3.0.html
+
+ For bug reports, e-mail to shizu@scl.kyoto-u.ac.jp
+
+
+
+ --- Entering d77.exe on 2024/4/29 at 17:37:59 (time zone = UTC+0900)
+
+ ===== Copy of your input file =====
+
+ $comment
+ Input file for calculating vibronic coupling constants
+ between S0 and S1
+ | 0 > : ground state (S0)
+ | 2 > : lowest excited singlet state (S1)
+ $end_comment
+ 
+ $control
+ property = vc
+ runtyp   = int_pgf
+ method   = td
+ $end_control
+ 
+ $elec_state
+ bra = < 0 |
+ ket = | 2 >
+ $end_elec_state
+ 
+ DIR_INP_ELEC  = ../INP_ELEC
+ DIR_INP_VIB   = ../INP_VIB
+ DIR_INP_ELFLD = ../ELFLD
+
+ ===================================
+
+ Reading $CONTROL options in your input file.
+ Reading general information of the system from CONTROL_ELEC.
+
+ Reading frequencies from FREQ.
+ Reading vibrational modes from VIBMODE.
+
+ Orthonormalization of vibrational vectors
+
+ Information of the system
+ =============================
+ Number of atoms:         2
+ Charge:                  0
+ Spin multiplicity:       1
+ Number of electrons:     2
+ Number of CGFs:          4
+ Number of spin orbitals: 8
+ Number of vib. modes:    1
+ =============================
+
+ Threshold values
+ =================================
+ Threshold_s_cgf:        0.100E-04
+ Threshold_e_ab:         0.100E-03
+ Threshold_ci_ci:        0.100E-07
+ Threshold_contribution: 0.100E+00
+ Threshold_distance:     0.400E+01
+ =================================
+
+ Reading nuclear coordinates from COORD.
+ Reading atomic numbers from ATMNUM.
+ Reading nuclear charges from NUCCHARG.
+
+ Reading primitive Gaussian functions (PGFs) from ATMORB.
+ Reading expantion coefficients for CGFs (MO coefficients) from
+ COEFAREF and COEFBREF.
+ Constructing contracted Gaussian functions (CGFs) from the PGFs.
+
+ Names of spin orbitals
+ =================================
+     7    8   LUMO+2a    LUMO+2b  
+     5    6   LUMO+1a    LUMO+1b  
+     3    4   LUMOa      LUMOb    
+ ---------------------------------
+     1    2   HOMOa      HOMOb    
+ =================================
+
+ Nuclear coordinates (bohr)
+ ==============================================
+ Atom        x             y             z
+ ----------------------------------------------
+   1     0.00000000    0.00000000    0.70183307
+   2     0.00000000    0.00000000   -0.70183307
+ ==============================================
+
+ Nuclear charges (elementary charge) and
+ atomic weights (atomic mass unit)
+ =============================================
+ Atom   Element   Atomic   Nuclear     Atomic 
+        symbol    number   charge      weight 
+ ---------------------------------------------
+   1       H         1       1.0       1.00783
+   2       H         1       1.0       1.00783
+ =============================================
+
+ Reading X + Y and X - Y from XY.
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Singlet   
+
+   0.6516800    0.7642600   1 ->   3
+   0.6516800    0.7642600   2 ->   4
+   0.0827600    0.0234800   1 ->   7
+   0.0827600    0.0234800   2 ->   8
+ =============================================
+
+ X + Y, X - Y, and electronic configurations
+ in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+   1.0000000 HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Singlet   
+
+   0.6516800    0.7642600  LUMOa    
+                           HOMOa    
+   0.6516800    0.7642600  LUMOb    
+                           HOMOb    
+   0.0827600    0.0234800  LUMO+2a  
+                           HOMOa    
+   0.0827600    0.0234800  LUMO+2b  
+                           HOMOb    
+ =============================================
+
+ Sum of (X + Y)*(X - Y) of electronic state | i >
+ ==========================
+   i   Sum[(X + Y)*(X - Y)]
+ --------------------------
+   0   1.00000000
+   2   0.99999232
+ ==========================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital numbers
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Singlet   
+
+  49.81   1 ->   3
+  49.81   2 ->   4
+   0.19   1 ->   7
+   0.19   2 ->   8
+ =============================================
+
+ Contributions from individual electronic configurations
+ to electronic states in terms of spin-orbital names
+ =============================================
+ | 0 >
+ HF ground state
+ Singlet
+
+ 100.00  HF determinant
+ ---------------------------------------------
+ | 2 >
+ TD-HF/DFT excited state   2
+ Singlet   
+
+  49.81  LUMOa    
+         HOMOa    
+  49.81  LUMOb    
+         HOMOb    
+   0.19  LUMO+2a  
+         HOMOa    
+   0.19  LUMO+2b  
+         HOMOb    
+ =============================================
+
+
+ --- Entering SUBROUTINE vc_int_pgf
+
+ --------------
+ Density matrix
+ --------------
+
+ gamma: one-particle reduced density matrix
+ between electronic states | i > and | j >
+
+ Trace of gamma
+ =============================
+   i   j   n_ci_ci   Tr[gamma]
+ -----------------------------
+   0   2       4       0.00000
+ =============================
+
+ Calculating density matrix in terms of CGFs
+ from gamma and CGF coefficients.
+
+ -------------
+ Dipole moment
+ -------------
+
+ Dipole moment in atomic units
+ ====================================================
+   i   j      mu_x       mu_y       mu_z       |mu|
+ ----------------------------------------------------
+   0   2    0.00000    0.00000   -1.30524    1.30524
+ ====================================================
+
+ Dipole moment in debye
+ ====================================================
+   i   j      mu_x       mu_y       mu_z       |mu|
+ ----------------------------------------------------
+   0   2    0.00000    0.00000   -3.31758    3.31758
+ ====================================================
+
+ -----------------
+ Vibronic coupling
+ -----------------
+
+ Reading elfld_cgf_atm from ELFLD_CGF_ATM                 
+ Done
+
+ --------------------------------
+ Vibronic coupling constant (VCC)
+ --------------------------------
+
+ Freq   : frequency (cm-1)
+ VCC_en : electronic part of VCC (a.u.)
+ VCC_nn : nucelar part of VCC (a.u.)
+ VCC = VCC_en + VCC_nn
+
+ ====================================================
+ Mode    Freq      VCC_en       VCC_nn       VCC
+ ----------------------------------------------------
+   1   4453.12  -0.00000000   0.00000000  -0.00000000
+ ====================================================
+
+ --- Leaving SUBROUTINE vc_int_pgf
+
+
+ ****************************
+ **                        **
+ **   Normal termination   **
+ **                        **
+ ****************************
+
+
+ Total CPU time =     0.02 seconds
+
+ --- Leaving d77.exe on 2024/4/29 at 17:37:59 (time zone = UTC+0900)
+
+ --------------- End of d77 execution script ---------------

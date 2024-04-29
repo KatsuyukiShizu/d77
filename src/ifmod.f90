@@ -91,10 +91,11 @@ MODULE ifmod
       DOUBLE PRECISION, INTENT(OUT) :: int_rho
     END SUBROUTINE cube_rho
 
-    SUBROUTINE cube_dipole_density(dmat_cgf, int_rho, int_dd)
-      DOUBLE PRECISION, INTENT(IN)  :: dmat_cgf(:,:)
-      DOUBLE PRECISION, INTENT(OUT) :: int_rho
-      DOUBLE PRECISION, INTENT(OUT) :: int_dd(1:3)
+    SUBROUTINE cube_dipole_density(projection, dmat_cgf, int_rho, int_dd, int_dd_p)
+      CHARACTER(LEN=4), INTENT(IN)    :: projection
+      DOUBLE PRECISION, INTENT(IN)    :: dmat_cgf(:,:)
+      DOUBLE PRECISION, INTENT(INOUT) :: int_rho
+      DOUBLE PRECISION, INTENT(INOUT) :: int_dd(1:3), int_dd_p
     END SUBROUTINE cube_dipole_density
 
     SUBROUTINE cube_vc_density(dmat_cgf, int_rho, int_vcd)

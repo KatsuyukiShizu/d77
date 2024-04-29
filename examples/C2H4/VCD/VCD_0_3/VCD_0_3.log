@@ -1,13 +1,10 @@
-rm: 'VCD_0_3' を削除できません: Device or resource busy
-mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
-
  --------------- d77 execution script ---------------
 
 
 
  ****************************************************
  **                                                **
- **             d77: version 20240423              **
+ **             d77: version 20240427              **
  **                                                **
  **  Visual understanding of molecular properties  **
  **                                                **
@@ -24,7 +21,7 @@ mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
 
 
 
- --- Entering d77.exe on 2024/4/23 at 15:22:36 (time zone = UTC+0900)
+ --- Entering d77.exe on 2024/4/29 at 17:32:43 (time zone = UTC+0900)
 
  ===== Copy of your input file =====
 
@@ -36,9 +33,10 @@ mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
  $end_comment
  
  $control
- property = vc
- runtyp = density
- method = td
+ property      = vc
+ runtyp        = density
+ method        = td
+ save_rho_cube = yes
  $end_control
  
  $elec_state
@@ -58,29 +56,24 @@ mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
  ymax =  5.0
  zmin = -5.0
  zmax =  5.0
- dx = 0.10
- dy = 0.10
- dz = 0.10
+ dx   = 0.10
+ dy   = 0.10
+ dz   = 0.10
  $end_grid
  
- INPDIR_ELEC = ../../INP_ELEC
- INPDIR_VIB = ../../INP_VIB
- INPDIR_ELFLD = ../../ELFLD
+ DIR_INP_ELEC  = ../INP_ELEC
+ DIR_INP_VIB   = ../INP_VIB
+ DIR_INP_ELFLD = ../ELFLD
 
  ===================================
 
- Reading $CONTROL options in your input file
- Done
+ Reading $CONTROL options in your input file.
+ Reading general information of the system from CONTROL_ELEC.
 
- Reading general information of the system from CONTROL_ELEC
- Done
-
- Reading frequencies from FREQ
- Reading vibrational modes from VIBMODE
- Done
+ Reading frequencies from FREQ.
+ Reading vibrational modes from VIBMODE.
 
  Orthonormalization of vibrational vectors
- Done
 
  Information of the system
  =============================
@@ -102,15 +95,14 @@ mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
  Threshold_distance:     0.400E+01
  =================================
 
- Reading nuclear coordinates from COORD
- Reading atomic numbers from ATMNUM
- Reading nuclear charges from NUCCHARG
- Done
+ Reading nuclear coordinates from COORD.
+ Reading atomic numbers from ATMNUM.
+ Reading nuclear charges from NUCCHARG.
 
- Reading primitive Gaussian functions (PGFs) from ATMORB
+ Reading primitive Gaussian functions (PGFs) from ATMORB.
  Reading expantion coefficients for CGFs (MO coefficients) from
- COEFAREF and COEFBREF
- Constructing contracted Gaussian functions (CGFs) from the PGFs
+ COEFAREF and COEFBREF.
+ Constructing contracted Gaussian functions (CGFs) from the PGFs.
 
  Names of spin orbitals
  =================================
@@ -181,8 +173,7 @@ mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
    6       H         1       1.0       1.00783
  =============================================
 
- Reading X + Y and X - Y from XY
- Done
+ Reading X + Y and X - Y from XY.
 
  X + Y, X - Y, and electronic configurations
  in terms of spin-orbital numbers
@@ -504,15 +495,13 @@ mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
  =============================
 
  Calculating density matrix in terms of CGFs
- from gamma and CGF coefficients
- Done
+ from gamma and CGF coefficients.
 
  -------------------------
  Vibronic coupling density
  -------------------------
 
- Calculating grid size for cube files
- Done
+ Calculating grid size for cube files.
 
  --------------------------
  Information for cube grids
@@ -536,8 +525,7 @@ mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
  Dz  0.1000    Nz 102
  ====================
 
- Calculating xyz coordinates of lattice points
- Done
+ Calculating xyz coordinates of lattice points.
 
  Generating and opening cube files
  Done
@@ -545,6 +533,9 @@ mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
  Calculating and writing overlap density,
  derivative of nuclear-electronic potential,
  and vibronic coupling density
+ Saving them to cube files.
+
+ Generating and opening cube files
 
  Closing cube files
  Done
@@ -582,8 +573,8 @@ mkdir: ディレクトリ `VCD_0_3' を作成できません: File exists
  ****************************
 
 
- Total CPU time =    13.05 seconds
+ Total CPU time =    88.95 seconds
 
- --- Leaving d77.exe on 2024/4/23 at 15:24:8 (time zone = UTC+0900)
+ --- Leaving d77.exe on 2024/4/29 at 17:35:2 (time zone = UTC+0900)
 
  --------------- End of d77 execution script ---------------

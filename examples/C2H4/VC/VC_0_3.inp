@@ -1,14 +1,14 @@
 $comment
 Input file for calculating vibronic coupling constants
-between S0 and S1 
+between S0 and S1
 | 0 > : ground state (S0)
 | 3 > : lowest excited singlet state (S1)
 $end_comment
 
 $control
 property = vc
-runtyp = int_pgf
-method = td
+runtyp   = int_pgf
+method   = td
 $end_control
 
 $elec_state
@@ -16,6 +16,6 @@ bra = < 0 |
 ket = | 3 >
 $end_elec_state
 
-INPDIR_ELEC = ../../INP_ELEC
-INPDIR_VIB = ../../INP_VIB
-INPDIR_ELFLD = ../../ELFLD
+DIR_INP_ELEC  = ../INP_ELEC
+DIR_INP_VIB   = ../INP_VIB
+DIR_INP_ELFLD = ../ELFLD

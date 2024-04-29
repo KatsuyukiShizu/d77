@@ -16,8 +16,9 @@
 \usepackage{indentfirst}
 %\usepackage[mathscr]{eucal}
 \usepackage{mathrsfs}
+\usepackage{upgreek}
 
-\renewcommand{\baselinestretch}{1.5}
+%\renewcommand{\baselinestretch}{1.5}
 
 \setlength{\oddsidemargin}{-1mm}
 \setlength{\evensidemargin}{-4mm}
@@ -60,31 +61,42 @@ For details, see https://www.gnu.org/licenses/gpl-3.0.html.
 \section{Citation}
 \noindent
 You can cite d77 as\vspace{3mm}\\
-d77: visual understanding of molecular properties. Version 20240423. https://github.com/\\
+d77: visual understanding of molecular properties. Version 20240427. https://github.com/\\
 KatsuyukiShizu/d77\\
 
 \noindent
 BibTex description:
 \begin{verbatim}
 @misc{d77,
-title = {d77: visual understanding of molecular properties. 
-Version 20240423. https://github.com/KatsuyukiShizu/d77}
+title = {
+d77: visual understanding of molecular properties. 
+Version 20240427. https://github.com/KatsuyukiShizu/d77
+}
 }
 \end{verbatim}
 
 \section{Notations}
 \noindent
 \begin{tabular}{ll}
-PGF & primitive Gaussian function \\
-CGF & contracted Gaussian function \\
-VCC & vibronic coupling constant \\
-SOC & spin-orbit coupling \\
-fchk file & formatted checkpoint file \\
-TD-DFT & time-dependent density functional theory \\
+PGF & primitive Gaussian function\\
+CGF & contracted Gaussian function\\
+VCC & vibronic coupling constant\\
+SOC & spin-orbit coupling\\
+fchk file & formatted checkpoint file\\
+TD-DFT & time-dependent density functional theory\\
 CI & configuration interaction\\
-CIS & configuration interaction singles
+CIS & configuration interaction singles\\
+$\rho_{n}$ & electron density of electronic state $| n \rangle$\\
+$\rho_{mn}$ & overlap (transition) density between electronic states $| m \rangle$ and $| n \rangle$\\
+$\Delta\rho_{mn}$ & electron-density difference: $\rho_{m}-\rho_{n}$\\
+$\bm{\upmu}$ & permanent/transition dipole moment \\
+$\tau_x$ & permanent/transition dipole moment density in the $x$ direction\\
+$\tau_y$ & permanent/transition dipole moment density in the $y$ direction\\
+$\tau_z$ & permanent/transition dipole moment density in the $z$ direction\\
+$\tau_{\bm{\upmu}}$ & permanent/transition dipole moment density in the direction of $\bm{\upmu}$\\
+$\nu_k$ & derivative of the nuclear electronic potential for the $k$th vibrational mode\\
+$\eta_k$ & vibronic coupling density for the $k$th vibrational mode
 \end{tabular}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
@@ -118,7 +130,7 @@ Max_n_pgf = 30
 Max_n_state = 20
 Max_n_elec_config = 1000
 \end{verbatim}
-Change the default settings depending on your computer's system environment.
+Change the default settings depending on your computer's system environment.\\
 
 Utility programs for d77 are in the src/util directory. 
 A utility program, dpp, performs data preprocessing for d77.
@@ -132,20 +144,19 @@ make
 \end{verbatim}
 The executable file (dpp.exe) is created in your src/util/dpp/f90 directory.\\
 
-\clearpage
 Edit your configuration file, for example, .bashrc:
 \begin{verbatim} 
-# AAAA is a directory where you created d77 directory.
-alias d77='sh AAAA/d77/src/d77.sh'
-export DIR_d77_EXE=AAAA/d77/src
-alias dpp='sh AAAA/d77/src/util/dpp/dpp.sh'
-export DIR_d77_dpp_f90=AAAA/d77/src/util/dpp/f90
+alias d77='sh ABCD/d77/src/d77.sh'
+export DIR_d77_EXE=ABCD/d77/src
+alias dpp='sh ABCD/d77/src/util/dpp/dpp.sh'
+export DIR_d77_dpp_f90=ABCD/d77/src/util/dpp/f90
 \end{verbatim} 
+Here, ABCD is a directory where you created d77 directory.
 To run d77, simply type:
 \begin{verbatim} 
 d77 'input file' 'results directory'
 \end{verbatim}
-If you have an input file, test.inp, and want to save the log file (test.log) and calculated data to res\_test directory, type:
+If you have an input file, \textit{test.inp}, and want to save the log file (\textit{test.log}) and calculated data to \textit{res\_test} directory, type:
 \begin{verbatim} 
 d77 test.inp res_test
 \end{verbatim}
@@ -153,6 +164,11 @@ or
 \begin{verbatim} 
 d77 test res_test
 \end{verbatim}
+You can run the job without specifying a results directory:
+\begin{verbatim} 
+d77 test
+\end{verbatim}
+In this case, the log file and calculated data are saved to \textit{test} directory.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -161,7 +177,7 @@ d77 test res_test
 
 \subsection{Comment lines}
 \noindent
-Add comments between \$comment and \$end\_comment lines in your input file.
+Add comments between \$comment and \$end\_comment lines in your input file. Comment lines have no influence on d77 execution.
 
 \subsection{Control options}
 \noindent
@@ -186,7 +202,8 @@ calc\_int\_cgf & calculates one-electron integrals between CGFs\\
                    & with the McMurchie and Davidson formulation.\cite{MCMURCHIE1978218} \\
 int\_pgf & calculates molecular properties from one-electron integrals between PGFs \\
            & with the McMurchie and Davidson formulation\cite{MCMURCHIE1978218}  (default).\\
-density & calculates the density of a molecular property and writes it to a cube file.
+density & calculates molecular property densities and writes them to cube files.\\
+cube & manipulates existing cube files and generates a new cube file.\\
 \end{tabular}
 \\
 
@@ -207,8 +224,17 @@ read & reads effective nuclear charges from ZEFF\_SOC file (default). \\
 koseki & uses Koseki's effective nuclear charges.\cite{doi:10.1021/j100205a033, doi:10.1021/j100034a013, doi:10.1021/jp983453n} \\
 nuccharg & uses nuclear charges as effective nuclear charges for SOC calculation.
 \end{tabular}
+\\
 
-\clearpage
+\begin{verbatim}
+cube_op
+\end{verbatim}
+\begin{tabular}{ll}
+add & adds two cube files and saves the calculated date to a new cube file.\\
+sub & subtracts two cube files and saves the calculated date to a new cube file.\\
+mul & multiplies two cube files and saves the calculated date to a new cube file.\\
+\end{tabular}
+
 \subsection{Spin-orbit coupling options}
 \noindent
 Add spin-orbit coupling options between \$spin\_orbit and \$end\_spin\_orbit lines.
@@ -230,14 +256,14 @@ bra
 \end{verbatim}
 \begin{tabular}{ll}
 $\langle 0 |$ & ground state (default)\\
-$\langle n |$ & $n^{\rm{th}}$ excited state ($n \geq 1$)
+$\langle n |$ & $n$th excited state ($n \geq 1$)
 \end{tabular}
 \begin{verbatim}
 ket
 \end{verbatim}
 \begin{tabular}{ll}
 $| 0 \rangle$ & ground state (default)\\
-$| n \rangle$ & $n^{\rm{th}}$ excited state ($n \geq 1$)
+$| n \rangle$ & $n$th excited state ($n \geq 1$)
 \end{tabular}
 \\
 \vspace{5mm} 
@@ -250,7 +276,6 @@ ket = | 3 >
 $end_elec_state
 \end{verbatim}
 
-\clearpage
 \subsection{Grid options}
 \noindent
 Grid options are valid if runtyp = density.
@@ -271,12 +296,14 @@ dz & grid spacing in $z$ direction (the default value is 0.25 bohr)
 
 \subsection{Input data directories}
 \noindent
-Add input data directories in your input file. If your INP\_ELEC, INP\_VIB, ELFLD, and SOC\_CGF directories are in the same directory where your input file is, add the following descriptions:
+Add input data directories in your input file. 
+If your INP\_ELEC, INP\_VIB, ELFLD, and SOC\_CGF directories are in the same directory 
+where your input file is, add the following descriptions:
 \begin{verbatim}
-INPDIR_ELEC = ../INP_ELEC
-INPDIR_VIB = ../INP_VIB
-INPDIR_ELFLD = ../ELFLD
-INPDIR_SOC_CGF = ../SOC_CGF
+INPDIR_ELEC = INP_ELEC
+INPDIR_VIB = INP_VIB
+INPDIR_ELFLD = ELFLD
+INPDIR_SOC_CGF = SOC_CGF
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -284,7 +311,6 @@ INPDIR_SOC_CGF = ../SOC_CGF
 \clearpage
 \section{Examples}
 
-%\subsection{VCCs between S$_0$ and S$_1$ at optimized S$_0$ geometry}
 \subsection{VCCs between singlet/triplet states at optimized S$_0$ geometry}\label{calc_VCC}
 This example shows how VCCs are calculated with d77. 
 Sample d77 input and output files are in the
@@ -292,10 +318,14 @@ examples/C2H4 and
 examples/C2H4/VC directories.
 
 \begin{enumerate}
-\item{Run geometry optimization and frequency analysis with Gaussian 16.\cite{g16} 6D and 10F options are required to run d77.}
+\item{
+Run geometry optimization and frequency analysis with Gaussian 16.\cite{g16} 
+6D and 10F options are required to run d77.
+}
 
 \begin{enumerate}
-\item{Input description for geometry optimization
+\item{
+Input description for geometry optimization
 \begin{verbatim}
 #P B3LYP/6-31G(d)
 6D 10F
@@ -303,7 +333,8 @@ opt
 \end{verbatim}
 }
 
-\item{Input description for frequency analysis 
+\item{
+Input description for frequency analysis 
 \begin{verbatim}
 %chk=freq.chk
 #P B3LYP/6-31G(d)
@@ -312,7 +343,8 @@ Freq=HPModes
 \end{verbatim}
 }
 
-\item{Input description for excited-state calculation with TD-DFT
+\item{
+Input description for excited-state calculation with TD-DFT
 \begin{verbatim}
 %chk=TD.chk
 #P B3LYP/6-31G(d)
@@ -323,15 +355,19 @@ IOP(9/40=4)
 }
 \end{enumerate}
 
-\item{Generate fchk files from the checkpoint files associated with the frequency analysis and excited-state calculation.  Use the formchk utility of the Gaussian 16 program:
+\item{
+Generate fchk files from the checkpoint files.  
+Use the formchk utility of the Gaussian 16 program:
 \begin{verbatim}
 formchk freq.chk
 formchk TD.chk
 \end{verbatim}
 }
-Confirm that freq.fchk and TD.fchk files are generated.
+Confirm that freq.fchk and TD.fchk files are generated. 
+Sample freq.fchk, TD.fchk, and TD.log files are in the examples/C2H4 directory.
 
-\item{Create an input file (dpp.inp) for data preprocessing and run dpp. dpp.inp is formatted as follows:
+\item{
+Create an input file (dpp.inp) for data preprocessing and run dpp. dpp.inp is formatted as follows:
 \begin{verbatim}
 QC_PROGRAM_ELEC = g16
 QC_PROGRAM_VIB  = g16
@@ -351,8 +387,9 @@ dpp
 INP\_ELEC and INP\_VIB directories are created. Sample INP\_ELEC and INP\_VIB directories are in the examples/C2H4 directory.
 }
 
-\item{Calculate electric field integrals between CGFs with d77.\\
-A d77 input file is formatted as follows:
+\item{
+Calculate electric field integrals between CGFs with d77.\\
+A sample input file (ELFLD.inp) is as follows:
 \begin{verbatim}
 $comment
 Input file for calculating electric field integrals between CGFs
@@ -360,21 +397,29 @@ $end_comment
 
 $control
 property = vc
-runtyp = calc_int_cgf
+runtyp   = calc_int_cgf
 $end_control
 
-INPDIR_ELEC = ../INP_ELEC
+DIR_INP_ELEC = INP_ELEC
 \end{verbatim}
-If you have an input file, ELFLD.inp, and want to save the log file (ELFLD.log) and calculated data to ELFLD directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 ELFLD ELFLD
+d77 ELFLD
 \end{verbatim}
 d77 reads information on the nuclear coordinates and atomic orbitals from \\
-INPDIR\_ELEC directory, calculates the electric field integrals, and writes them to a file (ELFLD\_CGF\_ATM) in the ELFLD directory. Note that ELFLD\_CGF\_ATM takes up large amounts of disk space (sometimes larger than 10 GB) for large molecules. A sample ELFLD\_CGF\_ATM file is in the examples/C2H4/ELFLD directory.
+INP\_ELEC directory, calculates the electric field integrals, and writes them to a file (ELFLD\_CGF\_ATM) in the ELFLD directory. 
+Note that ELFLD\_CGF\_ATM takes up large amounts of disk space (sometimes larger than 10 GB) for large molecules. 
+A sample ELFLD\_CGF\_ATM file is in the examples/C2H4/ELFLD directory.
 }
 
-\item{Calculate VCCs between S$_0$ and S$_1$ from the electric field integrals.\\
-A d77 input file is formatted as follows:
+\item{
+Calculate VCCs between S$_0$ and S$_1$ from the electric field integrals.\\
+Create VC directory and move into it:
+\begin{verbatim}
+mkdir VC
+cd VC
+\end{verbatim} 
+A sample input file (VC\_0\_3.inp) is as follows:
 \begin{verbatim} 
 $comment
 Input file for calculating vibronic coupling constants
@@ -385,8 +430,8 @@ $end_comment
 
 $control
 property = vc
-runtyp = int_pgf
-method = td
+runtyp   = int_pgf
+method   = td
 $end_control
 
 $elec_state
@@ -394,30 +439,31 @@ bra = < 0 |
 ket = | 3 >
 $end_elec_state
 
-INPDIR_ELEC = ../../INP_ELEC
-INPDIR_VIB = ../../INP_VIB
-INPDIR_ELFLD = ../../ELFLD
+DIR_INP_ELEC  = ../INP_ELEC
+DIR_INP_VIB   = ../INP_VIB
+DIR_INP_ELFLD = ../ELFLD
 \end{verbatim}
-If you have an input file, VC\_0\_3.inp, and want to save the log file (VC\_0\_3.log) and calculated data to VC\_0\_3 directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 VC_0_3 VC_0_3
+d77 VC_0_3
 \end{verbatim}
 The frequencies (in cm$^{-1}$) and calculated S$_0$-S$_1$ VCCs (in atomic units) are written in VC\_0\_3.log and VCC files in VC\_0\_3 directory. The transition dipole moments between S$_0$ and S$_1$ are also written in VC\_0\_3.log (in atomic units and debye) and DM files (in atomic units) in the VC\_0\_3 directory.}
 
-\item{Calculate VCCs between T$_1$ and T$_2$ from the electric field integrals.\\
-A d77 input file is formatted as follows:
+\item{
+Calculate VCCs between T$_1$ and T$_2$ from the electric field integrals.\\
+A sample input file (VC\_1\_2.inp) is as follows:
 \begin{verbatim} 
 $comment
 Input file for calculating vibronic coupling constants
 between T1 and T2
 | 1 > : lowest triplet state (T1)
-| 2 > : second lowest excited triplet state (T2)
-$end_comment
+| 2 > : second lowest triplet state (T2)
+$comment
 
 $control
 property = vc
-runtyp = int_pgf
-method = td
+runtyp   = int_pgf
+method   = td
 $end_control
 
 $elec_state
@@ -425,13 +471,13 @@ bra = < 1 |
 ket = | 2 >
 $end_elec_state
 
-INPDIR_ELEC = ../../INP_ELEC
-INPDIR_VIB = ../../INP_VIB
-INPDIR_ELFLD = ../../ELFLD
+DIR_INP_ELEC  = ../INP_ELEC
+DIR_INP_VIB   = ../INP_VIB
+DIR_INP_ELFLD = ../ELFLD
 \end{verbatim}
-If you have an input file, VC\_1\_2.inp, and want to save the log file (VC\_1\_2.log) and calculated data to VC\_1\_2 directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 VC_1_2 VC_1_2
+d77 VC_1_2
 \end{verbatim}
 }
 \end{enumerate}
@@ -443,12 +489,16 @@ This example shows how SOCs are calculated with d77. Sample d77 input and output
 
 \begin{enumerate}
 
-\item{Run geometry optimization and frequency analysis with Gaussian 16. 6D and 10F options are required to run d77.}
+\item{
+Run geometry optimization and frequency analysis with Gaussian 16. 
+6D and 10F options are required to run d77.
+}
 \item{Generate freq.fchk and TD.fchk files.}
 \item{Run dpp.}
 
-\item{Calculate SOC integrals between CGFs with d77.\\
-A d77 input file is formatted as follows:
+\item{
+Calculate SOC integrals between CGFs with d77.\\
+A sample input file (SOC\_CGF.inp) is as follows:
 \begin{verbatim}
 $comment
 Input file for calculating spin-orbit integrals between CGFs
@@ -456,34 +506,41 @@ $end_comment
 
 $control
 property = soc
-runtyp = calc_int_cgf
+runtyp   = calc_int_cgf
 $end_control
 
-INPDIR_ELEC = ../INP_ELEC
+DIR_INP_ELEC = INP_ELEC
 \end{verbatim}
-If you have an input file, SOC\_CGF.inp, and want to save the log file (SOC\_CGF.log) and calculated data to the SOC\_CGF directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 SOC_CGF SOC_CGF
+d77 SOC_CGF
 \end{verbatim}
 d77 reads information on the nuclear coordinates and atomic orbitals from \\
-the INPDIR\_ELEC directroy, calculates the spin-orbit integrals, and writes them to files (SOC\_CGF\_X, SOC\_CGF\_Y, and SOC\_CGF\_Z) in the SOC\_CGF directory.
+the INP\_ELEC directroy, calculates the spin-orbit integrals, 
+and writes them to files (SOC\_CGF\_X, SOC\_CGF\_Y, and SOC\_CGF\_Z) in the SOC\_CGF directory.
 }
 
 \item{
-Calculate $x$, $y$, and $z$ components of SOC between S$_0$ and T$_1$ with $M_{\rm{s}} = 0$ from the SOC integrals between CGFs.\\
-A d77 input file is formatted as follows:
+Calculate $x$, $y$, and $z$ components of SOC between S$_0$ and T$_1$ 
+with $M_{\rm{s}} = 0$ from the SOC integrals between CGFs.\\
+Create SOC directory and move into it:
+\begin{verbatim}
+mkdir SOC
+cd SOC
+\end{verbatim} 
+A sample input file (SOC\_0\_1\_Ms\_0.inp) is as follows:
 \begin{verbatim} 
 $comment
 Input file for calculating spin-orbit coupling
 between S0 and T1 (Ms = 0)
-| 0 >: ground state (S0)
-| 1 >: lowest triplet state (T1)
+| 0 > : ground state (S0)
+| 1 > : lowest triplet state (T1)
 $end_comment
 
 $control
-property = soc
-runtyp = int_pgf
-method = td
+property     = soc
+runtyp       = int_pgf
+method       = td
 effcharg_soc = read
 $end_control
 
@@ -496,36 +553,41 @@ bra = < 0 |
 ket = | 1 >
 $end_elec_state
 
-INPDIR_ELEC = ../../INP_ELEC
-INPDIR_SOC_CGF = ../../SOC_CGF
+DIR_INP_ELEC    = ../INP_ELEC
+DIR_INP_SOC_CGF = ../SOC_CGF
 \end{verbatim}
-If you have an input file, SOC\_0\_1\_Ms\_0.inp, and want to save the log file (SOC\_0\_1\_Ms\_0.log) and calculated data to SOC\_0\_1\_Ms\_0 directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 SOC_0_1_Ms_0 SOC_0_1_Ms_0
+d77 SOC_0_1_Ms_0
 \end{verbatim}
-The calculated $x$, $y$, and $z$ components of S$_0$-T$_1$ SOC (in atomic units and cm$^{-1}$) are written in SOC\_0\_1\_Ms\_0.log and SOC files in the SOC\_0\_1\_Ms\_0 directory.
+The calculated $x$, $y$, and $z$ components of S$_0$-T$_1$ SOC are written 
+in SOC\_0\_1\_Ms\_0.log (atomic units and cm$^{-1}$) and SOC (atomic units) files 
+in the SOC\_0\_1\_Ms\_0 directory.
 }
 
 \item{
-Calculate $x$, $y$, and $z$ components of SOC between S$_0$ and T$_1$ with $M_{\rm{s}} =1$ ($M_{\rm{s}} = -1$).\\
-Replacing ms = $0$ with ms = $1$ (ms = $-1$) gives an input file for calculating the $x$, $y$, and $z$ components of the SOC between S$_0$ and T$_1$ with $M_{\rm{s}} = 1$ ($M_{\rm{s}} = -1$).
+Calculate $x$, $y$, and $z$ components of SOC 
+between S$_0$ and T$_1$ with $M_{\rm{s}} =1$ ($M_{\rm{s}} = -1$).\\
+Replacing ms = $0$ with ms = $1$ (ms = $-1$) gives an input file 
+for calculating the $x$, $y$, and $z$ components of 
+the SOC between S$_0$ and T$_1$ with $M_{\rm{s}} = 1$ ($M_{\rm{s}} = -1$).
 }
 
 \item{
 Calculate $x$, $y$, and $z$ components of S$_0$-T$_2$ SOC with $M_{\rm{s}} = 0$.\\
-A d77 input file is formatted as follows:
+A sample input file (SOC\_0\_2\_Ms\_0.inp) is as follows:
 \begin{verbatim} 
 $comment
 Input file for calculating spin-orbit coupling
 between S0 and T2 (Ms = 0)
-| 0 >: ground state (S0)
-| 2 >: second lowest triplet state (T2)
+| 0 > : ground state (S0)
+| 2 > : second lowest triplet state (T2)
 $end_comment
 
 $control
-property = soc
-runtyp = int_pgf
-method = td
+property     = soc
+runtyp       = int_pgf
+method       = td
 effcharg_soc = read
 $end_control
 
@@ -538,12 +600,12 @@ bra = < 0 |
 ket = | 2 >
 $end_elec_state
 
-INPDIR_ELEC = ../../INP_ELEC
-INPDIR_SOC_CGF = ../../SOC_CGF
+DIR_INP_ELEC    = ../INP_ELEC
+DIR_INP_SOC_CGF = ../SOC_CGF
 \end{verbatim}
-If you have an input file, SOC\_0\_2\_Ms\_0.inp, and want to save the log file (SOC\_0\_2\_Ms\_0.log) and calculated data to SOC\_0\_2\_Ms\_0 directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 SOC_0_2_Ms_0 SOC_0_2_Ms_0
+d77 SOC_0_2_Ms_0
 \end{verbatim}
 }
 
@@ -551,19 +613,27 @@ d77 SOC_0_2_Ms_0 SOC_0_2_Ms_0
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Electron density and overlap (transition) density at optimized S$_0$ geometry}
+\subsection{Electron density, electron-density difference (difference electron-density; electron-difference density), and overlap (transition) density at optimized S$_0$ geometry}\label{calc_RHO}
 This example shows how electron density and overlap (transition) density are calculated with d77. 
 Sample d77 input and output files are in the examples/C2H4/RHO directories. The first three steps are the same as in \bf{\ref{calc_VCC}}\rm{.}
 
 \begin{enumerate}
 
-\item{Run geometry optimization and frequency analysis with Gaussian 16. 6D and 10F options are required to run d77.}
+\item{
+Run geometry optimization and frequency analysis with Gaussian 16. 
+6D and 10F options are required to run d77.
+}
 \item{Generate freq.fchk and TD.fchk files.}
 \item{Run dpp.}
 
 \item{
 Calculate electron density of S$_0$ ($\rho_{\mathrm{S}_0}$) with d77.\\
-A d77 input file is formatted as follows:
+Create RHO directory and move into it:
+\begin{verbatim}
+mkdir RHO
+cd RHO
+\end{verbatim} 
+A sample input file (RHO\_0\_0.inp) is as follows:
 \begin{verbatim}
 $comment
 Input file for calculating electron density of S0
@@ -572,8 +642,8 @@ $end_comment
 
 $control
 property = rho
-runtyp = density
-method = td
+runtyp   = density
+method   = td
 $end_control
 
 $elec_state
@@ -588,23 +658,23 @@ ymin = -5.0
 ymax =  5.0
 zmin = -5.0
 zmax =  5.0
-dx = 0.20
-dy = 0.20
-dz = 0.20
+dx   = 0.20
+dy   = 0.20
+dz   = 0.20
 $end_grid
 
-INPDIR_ELEC = ../../INP_ELEC
+DIR_INP_ELEC = ../INP_ELEC
 \end{verbatim}
-If you have an input file, RHO\_0\_0.inp, and want to save the log file (RHO\_0\_0.log) and calculated data to RHO\_0\_0 directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 RHO_0_0 RHO_0_0
+d77 RHO_0_0
 \end{verbatim}
 d77 calculates the electron density of S$_0$ and writes it to a cube file (RHO.cube) in the RHO\_0\_0 directory. You can visualize RHO.cube using Chemcraft\cite{Chemcraft} or GaussView 6,\cite{gv6} for example.
 }
 
 \item{
-Calculate electron density of S$_1$  ($\rho_{\mathrm{S}_1}$) .\\
-A d77 input file is formatted as follows:
+Calculate electron density of S$_1$  ($\rho_{\mathrm{S}_1}$).\\
+A sample input file (RHO\_3\_3.inp) is as follows:
 \begin{verbatim}
 $comment
 Input file for calculating electron density of S1
@@ -613,8 +683,8 @@ $end_comment
 
 $control
 property = rho
-runtyp = density
-method = td
+runtyp   = density
+method   = td
 $end_control
 
 $elec_state
@@ -629,22 +699,51 @@ ymin = -5.0
 ymax =  5.0
 zmin = -5.0
 zmax =  5.0
-dx = 0.20
-dy = 0.20
-dz = 0.20
+dx   = 0.20
+dy   = 0.20
+dz   = 0.20
 $end_grid
 
-INPDIR_ELEC = ../../INP_ELEC
+DIR_INP_ELEC = ../INP_ELEC
 \end{verbatim}
-If you have an input file, RHO\_3\_3.inp, and want to save the log file (RHO\_3\_3.log) and calculated data to RHO\_3\_3 directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 RHO_3_3 RHO_3_3
+d77 RHO_3_3
 \end{verbatim}
 }
 
 \item{
+Calculate electron-density difference $\Delta\rho_{\mathrm{S}_1\mathrm{S}_0}$ ($= \rho_{\mathrm{S}_1}-\rho_{\mathrm{S}_0}$).\\
+A sample input file (DIFF\_DENSITY.inp) is as follows:
+\begin{verbatim}
+$comment
+Input file for calculating electron density difference
+between S0 and S1: (S1 electron density) - (S0 electron density)
+| 0 > : ground state (S0)
+| 3 > : lowest excited singlet state (S1)
+$end_comment
+
+$control
+runtyp  = cube
+cube_op = sub
+$end_control
+
+CUBE_RES = DIFF_DENSITY_S1_S0.cube
+CUBE_1   = RHO_3_3/RHO.cube
+CUBE_2   = RHO_0_0/RHO.cube
+\end{verbatim}
+To run d77, type:
+\begin{verbatim} 
+d77 DIFF_DENSITY
+\end{verbatim}
+The calculated $\Delta\rho_{\mathrm{S}_1\mathrm{S}_0}$ is saved to DIFF\_DENSITY\_S1\_S0.cube file.
+When runtyp = cube, the log file (DIFF\_DENSITY.log) and results directory (DIFF\_DENSITY) are not generated.
+Error messages are written in DIFF\_DENSITY\_S1\_S0.cube.
+}
+
+\item{
 Calculate overlap (transition) density between S$_0$ and S$_1$ ($\rho_{\mathrm{S}_0\mathrm{S}_1}$).\\
-A d77 input file is formatted as follows:
+A sample input file (RHO\_0\_3.inp) is as follows:
 \begin{verbatim}
 $comment
 Input file for calculating overlap (transition) density
@@ -655,8 +754,8 @@ $end_comment
 
 $control
 property = rho
-runtyp = density
-method = td
+runtyp   = density
+method   = td
 $end_control
 
 $elec_state
@@ -671,26 +770,27 @@ ymin = -5.0
 ymax =  5.0
 zmin = -5.0
 zmax =  5.0
-dx = 0.20
-dy = 0.20
-dz = 0.20
+dx   = 0.20
+dy   = 0.20
+dz   = 0.20
 $end_grid
 
-INPDIR_ELEC = ../../INP_ELEC
+DIR_INP_ELEC = ../INP_ELEC
 \end{verbatim}
-If you have an input file, RHO\_0\_3.inp, and want to save the log file (RHO\_0\_3.log) and calculated data to RHO\_0\_3 directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 RHO_0_3 RHO_0_3
+d77 RHO_0_3
 \end{verbatim}
 }
 \end{enumerate}
 
-Figure \ref{fig:rho} shows the $\rho_{\mathrm{S}_0}$, $\rho_{\mathrm{S}_1}$, and $\rho_{\mathrm{S}_0\mathrm{S}_1}$ distributions visualized with Chemcraft.\\
+Figure \ref{fig:rho} shows the $\rho_{\mathrm{S}_0}$, $\rho_{\mathrm{S}_1}$, $\Delta\rho_{\mathrm{S}_1\mathrm{S}_0}$, and $\rho_{\mathrm{S}_0\mathrm{S}_1}$ distributions visualized with Chemcraft.\\
 \begin{figure}[h]
 \centering
 \includegraphics[width=15cm]{rho.eps}
 \caption{
-Electron densities of S$_0$ and S$_1$ ($\rho_{\mathrm{S}_0}$ and $\rho_{\mathrm{S}_1}$, respectively) 
+Electron densities of S$_0$ and S$_1$ ($\rho_{\mathrm{S}_0}$ and $\rho_{\mathrm{S}_1}$, respectively),
+electron-density difference $\Delta\rho_{\mathrm{S}_1\mathrm{S}_0}$,
 and S$_0$-S$_1$ overlap density ($\rho_{\mathrm{S}_0\mathrm{S}_1}$): C$_2$H$_4$ as an example.
 Yellow shows positive; blue shows negative.
 }
@@ -699,14 +799,28 @@ Yellow shows positive; blue shows negative.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
 \subsection{Transition dipole moment densities between S$_0$ and S$_1$ at optimized S$_0$ geometry}
 This example shows how transition dipole moment densities are calculated with d77. 
 Sample d77 input and output files are in the examples/C2H4/TDMD directories. The first three steps are the same as in \bf{\ref{calc_VCC}}\rm{.}
 
 \begin{enumerate}
+
+\item{
+Run geometry optimization and frequency analysis with Gaussian 16. 
+6D and 10F options are required to run d77.
+}
+\item{Generate freq.fchk and TD.fchk files.}
+\item{Run dpp.}
+
 \item{
 Calculate transition dipole moment densities between S$_0$ and S$_1$.\\
-A d77 input file is formatted as follows:
+Create TDMD directory and move into it:
+\begin{verbatim}
+mkdir TDMD
+cd TDMD
+\end{verbatim} 
+A sample input file (TDMD\_0\_3.inp) is as follows:
 \begin{verbatim}
 $comment
 Input file for calculating transition dipole moment density
@@ -716,9 +830,10 @@ between S0 and S1
 $end_comment
 
 $control
-property = dipole
-runtyp = density
-method = td
+property      = dipole
+runtyp        = density
+method        = td
+save_rho_cube = yes
 $end_control
 
 $elec_state
@@ -733,24 +848,35 @@ ymin = -5.0
 ymax =  5.0
 zmin = -5.0
 zmax =  5.0
-dx = 0.20
-dy = 0.20
-dz = 0.20
+dx   = 0.20
+dy   = 0.20
+dz   = 0.20
 $end_grid
 
-INPDIR_ELEC = ../../INP_ELEC
+DIR_INP_ELEC = ../INP_ELEC
 \end{verbatim}
-If you have an input file, TDMD\_0\_3.inp, and want to save the log file (TDMD\_0\_3.log) and calculated data to TDMD\_0\_3 directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 TDMD_0_3 TDMD_0_3
+d77 TDMD_0_3
 \end{verbatim}
 d77 calculates the S$_0$-S$_1$ overlap density ($\rho_{\mathrm{S}_0\mathrm{S}_1}$), 
 $-ex$, $-ey$, $-ez$,
 and the transition dipole moment densities for the $x$, $y$, and $z$ directions ($\tau_x$, $\tau_y$, and $\tau_z$).
-The calculated $\rho_{\mathrm{S}_0\mathrm{S}_1}$, $-ex$, $-ey$, $-ez$, $\tau_x$, $\tau_y$, and $\tau_z$
+d77 also calculates the transition dipole moment densitiy ($\tau_{\bm{\upmu}}$) projected to the transition dipole moment vector ($\bm{\upmu}$).
+The calculated $\rho_{\mathrm{S}_0\mathrm{S}_1}$, $-ex$, $-ey$, $-ez$, $\tau_x$, $\tau_y$, $\tau_z$, and $\tau_{\bm{\upmu}}$
 are written to RHO.cube, ER\_X.cube, ER\_Y.cube, ER\_Z.cube, 
-TDMD\_X.cube, TDMD\_Y.cube, and TDMD\_Z.cube
+TDMD\_X.cube, TDMD\_Y.cube, TDMD\_Z.cube, and TDMD\_MU.cube
 in the TDMD\_0\_3 directory.
+RHO.cube ($\rho_{\mathrm{S}_0\mathrm{S}_1}$) calculated in this example
+is the same as that calculated in \bf{\ref{calc_RHO}}\rm{.}
+You can skip generating RHO.cube by adding the following option in your control section:
+\begin{verbatim} 
+save_rho_cube = no
+\end{verbatim}
+The default setting is:
+\begin{verbatim} 
+save_rho_cube = yes
+\end{verbatim}
 }
 \end{enumerate}
 
@@ -761,19 +887,24 @@ $\tau_x = \rho_{\mathrm{S}_0\mathrm{S}_1}\times\left(-ex\right)$;
 $\tau_y = \rho_{\mathrm{S}_0\mathrm{S}_1}\times\left(-ey\right)$;
 $\tau_z = \rho_{\mathrm{S}_0\mathrm{S}_1}\times\left(-ez\right)$. 
 The spatial integral of $\tau_x$, $\tau_y$, and $\tau_z$ gives the $x$, $y$, and $z$ components of the S$_0$-S$_1$ 
-transition dipole moment $\bm{\mu}$: ${\bm{\mu}} = \left(\int \tau_x d{\bf{r}}, \int \tau_y d{\bf{r}}, \int \tau_z d{\bf{r}}\right)$.
-The positive and negative regions of $\tau_x$ and $\tau_y$ are cancelled out and therefore, the $x$ and $y$ components of $\bm{\mu}$ vanish ($\int \tau_x d{\bf{r}} = 0; \int \tau_y d{\bf{r}} = 0$). Meanwhile, the negative region of $\tau_z$ is more widely distributed than the positive region, leading to non-zero $\int \tau_z d\bf{r}$:  ${\bm{\mu}} = \left(0, 0, 3.31962\right)$ in debye.\\
+transition dipole moment $\bm{\upmu}$: $\bm{\upmu} = \left(\int \tau_x d{\bf{r}}, \int \tau_y d{\bf{r}}, \int \tau_z d{\bf{r}}\right)$.
+$\tau_{\bm{\upmu}}$ is the transition dipole moment density projected to the direction of $\bm{\upmu}$:
+$\tau_{\bm{\upmu}} = -\rho_{\mathrm{S}_0\mathrm{S}_1}\times{e}\bf{r}\cdot\bm{\upmu}/|\bm{\upmu}|$;
+$\int \tau_{\bm{\upmu}} d{\bf{r}} = |\bm{\upmu}|$.
+The positive and negative regions of $\tau_x$ and $\tau_y$ are cancelled out and therefore, the $x$ and $y$ components of $\bm{\upmu}$ vanish ($\int \tau_x d{\bf{r}} = 0; \int \tau_y d{\bf{r}} = 0$). Meanwhile, the negative region of $\tau_z$ is more widely distributed than the positive region, leading to non-zero $\int \tau_z d\bf{r}$:  $\bm{\upmu} = \left(0, 0, -3.31962\right)$ in debye.\\
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=15cm]{tdmd.eps}
 \caption{
-$\rho_{\mathrm{S}_0\mathrm{S}_1}$, $\tau_x$, $\tau_y$, and $\tau_z$ distributions.
+$\rho_{\mathrm{S}_0\mathrm{S}_1}$, $\tau_x$, $\tau_y$, $\tau_z$, and $\tau_{\bm{\upmu}}$ distributions.
 Yellow shows positive; blue shows negative.
 }
 \label{fig:tdmd}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \clearpage
 \subsection{Vibronic coupling densities between S$_0$ and S$_1$ at optimized S$_0$ geometry}
 This example shows how vibronic coupling densities are calculated with d77. 
@@ -786,7 +917,12 @@ Sample d77 input and output files are in the examples/C2H4/VCD directories. The 
 
 \item{
 Calculate vibronic coupling densities between S$_0$ and S$_1$.\\
-A d77 input file is formatted as follows:
+Create VCD directory and move into it:
+\begin{verbatim}
+mkdir VCD
+cd VCD
+\end{verbatim} 
+A sample input file (VCD\_0\_3.inp) is as follows:
 \begin{verbatim}
 $comment
 Input file for calculating vibronic coupling densities
@@ -797,8 +933,8 @@ $end_comment
 
 $control
 property = vc
-runtyp = density
-method = td
+runtyp   = density
+method   = td
 $end_control
 
 $elec_state
@@ -818,18 +954,18 @@ ymin = -5.0
 ymax =  5.0
 zmin = -5.0
 zmax =  5.0
-dx = 0.20
-dy = 0.20
-dz = 0.20
+dx = 0.10
+dy = 0.10
+dz = 0.10
 $end_grid
 
-INPDIR_ELEC = ../../INP_ELEC
-INPDIR_VIB = ../../INP_VIB
-INPDIR_ELFLD = ../../ELFLD
+DIR_INP_ELEC  = ../INP_ELEC
+DIR_INP_VIB   = ../INP_VIB
+DIR_INP_ELFLD = ../ELFLD
 \end{verbatim}
-If you have an input file, VCD\_0\_3.inp, and want to save the log file (VCD\_0\_3.log) and calculated data to VCD\_0\_3 directory, type:
+To run d77, type:
 \begin{verbatim} 
-d77 VCD_0_3 VCD_0_3
+d77 VCD_0_3 
 \end{verbatim}
 d77 calculates the S$_0$-S$_1$ overlap density ($\rho_{\mathrm{S}_0\mathrm{S}_1}$), 
 the derivatives of the nuclear electronic potentials for the seventh and ninth vibrational modes ($\nu_7$ and $\nu_9$),
@@ -837,6 +973,12 @@ and the vibronic coupling densities for the seventh and ninth vibrational modes 
 The calculated $\rho_{\mathrm{S}_0\mathrm{S}_1}$, $\nu_7$, $\nu_9$, $\eta_7$, and $\eta_9$
 are written to RHO.cube, DVNE0007.cube, DVNE0009.cube, VCD0007.cube, and VCD0009.cube files 
 in the VCD\_0\_3 directory.
+RHO.cube ($\rho_{\mathrm{S}_0\mathrm{S}_1}$) calculated in this example
+is the same as that calculated in \bf{\ref{calc_RHO}}\rm{.}
+You can skip generating RHO.cube by adding the following option in your control section:
+\begin{verbatim} 
+save_rho_cube = no
+\end{verbatim}
 }
 \end{enumerate}
 
@@ -846,7 +988,7 @@ Figure \ref{fig:vcd} shows the $\rho_{\mathrm{S}_0\mathrm{S}_1}$, $\nu_7$, $\nu_
 The $\eta_7$ distribution suggests that the vibronic coupling for the seventh vibrational mode occurs around the carbon atoms. 
 The $\eta_9$ distribution suggests that the vibronic coupling for the ninth vibrational mode occurs along the C$-$H bonds.
 
-\begin{figure}[t]
+\begin{figure}[h]
 \centering
 \includegraphics[width=15cm]{vcd.eps}
 \caption{

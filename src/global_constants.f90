@@ -176,7 +176,7 @@ MODULE global_constants
 CONTAINS
 
   SUBROUTINE assign_globals
-    Program_ver = '20240423'
+    Program_ver = '20240427'
     Text_blank = REPEAT(' ',100)
     Max_n_atm = 30; Max_n_mode = 100
     Max_ne = 100

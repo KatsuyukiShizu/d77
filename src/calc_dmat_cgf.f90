@@ -37,7 +37,7 @@ SUBROUTINE calc_dmat_cgf(opr_dmat, dmat_cgf)
   dmat_cgf = 0.0D0
   WRITE(6,'(1X)')
   WRITE(6,'(1X, A)') 'Calculating density matrix in terms of CGFs'
-  WRITE(6,'(1X, A)') 'from gamma and CGF coefficients'
+  WRITE(6,'(1X, A)') 'from gamma and CGF coefficients.'
 ! Converting P_so into density matrix in terms of CGFs (P_CGF)
   DO i_cgf = 1, N_cgf
     DO j_cgf = 1, N_cgf
@@ -52,8 +52,6 @@ SUBROUTINE calc_dmat_cgf(opr_dmat, dmat_cgf)
     ENDDO
   ENDDO
 
-  WRITE(6,'(1X, A)') 'Done'
-  
   IF(Debug == 'Yes') &
  &CALL write_messages(3, Text_blank, type_program, name_program)
 

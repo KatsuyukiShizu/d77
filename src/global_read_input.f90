@@ -24,8 +24,7 @@ MODULE global_read_input
   CHARACTER(LEN=100), SAVE :: Method
   CHARACTER(LEN=100), SAVE :: Effcharg
   CHARACTER(LEN=100), SAVE :: Effcharg_soc
-  DOUBLE PRECISION, SAVE   :: Temperature
-  DOUBLE PRECISION, SAVE   :: Scale_fac_freq
+  DOUBLE PRECISION, SAVE   :: Temperature, Scale_freq, Scale_cube
   DOUBLE PRECISION, SAVE   :: Threshold_e_ab, &
                              &Threshold_distance, Threshold_s_cgf, Threshold_ci_ci, &
                              &Threshold_contribution
@@ -33,6 +32,7 @@ MODULE global_read_input
                              &Active_space_only, Read_ci_coef, &
                              &Save_soc_cgf, &
                              &Save_avcc, &
+                             &Save_rho_cube, &
                              &Debug
   CHARACTER(LEN=100), SAVE :: Fchk_mocube
 
@@ -46,6 +46,7 @@ MODULE global_read_input
   CHARACTER(LEN=100), SAVE :: Gen_soc_cgf, Gen_soc_cgf_atm
   CHARACTER(LEN=100), SAVE :: Gen_ke_cgf, Gen_pe_cgf_atm, Gen_elfld_cgf_atm
   CHARACTER(LEN=100), SAVE :: Save_g16_format
+  CHARACTER(LEN=100), SAVE :: Cube_op
 
 ! $SPIN_ORBIT keywords  
   INTEGER, SAVE :: Ms
@@ -119,7 +120,7 @@ CONTAINS
     WRITE(6,'(1X)')
     WRITE(6,'(1X, A)') '==================================='
     WRITE(6,'(1X)') 
-    WRITE(6,'(1X, A)') 'Reading $CONTROL options in your input file'
+    WRITE(6,'(1X, A)') 'Reading $CONTROL options in your input file.'
 
 !   Checking input options
     N_line_control    = 0; N_line_end_control    = 0
@@ -172,8 +173,9 @@ CONTAINS
     Method   = 'Td'
     Debug    = 'No'
 
-    Temperature    = 0.0D0
-    Scale_fac_freq = 1.0D0
+    Temperature = 0.0D0
+    Scale_freq  = 1.0D0
+    Scale_cube  = 1.0D0
     
     Effcharg     = 'Nuccharg'
     Effcharg_soc = 'Read'
@@ -195,6 +197,8 @@ CONTAINS
     
     Gen_elfld_cgf_atm = 'Read'
     Save_avcc         = 'No'
+
+    Save_rho_cube = 'Yes'
 
     IF(N_line_control /= 0 .AND. &
       &N_line_control + 1 < N_line_end_control) THEN
@@ -232,8 +236,8 @@ CONTAINS
           CASE('Method');   Method   = text_right
           CASE('Debug');    Debug    = text_right
 
-          CASE('Temperature');    Temperature    = value_real
-          CASE('Scale_fac_freq'); Scale_fac_freq = value_real
+          CASE('Temperature'); Temperature = value_real
+          CASE('Scale_freq');  Scale_freq  = value_real
           
           CASE('Effcharg');     Effcharg     = text_right
           CASE('Effcharg_soc'); Effcharg_soc = text_right
@@ -249,10 +253,10 @@ CONTAINS
 
           CASE('Save_avcc');  Save_avcc  = text_right
 
-          CASE('Gen_opr_dmat');      Gen_opr_dmat      = text_right
-          CASE('Save_opr_dmat');     Save_opr_dmat     = text_right
-          CASE('Gen_dmat_cgf');      Gen_dmat_cgf      = text_right
-          CASE('Save_dmat_cgf');     Save_dmat_cgf     = text_right
+          CASE('Gen_opr_dmat');  Gen_opr_dmat  = text_right
+          CASE('Save_opr_dmat'); Save_opr_dmat = text_right
+          CASE('Gen_dmat_cgf');  Gen_dmat_cgf  = text_right
+          CASE('Save_dmat_cgf'); Save_dmat_cgf = text_right
 
           CASE('Active_space_only'); Active_space_only = text_right
           CASE('Read_ci_coef');      Read_ci_coef      = text_right
@@ -262,6 +266,10 @@ CONTAINS
           CASE('Gen_elfld_cgf_atm'); Gen_elfld_cgf_atm = text_right
           
           CASE('Fchk_mocube'); Fchk_mocube = text_right
+          
+          CASE('Cube_op');       Cube_op       = text_right
+          CASE('Scale_cube');    Scale_cube    = value_real
+          CASE('Save_rho_cube'); Save_rho_cube = text_right
           
           CASE DEFAULT
             WRITE(6,'(1X, A)') 'Invalid Control keyward: ', text_left
@@ -273,15 +281,18 @@ CONTAINS
       CALL write_messages(-9999, Text_blank, type_program, name_program)
     ENDIF
 
-    SELECT CASE(Property)
-      CASE('Cicoef_only', 'Dvne_only', 'Rho', 'Ke', 'Pe', 'Dipole', 'Vc', 'Soc')
-      CASE DEFAULT
-        WRITE(6,'(1X, A, A)') 'Invalid property: ', Property
-        CALL write_messages(-9999, Text_blank, type_program, name_program)
-    END SELECT
+    IF(Runtyp == 'Cube') THEN
+    ELSE
+      SELECT CASE(Property)
+        CASE('Cicoef_only', 'Dvne_only', 'Rho', 'Ke', 'Pe', 'Dipole', 'Vc', 'Soc')
+        CASE DEFAULT
+          WRITE(6,'(1X, A, A)') 'Invalid property: ', Property
+          CALL write_messages(-9999, Text_blank, type_program, name_program)
+      END SELECT
+    ENDIF  
 
     SELECT CASE(Runtyp)
-      CASE('Calc_int_cgf', 'Int_pgf', 'Density')
+      CASE('Calc_int_cgf', 'Int_pgf', 'Density', 'Cube')
       CASE DEFAULT
         WRITE(6,'(1X, A, A)') 'Invalid runtyp: ', Runtyp
         CALL write_messages(-9999, Text_blank, type_program, name_program)
@@ -298,8 +309,6 @@ CONTAINS
         END SELECT  
       CASE DEFAULT
     END SELECT  
-
-    WRITE(6,'(1X, A)') 'Done'
 
     SELECT CASE(Runtyp)
       CASE('Int_pgf', 'Density')
@@ -721,7 +730,7 @@ CONTAINS
       CASE('Effcharg');       real_int_char = 'CHAR'
       CASE('Effcharg_soc');   real_int_char = 'CHAR'
       CASE('Temperature');    real_int_char = 'REAL'
-      CASE('Scale_fac_freq'); real_int_char = 'REAL'
+      CASE('Scale_freq'); real_int_char = 'REAL'
 
       CASE('Threshold_s_cgf');        real_int_char = 'REAL'
       CASE('Threshold_e_ab');         real_int_char = 'REAL'
@@ -760,6 +769,9 @@ CONTAINS
       CASE('Dy'); real_int_char = 'REAL'
       CASE('Dz'); real_int_char = 'REAL'
       CASE('Fchk_mocube'); real_int_char = 'CHAR'
+      CASE('Cube_op'); real_int_char = 'CHAR'
+      CASE('Scale_cube'); real_int_char = 'REAL'
+      CASE('Save_rho_cube'); Save_rho_cube = 'CHAR'
       CASE DEFAULT
         WRITE(6,'(1X, A)') 'Invalid CONTROL keyward: ', namevar
         CALL write_messages(-9999, Text_blank, type_program, name_program)

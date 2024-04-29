@@ -1,0 +1,21 @@
+$comment
+Input file for calculating vibronic coupling constants
+between T1 and T2
+| 1 > : lowest triplet state (T1)
+| 3 > : second lowest triplet state (T2)
+$comment
+
+$control
+property = vc
+runtyp   = int_pgf
+method   = td
+$end_control
+
+$elec_state
+Bra = < 1 |
+Ket = | 3 >
+$end_elec_state
+
+DIR_INP_ELEC  = ../INP_ELEC
+DIR_INP_VIB   = ../INP_VIB
+DIR_INP_ELFLD = ../ELFLD

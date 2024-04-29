@@ -1,11 +1,10 @@
-
  --------------- d77 execution script ---------------
 
 
 
  ****************************************************
  **                                                **
- **             d77: version 20240423              **
+ **             d77: version 20240427              **
  **                                                **
  **  Visual understanding of molecular properties  **
  **                                                **
@@ -22,7 +21,7 @@
 
 
 
- --- Entering d77.exe on 2024/4/23 at 11:23:8 (time zone = UTC+0900)
+ --- Entering d77.exe on 2024/4/29 at 17:35:18 (time zone = UTC+0900)
 
  ===== Copy of your input file =====
 
@@ -33,8 +32,8 @@
  
  $control
  property = rho
- runtyp = density
- method = td
+ runtyp   = density
+ method   = td
  $end_control
  
  $elec_state
@@ -49,20 +48,17 @@
  ymax =  5.0
  zmin = -5.0
  zmax =  5.0
- dx = 0.20
- dy = 0.20
- dz = 0.20
+ dx   = 0.20
+ dy   = 0.20
+ dz   = 0.20
  $end_grid
  
- INPDIR_ELEC = ../../INP_ELEC
+ DIR_INP_ELEC = ../INP_ELEC
 
  ===================================
 
- Reading $CONTROL options in your input file
- Done
-
- Reading general information of the system from CONTROL_ELEC
- Done
+ Reading $CONTROL options in your input file.
+ Reading general information of the system from CONTROL_ELEC.
 
  Information of the system
  =============================
@@ -83,15 +79,14 @@
  Threshold_distance:     0.400E+01
  =================================
 
- Reading nuclear coordinates from COORD
- Reading atomic numbers from ATMNUM
- Reading nuclear charges from NUCCHARG
- Done
+ Reading nuclear coordinates from COORD.
+ Reading atomic numbers from ATMNUM.
+ Reading nuclear charges from NUCCHARG.
 
- Reading primitive Gaussian functions (PGFs) from ATMORB
+ Reading primitive Gaussian functions (PGFs) from ATMORB.
  Reading expantion coefficients for CGFs (MO coefficients) from
- COEFAREF and COEFBREF
- Constructing contracted Gaussian functions (CGFs) from the PGFs
+ COEFAREF and COEFBREF.
+ Constructing contracted Gaussian functions (CGFs) from the PGFs.
 
  Names of spin orbitals
  =================================
@@ -161,8 +156,7 @@
    6       H         1       1.0
  =================================
 
- Reading X + Y and X - Y from XY
- Done
+ Reading X + Y and X - Y from XY.
 
  X + Y, X - Y, and electronic configurations
  in terms of spin-orbital numbers
@@ -229,15 +223,13 @@
  =============================
 
  Calculating density matrix in terms of CGFs
- from gamma and CGF coefficients
- Done
+ from gamma and CGF coefficients.
 
  ----------------
  Electron density
  ----------------
 
- Calculating grid size for cube files
- Done
+ Calculating grid size for cube files.
 
  --------------------------
  Information for cube grids
@@ -261,8 +253,7 @@
  Dz  0.2000    Nz  52
  ====================
 
- Calculating xyz coordinates of lattice points
- Done
+ Calculating xyz coordinates of lattice points.
 
  Generating and opening cube files
  Done
@@ -287,8 +278,8 @@
  ****************************
 
 
- Total CPU time =     6.09 seconds
+ Total CPU time =    11.03 seconds
 
- --- Leaving d77.exe on 2024/4/23 at 11:23:27 (time zone = UTC+0900)
+ --- Leaving d77.exe on 2024/4/29 at 17:35:35 (time zone = UTC+0900)
 
  --------------- End of d77 execution script ---------------

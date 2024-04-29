@@ -12,126 +12,156 @@
 
 shopt -s nocasematch
 
-EXE=d77
-
-if [ ! -d ${RESDIR} ] ; then
-  mkdir ${RESDIR}
+if [ -n "${DIR_PWD}" ]; then
+  :
 else
-  rm -rf ${RESDIR}
-  mkdir ${RESDIR}
-fi
-cd ${RESDIR}
-
-echo 
-echo " --------------- ${EXE} execution script ---------------"
-
-###
-echo 
-echo " Host = `hostname`"
-echo " OS   = `uname`"
-echo " Date = `date`"
-echo 
-echo " d77 is running in directory: $(pwd)"
-###
-
-export INPUT_d77=${JOB}.inp
-if [ -f "${DIRPWD}/${JOB}.inp" ] ; then
-  cp "${DIRPWD}/${JOB}.inp" INPUT
-else
-  echo " Missing ${JOB}.inp"
-  echo " Removing ${RESDIR} directory"
-  rm -rf "${DIRPWD}/${RESDIR}"
-  echo 
-  echo " Error termination"
-  echo 
+  echo
+  echo " DIR_PWD directory is not specified."
+  echo
   echo " --------------- End of ${EXE} execution script ---------------"
   exit
 fi
 
+EXE=d77
+echo " --------------- ${EXE} execution script ---------------"
+
+###
+#echo 
+#echo " Host = `hostname`"
+#echo " OS   = `uname`"
+#echo " Date = `date`"
+#echo 
+#echo " d77 is running in directory: $(pwd)"
+###
+
+if [ -f "${DIR_PWD}/${JOB}.inp" ] ; then
+  RUNTYP=$(grep -i Runtyp "${DIR_PWD}/${JOB}.inp" | awk '{print $3}')
+else
+  echo
+  echo " Missing ${JOB}.inp"
+  echo " Removing ${DIR_RES} directory"
+  rm -rf "${DIR_PWD}/${DIR_RES}"
+  echo
+  echo " Error termination"
+  echo
+  echo " --------------- End of ${EXE} execution script ---------------"
+  exit
+fi
+
+case ${RUNTYP} in
+
+  Cube)
+    :
+  ;;
+
+  *)
+
+    if [ ! -d ${DIR_RES} ] ; then
+      mkdir ${DIR_RES}
+    else
+      rm -rf ${DIR_RES}
+      mkdir ${DIR_RES}
+    fi
+    cd ${DIR_RES}
+  ;;
+esac
+
+cp "${DIR_PWD}/${JOB}.inp" INPUT
+
 PROPERTY=$(grep -i Property INPUT | awk '{print $3}')
 METHOD=$(grep -i Method INPUT | awk '{print $3}')
 RUNTYP=$(grep -i Runtyp INPUT | awk '{print $3}')
+CUBE_OP=$(grep -i Cube_op INPUT | awk '{print $3}')
 
-INPDIR_ELEC=$(grep -i INPDIR_ELEC INPUT | awk '{print $3}')
-INPDIR_VIB=$(grep -i INPDIR_VIB INPUT | awk '{print $3}')
-INPDIR_ELFLD=$(grep -i INPDIR_ELFLD INPUT | awk '{print $3}')
-INPDIR_SOC_CGF=$(grep -i INPDIR_SOC_CGF INPUT | awk '{print $3}')
+DIR_INP_ELEC=$(grep -i DIR_INP_ELEC INPUT | awk '{print $3}')
+DIR_INP_VIB=$(grep -i DIR_INP_VIB INPUT | awk '{print $3}')
+DIR_INP_ELFLD=$(grep -i DIR_INP_ELFLD INPUT | awk '{print $3}')
+DIR_INP_SOC_CGF=$(grep -i DIR_INP_SOC_CGF INPUT | awk '{print $3}')
 
+CUBE_RES=$(grep -i CUBE_RES INPUT | awk '{print $3}')
+CUBE_1=$(grep -i CUBE_1 INPUT | awk '{print $3}')
+CUBE_2=$(grep -i CUBE_2 INPUT | awk '{print $3}')
 
 case ${RUNTYP} in 
 
   Calc_int_cgf) 
 
-    if [ -n "${INPDIR_ELEC}" ]; then
-      if [ ! -d "${INPDIR_ELEC}" ] ; then
-        echo " No ${INPDIR_ELEC} directory"
+    if [ -n "${DIR_INP_ELEC}" ]; then
+      if [ -d "../${DIR_INP_ELEC}" ] ; then
+        :
+      else  
+        echo 
+        echo " No ${DIR_INP_ELEC} directory"
         echo 
         echo " Error termination"
         echo 
         echo " --------------- End of ${EXE} execution script ---------------"
         exit
-      else
-        :
       fi
     else
-      echo " INPDIR_ELEC is empty"
+      echo 
+      echo " DIR_INP_ELEC directory is not specified."
       echo 
       echo " --------------- End of ${EXE} execution script ---------------"
       exit
     fi
-    ln -s $INPDIR_ELEC/* .
+    ln -s "../${DIR_INP_ELEC}"/* .
   ;; # Calc_int_cgf)
 
   Density) 
 
-    if [ -n "${INPDIR_ELEC}" ]; then
-      if [ ! -d "${INPDIR_ELEC}" ] ; then
-        echo " No ${INPDIR_ELEC} directory"
+    if [ -n "${DIR_INP_ELEC}" ]; then
+      if [ -d "../${DIR_INP_ELEC}" ] ; then
+        :
+      else  
+        echo 
+        echo " No ${DIR_INP_ELEC} directory"
         echo
         echo " Error termination"
         echo
         echo " --------------- End of ${EXE} execution script ---------------"
         exit
-      else
-        :
       fi
     else
-      echo " INPDIR_ELEC is empty"
+      echo 
+      echo " DIR_INP_ELEC directory is not specified."
       echo
       echo " Error termination"
       echo
       echo " --------------- End of ${EXE} execution script ---------------"
       exit
     fi
-    ln -s $INPDIR_ELEC/* .
+    ln -s "../${DIR_INP_ELEC}"/* .
 
-    case $PROPERTY in
+    case ${PROPERTY} in
 
       Dipole)
         :
       ;;
       Vc)
 
-        if [ -n "${INPDIR_VIB}" ]; then
-          if [ ! -d "${INPDIR_VIB}" ] ; then
-            echo " No ${INPDIR_VIB} directory"
+        if [ -n "${DIR_INP_VIB}" ]; then
+          if [ -d "../${DIR_INP_VIB}" ] ; then
+            :
+          else
+            echo 
+            echo " No ${DIR_INP_VIB} directory"
             echo
             echo " Error termination"
             echo
             echo " --------------- End of ${EXE} execution script ---------------"
             exit
-          else
-            :
           fi
         else
-          echo " INPDIR_VIB is empty"
+          echo 
+          echo " DIR_INP_VIB directory is not specified."
           echo
           echo " Error termination"
           echo
           echo " --------------- End of ${EXE} execution script ---------------"
           exit
         fi
-        ln -s $INPDIR_VIB/* .
+        ln -s "../${DIR_INP_VIB}"/* .
 
       ;;
     esac
@@ -140,98 +170,200 @@ case ${RUNTYP} in
 
   Int_pgf) 
 
-    if [ -n "${INPDIR_ELEC}" ]; then
-      if [ ! -d "${INPDIR_ELEC}" ] ; then
-        echo " No ${INPDIR_ELEC} directory"
+    if [ -n "${DIR_INP_ELEC}" ]; then
+      if [ -d "../${DIR_INP_ELEC}" ] ; then
+        :
+      else
+        echo 
+        echo " No ${DIR_INP_ELEC} directory"
         echo 
         echo " Error termination"
         echo 
         echo " --------------- End of ${EXE} execution script ---------------"
         exit
-      else
-        :
       fi
     else
-      echo " INPDIR_ELEC is empty"
+      echo 
+      echo " DIR_INP_ELEC directory is not specified."
       echo 
       echo " Error termination"
       echo 
       echo " --------------- End of ${EXE} execution script ---------------"
       exit
     fi
-    ln -s $INPDIR_ELEC/* .
+    ln -s "../${DIR_INP_ELEC}"/* .
 
-    case $PROPERTY in
+    case ${PROPERTY} in
 
       Dipole)
         :
       ;;  
       Vc)
 
-        if [ -n "${INPDIR_VIB}" ]; then
-          if [ ! -d "${INPDIR_VIB}" ] ; then
-            echo " No ${INPDIR_VIB} directory"
+        if [ -n "${DIR_INP_VIB}" ]; then
+          if [ -d "../${DIR_INP_VIB}" ] ; then
+            :
+          else
+            echo 
+            echo " No ${DIR_INP_VIB} directory"
             echo
             echo " Error termination"
             echo
             echo " --------------- End of ${EXE} execution script ---------------"
             exit
-          else
-            :
           fi
         else
-          echo " INPDIR_VIB is empty"
+          echo 
+          echo " DIR_INP_VIB directory is not specified."
           echo
           echo " Error termination"
           echo
           echo " --------------- End of ${EXE} execution script ---------------"
           exit
         fi
-        ln -s $INPDIR_VIB/* .
+        ln -s "../${DIR_INP_VIB}"/* .
 
-        if [ -n "${INPDIR_ELFLD}" ]; then
-          if [ ! -d "${INPDIR_ELFLD}" ] ; then
-            echo " No ${INPDIR_ELFLD} directory"
+        if [ -n "${DIR_INP_ELFLD}" ]; then
+          if [ -d "../${DIR_INP_ELFLD}" ] ; then
+            :
+          else
+            echo 
+            echo " No ${DIR_INP_ELFLD} directory"
             echo
             echo " Error termination"
             echo
             echo " --------------- End of ${EXE} execution script ---------------"
             exit
-          else
-            :
           fi
         else
-          echo " INPDIR_ELFLD is empty"
+          echo 
+          echo " DIR_INP_ELEC directory is not specified."
           echo
           echo " Error termination"
           echo
           echo " --------------- End of ${EXE} execution script ---------------"
           exit
         fi
-        ln -s ${INPDIR_ELFLD}/ELFLD_CGF_ATM .
+        ln -s "../${DIR_INP_ELFLD}"/ELFLD_CGF_ATM .
 
       ;;
       Soc)
 
-        if [ -n "${INPDIR_SOC_CGF}" ]; then
-          :
+        if [ -n "${DIR_INP_SOC_CGF}" ]; then
+          if [ -d "../${DIR_INP_SOC_CGF}" ]; then
+            :
+          else
+            echo
+            echo " No ${DIR_INP_SOC_CGF} directory"
+            echo
+            echo " Error termination"
+            echo
+            echo " --------------- End of ${EXE} execution script ---------------"
+            exit
+          fi
         else
-          echo 'No INPDIR_SOC_CGF directry'
+          echo 
+          echo " DIR_INP_SOC_CGF directory is not specified."
+          echo
+          echo " Error termination"
+          echo
+          echo " --------------- End of ${EXE} execution script ---------------"
           exit
         fi
-        ln -s ${INPDIR_SOC_CGF}/SOC_CGF_X .
-        ln -s ${INPDIR_SOC_CGF}/SOC_CGF_Y .
-        ln -s ${INPDIR_SOC_CGF}/SOC_CGF_Z .
+        ln -s "../${DIR_INP_SOC_CGF}"/SOC_CGF_X .
+        ln -s "../${DIR_INP_SOC_CGF}"/SOC_CGF_Y .
+        ln -s "../${DIR_INP_SOC_CGF}"/SOC_CGF_Z .
       ;;
 
       *)
+        echo 
         echo "Invalid PROPERTY: '${PROPERTY}"
         exit
       ;;
     esac 
   ;; # Int_pgf)
   
+  Cube) 
+    
+    if [ -n "${CUBE_RES}" ]; then
+      rm -f CUBE_RES ${CUBE_RES}
+      echo ${CUBE_RES} > CUBE_FILE_NAME
+      
+      if [ -n "${CUBE_1}" ]; then
+
+        if [ -f "${CUBE_1}" ]; then
+          rm -f CUBE_1
+          ln -s ${CUBE_1} CUBE_1
+          echo ${CUBE_1} >> CUBE_FILE_NAME
+        else
+          echo
+          echo " No ${CUBE_1} file"
+          echo
+          echo " Error termination"
+          echo
+          echo " --------------- End of ${EXE} execution script ---------------"
+          exit
+        fi
+ 
+      else
+        echo
+        echo " CUBE_1 file is not specified."
+        echo
+        echo " Error termination"
+        echo
+        echo " --------------- End of ${EXE} execution script ---------------"
+        exit
+      fi
+   
+    else
+      echo
+      echo " CUBE_RES file is not specified."
+      echo
+      echo " Error termination"
+      echo
+      echo " --------------- End of ${EXE} execution script ---------------"
+      exit
+    fi
+  
+    case ${CUBE_OP} in
+    
+      Add | Sub | Mul)
+
+        if [ -n "${CUBE_2}" ]; then
+  
+          if [ -f "${CUBE_2}" ]; then
+            rm -f CUBE_2
+            ln -s ${CUBE_2} CUBE_2
+            echo ${CUBE_2} >> CUBE_FILE_NAME
+          else
+            echo
+            echo " No ${CUBE_2} file"
+            echo
+            echo " Error termination"
+            echo
+            echo " --------------- End of ${EXE} execution script ---------------"
+            exit
+          fi
+  
+        else
+          echo
+          echo " CUBE_2 file is not specified."
+          echo
+          echo " Error termination"
+          echo
+          echo " --------------- End of ${EXE} execution script ---------------"
+          exit
+        fi
+      ;;
+
+      *)
+        :
+      ;;
+    esac  
+  ;;
+
   *) 
+    echo  
     echo "Invalid Runtyp: ${RUNTYP}" 
     exit
   ;;
@@ -239,9 +371,9 @@ esac
 
 
 ###
-echo
-echo ' INPUT file       = '${DIRPWD}/${JOB}.inp
-echo ' RESULTS directry = '${DIRPWD}/${RESDIR}
+#echo
+#echo ' INPUT file       = '${DIR_PWD}/${JOB}.inp
+#echo ' RESULTS directry = '${DIR_PWD}/${DIR_RES}
 ###
 
 echo
@@ -283,12 +415,43 @@ case ${RUNTYP} in
       fi
     done
   ;;
+  
+  Cube)
+
+    mv CUBE_RES ${CUBE_RES}
+    
+    array=(\
+    CUBE_FILE_NAME CUBE_1 CUBE_2 ${JOB}.log
+     \
+    )
+
+    for FILENAME in "${array[@]}"
+    do
+      if [ -f "${FILENAME}" ]; then
+        rm -f "${FILENAME}"
+      else
+        :
+      fi
+    done
+
+  ;;
   *)
     :
 esac
 
 mv INPUT ${JOB}.inp 
-mv ../${JOB}.log . 
+
+case ${RUNTYP} in
+
+  Cube)
+    :
+  ;;
+
+  *)
+    mv ../${JOB}.log . 
+  ;;
+esac
+
 echo 
 echo " --------------- End of ${EXE} execution script ---------------"
 exit

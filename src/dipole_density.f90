@@ -32,8 +32,10 @@ SUBROUTINE dipole_density
   DOUBLE PRECISION, ALLOCATABLE :: dmat_cgf(:,:)
   DOUBLE PRECISION              :: int_rho
 
+  CHARACTER(LEN=4)              :: projection
+
 ! Dipole moment 
-  DOUBLE PRECISION              :: dipole(1:4), dipole_norm
+  DOUBLE PRECISION              :: dipole(1:3), dipole_norm, dipole_p
 
 ! DO Loop variables
   INTEGER :: i_cgf, j_cgf, i_so, j_so
@@ -42,9 +44,6 @@ SUBROUTINE dipole_density
 
   left_state = 0; right_state = 0; n_ci_ci = 0
   trace_opr_dmat = 0.0D0
-
-  int_rho = 0.0D0
-  dipole(1:3) = 0.0D0; dipole_norm = 0.0D0
 
   CALL write_messages(2, Text_blank, type_program, name_program)
     
@@ -94,7 +93,6 @@ SUBROUTINE dipole_density
           ENDDO ! j_cgf
         ENDDO ! i_cgf
       CLOSE(fid)
-      WRITE(6,'(1X, A)') 'Done'
     ELSEIF(Gen_opr_dmat == 'Calc') THEN
       CALL calc_opr_dmat&
           &(left_state, right_state, n_ci_ci, opr_dmat, trace_opr_dmat)
@@ -135,7 +133,11 @@ SUBROUTINE dipole_density
   WRITE(6,'(1X, A)') '---------------------'
   WRITE(6,'(1X, A)') 'Dipole moment density'
   WRITE(6,'(1X, A)') '---------------------'
-  CALL cube_dipole_density(dmat_cgf, int_rho, dipole)
+  
+  projection = 'No'
+  int_rho = 0.0D0; dipole = 0.0D0; dipole_p = 0.0D0
+  CALL cube_dipole_density(projection, dmat_cgf, int_rho, dipole, dipole_p)
+  dipole_norm = 0.0D0
   dipole_norm = DSQRT(DOT_PRODUCT(dipole, dipole))
 
   WRITE(6,'(1X)')
@@ -174,7 +176,18 @@ SUBROUTINE dipole_density
   WRITE(6,'(1X, I3, 1X, I3, 4F11.5)') bra, ket, dipole(1:3)*Debye, dipole_norm*Debye
   WRITE(6,'(1X, A)') REPEAT('=', n_repeat)
 
+  WRITE(6,'(1X)')
+  WRITE(6,'(1X, A)') 'Calculating projected dipole moment density.'
+  WRITE(6,'(1X)')
+  projection = 'Yes'
+  int_rho = 0.0D0; dipole_p = 0.0D0
+  CALL cube_dipole_density(projection, dmat_cgf, int_rho, dipole, dipole_p)
+  WRITE(6,'(1X, A)') 'Calculating the magnitude of dipole moment'
+  WRITE(6,'(1X, A)') 'by integrating projected dipole moment density.'
+  WRITE(6,'(1X)')
+  WRITE(6,'(1X, A, F11.5)') '|mu| = ', dipole_p
 
+  
   DEALLOCATE (Atmnum, Nuccharg, Xyznuc, Elmsym)
   DEALLOCATE (Lmn, Xyzao)
   DEALLOCATE (Coef_so)

@@ -1,11 +1,10 @@
-
  --------------- d77 execution script ---------------
 
 
 
  ****************************************************
  **                                                **
- **             d77: version 20240423              **
+ **             d77: version 20240427              **
  **                                                **
  **  Visual understanding of molecular properties  **
  **                                                **
@@ -22,21 +21,21 @@
 
 
 
- --- Entering d77.exe on 2024/4/23 at 11:7:59 (time zone = UTC+0900)
+ --- Entering d77.exe on 2024/4/29 at 17:35:11 (time zone = UTC+0900)
 
  ===== Copy of your input file =====
 
  $comment
  Input file for calculating spin-orbit coupling
  between S0 and T1 (Ms = 1)
- | 0 >: ground state (S0)
- | 1 >: lowest triplet state (T1)
+ | 0 > : ground state (S0)
+ | 1 > : lowest triplet state (T1)
  $end_comment
  
  $control
- property = soc
- runtyp = int_pgf
- method = td
+ property     = soc
+ runtyp       = int_pgf
+ method       = td
  effcharg_soc = read
  $end_control
  
@@ -49,17 +48,14 @@
  ket = | 1 >
  $end_elec_state
  
- INPDIR_ELEC = ../../INP_ELEC
- INPDIR_SOC_CGF = ../../SOC_CGF
+ DIR_INP_ELEC    = ../INP_ELEC
+ DIR_INP_SOC_CGF = ../SOC_CGF
 
  ===================================
 
- Reading $CONTROL options in your input file
- Done
+ Reading $CONTROL options in your input file.
  ms = 1                                                                                              
-
- Reading general information of the system from CONTROL_ELEC
- Done
+ Reading general information of the system from CONTROL_ELEC.
 
  Information of the system
  =============================
@@ -80,15 +76,14 @@
  Threshold_distance:     0.400E+01
  =================================
 
- Reading nuclear coordinates from COORD
- Reading atomic numbers from ATMNUM
- Reading nuclear charges from NUCCHARG
- Done
+ Reading nuclear coordinates from COORD.
+ Reading atomic numbers from ATMNUM.
+ Reading nuclear charges from NUCCHARG.
 
- Reading primitive Gaussian functions (PGFs) from ATMORB
+ Reading primitive Gaussian functions (PGFs) from ATMORB.
  Reading expantion coefficients for CGFs (MO coefficients) from
- COEFAREF and COEFBREF
- Constructing contracted Gaussian functions (CGFs) from the PGFs
+ COEFAREF and COEFBREF.
+ Constructing contracted Gaussian functions (CGFs) from the PGFs.
 
  Names of spin orbitals
  =================================
@@ -171,8 +166,7 @@
    6       H         1       1.0
  =================================
 
- Reading X + Y and X - Y from XY
- Done
+ Reading X + Y and X - Y from XY.
 
  X + Y, X - Y, and electronic configurations
  in terms of spin-orbital numbers
@@ -414,8 +408,8 @@
  ****************************
 
 
- Total CPU time =     0.11 seconds
+ Total CPU time =     0.03 seconds
 
- --- Leaving d77.exe on 2024/4/23 at 11:7:59 (time zone = UTC+0900)
+ --- Leaving d77.exe on 2024/4/29 at 17:35:11 (time zone = UTC+0900)
 
  --------------- End of d77 execution script ---------------

@@ -6,9 +6,10 @@ for S0-S1 transition
 $end_comment
 
 $control
-property = vc
-runtyp = density
-method = td
+property      = vc
+runtyp        = density
+method        = td
+save_rho_cube = yes
 $end_control
 
 $elec_state
@@ -28,11 +29,11 @@ ymin = -5.0
 ymax =  5.0
 zmin = -5.0
 zmax =  5.0
-dx = 0.10
-dy = 0.10
-dz = 0.10
+dx   = 0.10
+dy   = 0.10
+dz   = 0.10
 $end_grid
 
-INPDIR_ELEC = ../../INP_ELEC
-INPDIR_VIB = ../../INP_VIB
-INPDIR_ELFLD = ../../ELFLD
+DIR_INP_ELEC  = ../INP_ELEC
+DIR_INP_VIB   = ../INP_VIB
+DIR_INP_ELFLD = ../ELFLD

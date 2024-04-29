@@ -1,0 +1,42 @@
+STATE =  1
+X only :  0
+Y only :  0
+X and Y:  2
+X total:  2
+y total:  2
+
+STATE =  2
+X only :  0
+Y only :  0
+X and Y:  2
+X total:  2
+y total:  2
+
+STATE =  3
+X only :  0
+Y only :  0
+X and Y:  1
+X total:  1
+y total:  1
+
+STATE =  4
+X only :  0
+Y only :  0
+X and Y:  1
+X total:  1
+y total:  1
+
+STATE =  5
+X only :  0
+Y only :  0
+X and Y:  2
+X total:  2
+y total:  2
+
+STATE =  6
+X only :  0
+Y only :  0
+X and Y:  2
+X total:  2
+y total:  2
+

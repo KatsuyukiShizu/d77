@@ -7,8 +7,8 @@ $end_comment
 
 $control
 property = rho
-runtyp = density
-method = td
+runtyp   = density
+method   = td
 $end_control
 
 $elec_state
@@ -23,9 +23,9 @@ ymin = -5.0
 ymax =  5.0
 zmin = -5.0
 zmax =  5.0
-dx = 0.20
-dy = 0.20
-dz = 0.20
+dx   = 0.20
+dy   = 0.20
+dz   = 0.20
 $end_grid
 
-INPDIR_ELEC = ../../INP_ELEC
+DIR_INP_ELEC = ../INP_ELEC

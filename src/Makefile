@@ -9,7 +9,7 @@ func_int_pgf.o \
 global_read_data.o \
 func_potential.o \
 func_rho.o \
-cube_write.o \
+cube.o \
 main.o \
 write_messages.o \
 calc_int_cgf.o \
