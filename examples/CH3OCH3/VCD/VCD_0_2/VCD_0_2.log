@@ -1,11 +1,10 @@
-
  --------------- d77 execution script ---------------
 
 
 
  ****************************************************
  **                                                **
- **             d77: version 20240423              **
+ **             d77: version 20240427              **
  **                                                **
  **  Visual understanding of molecular properties  **
  **                                                **
@@ -22,7 +21,7 @@
 
 
 
- --- Entering d77.exe on 2024/4/24 at 15:37:25 (time zone = UTC+0900)
+ --- Entering d77.exe on 2024/4/29 at 18:35:40 (time zone = UTC+0900)
 
  ===== Copy of your input file =====
 
@@ -34,9 +33,10 @@
  $end_comment
  
  $control
- property = vc
- runtyp = density
- method = td
+ property      = vc
+ runtyp        = density
+ method        = td
+ save_rho_cube = no
  $end_control
  
  $elec_state
@@ -52,35 +52,30 @@
  $end_vibmode
  
  $grid
- xmin = -8.0
- xmax =  8.0
- ymin = -8.0
- ymax =  8.0
- zmin = -8.0
- zmax =  8.0
- dx = 0.20
- dy = 0.20
- dz = 0.20
+ xmin = -5.0
+ xmax =  5.0
+ ymin = -7.0
+ ymax =  7.0
+ zmin = -5.0
+ zmax =  5.0
+ dx   = 0.20
+ dy   = 0.20
+ dz   = 0.20
  $end_grid
  
- INPDIR_ELEC = ../../INP_ELEC
- INPDIR_VIB = ../../INP_VIB
- INPDIR_ELFLD = ../../ELFLD
+ DIR_INP_ELEC  = ../INP_ELEC
+ DIR_INP_VIB   = ../INP_VIB
+ DIR_INP_ELFLD = ../ELFLD
 
  ===================================
 
- Reading $CONTROL options in your input file
- Done
+ Reading $CONTROL options in your input file.
+ Reading general information of the system from CONTROL_ELEC.
 
- Reading general information of the system from CONTROL_ELEC
- Done
-
- Reading frequencies from FREQ
- Reading vibrational modes from VIBMODE
- Done
+ Reading frequencies from FREQ.
+ Reading vibrational modes from VIBMODE.
 
  Orthonormalization of vibrational vectors
- Done
 
  Information of the system
  =============================
@@ -102,15 +97,14 @@
  Threshold_distance:     0.400E+01
  =================================
 
- Reading nuclear coordinates from COORD
- Reading atomic numbers from ATMNUM
- Reading nuclear charges from NUCCHARG
- Done
+ Reading nuclear coordinates from COORD.
+ Reading atomic numbers from ATMNUM.
+ Reading nuclear charges from NUCCHARG.
 
- Reading primitive Gaussian functions (PGFs) from ATMORB
+ Reading primitive Gaussian functions (PGFs) from ATMORB.
  Reading expantion coefficients for CGFs (MO coefficients) from
- COEFAREF and COEFBREF
- Constructing contracted Gaussian functions (CGFs) from the PGFs
+ COEFAREF and COEFBREF.
+ Constructing contracted Gaussian functions (CGFs) from the PGFs.
 
  Names of spin orbitals
  =================================
@@ -223,8 +217,7 @@
   10       H         1       1.0       1.00783
  =============================================
 
- Reading X + Y and X - Y from XY
- Done
+ Reading X + Y and X - Y from XY.
 
  X + Y, X - Y, and electronic configurations
  in terms of spin-orbital numbers
@@ -1050,15 +1043,13 @@
  =============================
 
  Calculating density matrix in terms of CGFs
- from gamma and CGF coefficients
- Done
+ from gamma and CGF coefficients.
 
  -------------------------
  Vibronic coupling density
  -------------------------
 
- Calculating grid size for cube files
- Done
+ Calculating grid size for cube files.
 
  --------------------------
  Information for cube grids
@@ -1069,21 +1060,20 @@
  =========================
          Min         Max  
  -------------------------
- x    -8.11000     8.11000
- y    -8.11000     8.11000
- z    -8.11000     8.11000
+ x    -5.11000     5.11000
+ y    -7.11000     7.11000
+ z    -5.11000     5.11000
  =========================
 
  Grid size (bohr): Dx, Dy, Dz
  The number of lattice ponts: Nx, Ny, Nz
  ====================
- Dx  0.2000    Nx  82
- Dy  0.2000    Ny  82
- Dz  0.2000    Nz  82
+ Dx  0.2000    Nx  52
+ Dy  0.2000    Ny  72
+ Dz  0.2000    Nz  52
  ====================
 
- Calculating xyz coordinates of lattice points
- Done
+ Calculating xyz coordinates of lattice points.
 
  Generating and opening cube files
  Done
@@ -1117,7 +1107,7 @@
     1     48.51  -0.000025   0.000000  -0.000025
     8    897.17   0.000460   0.000000   0.000460
    15   1495.05  -0.000023   0.000000  -0.000023
-   21   3100.60  -0.000130   0.000000  -0.000130
+   21   3100.60  -0.000131   0.000000  -0.000131
  ===============================================
 
  --- Leaving SUBROUTINE vc_density
@@ -1130,8 +1120,8 @@
  ****************************
 
 
- Total CPU time =    65.25 seconds
+ Total CPU time =    52.02 seconds
 
- --- Leaving d77.exe on 2024/4/24 at 15:39:28 (time zone = UTC+0900)
+ --- Leaving d77.exe on 2024/4/29 at 18:37:9 (time zone = UTC+0900)
 
  --------------- End of d77 execution script ---------------

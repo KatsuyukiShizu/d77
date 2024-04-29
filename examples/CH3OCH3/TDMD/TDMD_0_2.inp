@@ -6,9 +6,10 @@ between S0 and S1
 $end_comment
 
 $control
-property = dipole
-runtyp = density
-method = td
+property      = dipole
+runtyp        = density
+method        = td
+save_rho_cube = no
 $end_control
 
 $elec_state
@@ -19,13 +20,13 @@ $end_elec_state
 $grid
 xmin = -5.0
 xmax =  5.0
-ymin = -5.0
-ymax =  5.0
+ymin = -7.0
+ymax =  7.0
 zmin = -5.0
 zmax =  5.0
-dx = 0.20
-dy = 0.20
-dz = 0.20
+dx   = 0.20
+dy   = 0.20
+dz   = 0.20
 $end_grid
 
-INPDIR_ELEC = ../../INP_ELEC
+DIR_INP_ELEC = ../INP_ELEC

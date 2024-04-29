@@ -1,3 +1,9 @@
+ Entering Gaussian System, Link 0=/usr/appli/g16/c01/g16/.g16
+ Input=TD.com
+ Output=TD.log
+ Initial command:
+ /usr/appli/g16/c01/g16/l1.exe "/scratch/gaussian/Gau-2870291.inp" -scrdir="/scratch/gaussian/"
+ Entering Link 1 = /usr/appli/g16/c01/g16/l1.exe PID=   2870292.
   
  Copyright (c) 1988-2019, Gaussian, Inc.  All Rights Reserved.
   

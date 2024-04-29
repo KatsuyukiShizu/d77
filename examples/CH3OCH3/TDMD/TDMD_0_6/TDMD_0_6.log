@@ -1,11 +1,10 @@
-
  --------------- d77 execution script ---------------
 
 
 
  ****************************************************
  **                                                **
- **             d77: version 20240423              **
+ **             d77: version 20240427              **
  **                                                **
  **  Visual understanding of molecular properties  **
  **                                                **
@@ -22,7 +21,7 @@
 
 
 
- --- Entering d77.exe on 2024/4/24 at 15:34:29 (time zone = UTC+0900)
+ --- Entering d77.exe on 2024/4/29 at 18:50:12 (time zone = UTC+0900)
 
  ===== Copy of your input file =====
 
@@ -34,9 +33,10 @@
  $end_comment
  
  $control
- property = dipole
- runtyp = density
- method = td
+ property      = dipole
+ runtyp        = density
+ method        = td
+ save_rho_cube = yes
  $end_control
  
  $elec_state
@@ -45,26 +45,23 @@
  $end_elec_state
  
  $grid
- xmin = -8.0
- xmax =  8.0
- ymin = -8.0
- ymax =  8.0
- zmin = -8.0
- zmax =  8.0
- dx = 0.20
- dy = 0.20
- dz = 0.20
+ xmin = -5.0
+ xmax =  5.0
+ ymin = -7.0
+ ymax =  7.0
+ zmin = -5.0
+ zmax =  5.0
+ dx   = 0.20
+ dy   = 0.20
+ dz   = 0.20
  $end_grid
  
- INPDIR_ELEC = ../../INP_ELEC
+ DIR_INP_ELEC = ../INP_ELEC
 
  ===================================
 
- Reading $CONTROL options in your input file
- Done
-
- Reading general information of the system from CONTROL_ELEC
- Done
+ Reading $CONTROL options in your input file.
+ Reading general information of the system from CONTROL_ELEC.
 
  Information of the system
  =============================
@@ -85,15 +82,14 @@
  Threshold_distance:     0.400E+01
  =================================
 
- Reading nuclear coordinates from COORD
- Reading atomic numbers from ATMNUM
- Reading nuclear charges from NUCCHARG
- Done
+ Reading nuclear coordinates from COORD.
+ Reading atomic numbers from ATMNUM.
+ Reading nuclear charges from NUCCHARG.
 
- Reading primitive Gaussian functions (PGFs) from ATMORB
+ Reading primitive Gaussian functions (PGFs) from ATMORB.
  Reading expantion coefficients for CGFs (MO coefficients) from
- COEFAREF and COEFBREF
- Constructing contracted Gaussian functions (CGFs) from the PGFs
+ COEFAREF and COEFBREF.
+ Constructing contracted Gaussian functions (CGFs) from the PGFs.
 
  Names of spin orbitals
  =================================
@@ -205,8 +201,7 @@
   10       H         1       1.0
  =================================
 
- Reading X + Y and X - Y from XY
- Done
+ Reading X + Y and X - Y from XY.
 
  X + Y, X - Y, and electronic configurations
  in terms of spin-orbital numbers
@@ -1302,15 +1297,13 @@
  =============================
 
  Calculating density matrix in terms of CGFs
- from gamma and CGF coefficients
- Done
+ from gamma and CGF coefficients.
 
  ---------------------
  Dipole moment density
  ---------------------
 
- Calculating grid size for cube files
- Done
+ Calculating grid size for cube files.
 
  --------------------------
  Information for cube grids
@@ -1321,29 +1314,28 @@
  =========================
          Min         Max  
  -------------------------
- x    -8.11000     8.11000
- y    -8.11000     8.11000
- z    -8.11000     8.11000
+ x    -5.11000     5.11000
+ y    -7.11000     7.11000
+ z    -5.11000     5.11000
  =========================
 
  Grid size (bohr): Dx, Dy, Dz
  The number of lattice ponts: Nx, Ny, Nz
  ====================
- Dx  0.2000    Nx  82
- Dy  0.2000    Ny  82
- Dz  0.2000    Nz  82
+ Dx  0.2000    Nx  52
+ Dy  0.2000    Ny  72
+ Dz  0.2000    Nz  52
  ====================
 
- Calculating xyz coordinates of lattice points
- Done
+ Calculating xyz coordinates of lattice points.
 
- Generating and opening cube files
- Done
+ Generating and opening cube files.
 
- Calculating and writing overlap density
- and dipole moment density
+ Calculating overlap density and transition dipole moment densities.
 
- Closing cube files
+ Saving them to cube files.
+
+ Closing cube files.
 
  -----------------------------------------------------
  Integral of overlap (transition) density:    -0.00000
@@ -1361,15 +1353,22 @@
  ====================================================
    i   j      mu_x       mu_y       mu_z       |mu|
  ----------------------------------------------------
-   0   6   -0.00000    0.30570   -0.00000    0.30570
+   0   6   -0.00000    0.28636   -0.00000    0.28636
  ====================================================
 
  Dipole moment in debye
  ====================================================
    i   j      mu_x       mu_y       mu_z       |mu|
  ----------------------------------------------------
-   0   6   -0.00000    0.77701   -0.00000    0.77701
+   0   6   -0.00000    0.72786   -0.00000    0.72786
  ====================================================
+
+ Calculating projected dipole moment density.
+
+ Calculating the magnitude of dipole moment
+ by integrating projected dipole moment density.
+
+ |mu| =     0.28636
 
  --- Leaving SUBROUTINE dipole_density
 
@@ -1381,8 +1380,8 @@
  ****************************
 
 
- Total CPU time =    43.08 seconds
+ Total CPU time =    80.73 seconds
 
- --- Leaving d77.exe on 2024/4/24 at 15:36:13 (time zone = UTC+0900)
+ --- Leaving d77.exe on 2024/4/29 at 18:52:50 (time zone = UTC+0900)
 
  --------------- End of d77 execution script ---------------

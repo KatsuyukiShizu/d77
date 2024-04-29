@@ -1,11 +1,10 @@
-
  --------------- d77 execution script ---------------
 
 
 
  ****************************************************
  **                                                **
- **             d77: version 20240423              **
+ **             d77: version 20240427              **
  **                                                **
  **  Visual understanding of molecular properties  **
  **                                                **
@@ -22,7 +21,7 @@
 
 
 
- --- Entering d77.exe on 2024/4/24 at 15:14:39 (time zone = UTC+0900)
+ --- Entering d77.exe on 2024/4/29 at 18:24:7 (time zone = UTC+0900)
 
  ===== Copy of your input file =====
 
@@ -31,12 +30,12 @@
  between T1 and T2
  | 1 > : lowest triplet state (T1)
  | 3 > : second lowest triplet state (T2)
- $end_comment
+ $comment
  
  $control
  property = vc
- runtyp = int_pgf
- method = td
+ runtyp   = int_pgf
+ method   = td
  $end_control
  
  $elec_state
@@ -44,24 +43,19 @@
  ket = | 3 >
  $end_elec_state
  
- INPDIR_ELEC = ../../INP_ELEC
- INPDIR_VIB = ../../INP_VIB
- INPDIR_ELFLD = ../../ELFLD
+ DIR_INP_ELEC  = ../INP_ELEC
+ DIR_INP_VIB   = ../INP_VIB
+ DIR_INP_ELFLD = ../ELFLD
 
  ===================================
 
- Reading $CONTROL options in your input file
- Done
+ Reading $CONTROL options in your input file.
+ Reading general information of the system from CONTROL_ELEC.
 
- Reading general information of the system from CONTROL_ELEC
- Done
-
- Reading frequencies from FREQ
- Reading vibrational modes from VIBMODE
- Done
+ Reading frequencies from FREQ.
+ Reading vibrational modes from VIBMODE.
 
  Orthonormalization of vibrational vectors
- Done
 
  Information of the system
  =============================
@@ -83,15 +77,14 @@
  Threshold_distance:     0.400E+01
  =================================
 
- Reading nuclear coordinates from COORD
- Reading atomic numbers from ATMNUM
- Reading nuclear charges from NUCCHARG
- Done
+ Reading nuclear coordinates from COORD.
+ Reading atomic numbers from ATMNUM.
+ Reading nuclear charges from NUCCHARG.
 
- Reading primitive Gaussian functions (PGFs) from ATMORB
+ Reading primitive Gaussian functions (PGFs) from ATMORB.
  Reading expantion coefficients for CGFs (MO coefficients) from
- COEFAREF and COEFBREF
- Constructing contracted Gaussian functions (CGFs) from the PGFs
+ COEFAREF and COEFBREF.
+ Constructing contracted Gaussian functions (CGFs) from the PGFs.
 
  Names of spin orbitals
  =================================
@@ -204,8 +197,7 @@
   10       H         1       1.0       1.00783
  =============================================
 
- Reading X + Y and X - Y from XY
- Done
+ Reading X + Y and X - Y from XY.
 
  X + Y, X - Y, and electronic configurations
  in terms of spin-orbital numbers
@@ -1958,8 +1950,7 @@
  =============================
 
  Calculating density matrix in terms of CGFs
- from gamma and CGF coefficients
- Done
+ from gamma and CGF coefficients.
 
  -------------
  Dipole moment
@@ -2034,8 +2025,8 @@
  ****************************
 
 
- Total CPU time =   137.09 seconds
+ Total CPU time =   332.25 seconds
 
- --- Leaving d77.exe on 2024/4/24 at 15:20:43 (time zone = UTC+0900)
+ --- Leaving d77.exe on 2024/4/29 at 18:34:14 (time zone = UTC+0900)
 
  --------------- End of d77 execution script ---------------
